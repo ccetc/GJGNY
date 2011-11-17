@@ -9,20 +9,44 @@ ideas
 1.1
 ============================
 
-	1.	git init
+//	1.	git init
 	
-	2.	github
+//	2.	github
 	
 	3.	add bundles
 	
-		- Admin
+//		- Admin
 		
-		- Help
+//		- DoctrineAdmin
 		
-		- User Admin
+//		- Help
+		
+//		- User Admin
+	
+//		- user
+	
+//		- Knp
+	
+	10.	Misc
+	
+		- remove old bundles
+	
+		- Error templates
+		
+		- config
+		
+		- routing
+		
+		- appkernel
+		
+		- autoload
+	
 		
 	
-	4.	features lost from new Admin
+1.2
+============================
+
+	0.	features lost from new Admin
 
 		- Lead Events
 		
@@ -72,8 +96,6 @@ ideas
 
 				- on create/update redirect to list if show is not a route
 
-1.2
-============================
 	
 	1.	Excel exporting
 	

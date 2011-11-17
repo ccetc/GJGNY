@@ -4,7 +4,7 @@ dir
 39
 svn+ssh://haggerty@ccext.net/var/web/svnRepo/GJGNY/src/GJGNY/AdminExtensionBundle/Resources
 svn+ssh://haggerty@ccext.net/var/web/svnRepo/GJGNY
-
+delete
 
 
 2011-09-01T13:29:19.617838Z
@@ -28,4 +28,8 @@ haggerty
 
 views
 dir
+
+
+
+delete
 

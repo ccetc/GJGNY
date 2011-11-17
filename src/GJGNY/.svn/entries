@@ -28,10 +28,18 @@ haggerty
 
 AdminExtensionBundle
 dir
-
-DataToolBundle
-dir
+
+
+
+delete
 
 ChildBundle
+dir
+
+
+
+delete
+
+DataToolBundle
 dir
 

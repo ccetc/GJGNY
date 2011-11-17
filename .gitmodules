@@ -1,0 +1,21 @@
+[submodule "vendor/bundles/Sonata/AdminBundle"]
+	path = vendor/bundles/Sonata/AdminBundle
+	url = git://github.com/CCETC/SonataAdminBundle.git
+[submodule "vendor/bundles/Sonata/DoctrineORMAdminBundle"]
+	path = vendor/bundles/Sonata/DoctrineORMAdminBundle
+	url = git://github.com/CCETC/SonataDoctrineORMAdminBundle.git
+[submodule "vendor/bundles/CCETC/ErrorReportBundle"]
+	path = vendor/bundles/CCETC/ErrorReportBundle
+	url = git://github.com/CCETC/CCETCErrorReportBundle.git
+[submodule "vendor/bundles/CCETC/UserAdminBundle"]
+	path = vendor/bundles/CCETC/UserAdminBundle
+	url = git://github.com/CCETC/CCETCUserAdminBundle.git
+[submodule "vendor/bundles/FOS/UserBundle"]
+	path = vendor/bundles/FOS/UserBundle
+	url = git://github.com/CCETC/FOSUserBundle.git
+[submodule "vendor/bundles/Knp/Bundle/MenuBundle"]
+	path = vendor/bundles/Knp/Bundle/MenuBundle
+	url = https://github.com/knplabs/KnpMenuBundle.git
+[submodule "vendor/KnpMenu"]
+	path = vendor/KnpMenu
+	url = https://github.com/knplabs/KnpMenu.git

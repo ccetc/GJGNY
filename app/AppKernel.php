@@ -17,14 +17,15 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
-            new Knplabs\Bundle\MenuBundle\KnplabsMenuBundle(),
-            new FOS\UserBundle\FOSUserBundle(),
-            new Sonata\jQueryBundle\SonatajQueryBundle(),
-            new Sonata\BluePrintBundle\SonataBluePrintBundle(),
-            new Sonata\AdminBundle\SonataAdminBundle(),
             new GJGNY\DataToolBundle\GJGNYDataToolBundle(),
-            new GJGNY\AdminExtensionBundle\GJGNYAdminExtensionBundle(),
-            new GJGNY\ChildBundle\GJGNYChildBundle(),
+            new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+            new Sonata\jQueryBundle\SonatajQueryBundle(),
+            new Sonata\AdminBundle\SonataAdminBundle(),
+            new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
+            new CCETC\ErrorReportBundle\CCETCErrorReportBundle(),
+            new CCETC\UserAdminBundle\CCETCUserAdminBundle(),
+            new CCETC\BootstrapBundle\CCETCBootstrapBundle(),            
+            new FOS\UserBundle\FOSUserBundle(),            
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
