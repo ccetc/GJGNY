@@ -1,0 +1,9 @@
+{% extends 'SonataAdminBundle:CRUD:base_list_field.html.twig' %}
+
+{% block field%}
+    <div>
+        {% if object.DateOfLead %}
+            {{ object.DateOfLead|date("F j, Y") }}
+        {% endif %}
+   </div>
+{% endblock %}

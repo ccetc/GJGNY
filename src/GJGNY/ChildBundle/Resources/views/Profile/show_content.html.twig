@@ -1,0 +1,10 @@
+<div class="fos_user_user_show">
+    <p><b>{{ 'profile.show.firstName'|trans({}, 'FOSUserBundle') }}</b>: {{ user.firstName }}</p>
+    <p><b>{{ 'profile.show.lastName'|trans({}, 'FOSUserBundle') }}</b>: {{ user.lastName }}</p>
+    <p><b>{{ 'profile.show.email'|trans({}, 'FOSUserBundle') }}</b>: {{ user.email }}</p>
+    <p><b>{{ 'profile.show.organization'|trans({}, 'FOSUserBundle') }}</b>: {{ user.organization }}</p>
+    <p><b>{{ 'profile.show.county'|trans({}, 'FOSUserBundle') }}</b>: {{ user.county }}</p>
+
+    <a style="float: right;" href="{{ url('fos_user_profile_edit') }}">Edit Information &rarr;</a>
+    <div>&nbsp;</div>
+</div>

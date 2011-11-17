@@ -1,0 +1,12 @@
+{% form_theme profileForm theme %}
+
+<form action="{{ path('fos_user_profile_edit') }}" {{ form_enctype(profileForm) }} method="POST" class="fos_user_profile_edit">
+    {{ form_widget(profileForm) }}
+    <div>
+        <input type="submit" value="{{ 'profile.edit.submit'|trans({}, 'FOSUserBundle') }}" />
+    </div>
+    <div>&nbsp;</div>
+</form>
+<div style="width: 100%; text-align: center; margin-top: 10px;">
+<a style="font-size: 14px;" href="{{ url('fos_user_change_password') }}">Change Password &rarr;</a>
+</div>

@@ -1,0 +1,17 @@
+{% extends 'SonataAdminBundle:CRUD:base_list_field.html.twig' %}
+
+{% block field%}
+    <div>
+    	{% if object.personalEmail != '' %}
+            Personal: <a href="mailto:{{ object.personalEmail }}">{{ object.PersonalEmail }}</a><br/>
+        {% elseif object.workEmail != '' %}
+            Work: <a href="mailto:{{ object.workEmail }}">{{ object.workEmail }}</a><br/>
+        {% endif %}
+        {% if object.phone %}
+            {% if object.primaryPhoneType %} {{ object.primaryPhoneType }}: {% endif %}{{ object.phone }} <br/>
+        {% endif %}
+        {% if object.secondaryPhone %}
+            {% if object.secondaryPhoneType %} {{ object.secondaryPhoneType }}: {% endif %} {{ object.secondaryPhone }}
+        {% endif %}
+    </div>
+{% endblock %}

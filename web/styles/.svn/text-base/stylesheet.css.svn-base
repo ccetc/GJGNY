@@ -1,0 +1,6 @@
+div#content {
+    padding: 2em;
+    margin: 0;
+    overflow:auto;
+    clear: both;    
+}

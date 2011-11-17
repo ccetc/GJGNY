@@ -1,0 +1,21 @@
+
+  <h1>Created</h1>
+
+  {% for text in insertions %}
+    {{ text }}<br/>
+  {% endfor %}
+
+  <br/>
+  <h1>Deleted</h1>
+
+  {% for text in deletions %}
+    {{ text }}<br/>
+  {% endfor %}
+
+  <br/>
+  <h1>Updated or Unchanged</h1>
+
+  {% for text in updates %}
+    {{ text }}<br/>
+  {% endfor %}
+

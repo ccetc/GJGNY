@@ -1,0 +1,20 @@
+
+form.fos_user_profile_edit,
+form.fos_user_change_password,
+div.fos_user_user_show {
+        font-size: 14px; width: 500px; background: none repeat scroll 0% 0% rgb(238, 238, 238); margin: 0pt auto; padding: 15px;
+}
+
+form.fos_user_change_password input,
+form.fos_user_profile_edit input {
+        float: left;
+        font-size: 14px;
+        width: 100%;
+        margin-bottom: 10px;
+}
+
+form.fos_user_change_password input[type="submit"],
+form.fos_user_profile_edit input[type="submit"] {
+        float: right;
+        width: auto;
+}
