@@ -21,26 +21,42 @@ ideas
 		
 //		- Help
 		
+			- work in
+		
 //		- User Admin
 	
+			- work in
+	
 //		- user
+
+			- no why register text?
+			
+			- lost custom user fields and forms
 	
 //		- Knp
 	
+		- bootstrap
+	
+//	4.	Admin Syntax
+
+//		- fix filters
+	
+	
 	10.	Misc
 	
-		- remove old bundles
+//		- remove old bundles
 	
 		- Error templates
 		
-		- config
+//		- config
 		
-		- routing
+//		- routing
 		
-		- appkernel
+//		- appkernel
 		
-		- autoload
+//		- autoload
 	
+		
 		
 	
 1.2
@@ -149,6 +165,11 @@ ideas
 
 		- check address when creating lead to limit duplicates
 		
+		- fix boolean yes/no/empty problem
+		
+			- switch to yes/no/empty, add extra field, do simple query
+				
+				- default no to empty
 
 	12.	Misc	
 

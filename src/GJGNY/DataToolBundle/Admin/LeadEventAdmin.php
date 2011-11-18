@@ -2,421 +2,285 @@
 
 namespace GJGNY\DataToolBundle\Admin;
 
+use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Spreadsheet\SpreadsheetMapper;
+use Sonata\AdminBundle\Summary\SummaryMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use GJGNY\DataToolBundle\Entity\LeadEvent as LeadEvent;
-use GJGNY\AdminExtensionBundle\Admin\CustomAdmin;
 
-class LeadEventAdmin extends CustomAdmin
+class LeadEventAdmin extends Admin
 {
 
-  protected $maxPerPage = 20;
-  protected $classnameLabel = 'Lead Events';
-  public $classname = "LeadEvent";
-  protected $entityDescription = "A Lead Event usually represents an instance of contact with a Lead, such as a phone call.  A Lead Event could also indicate the date that a Lead got an assessment or upgrade.";
-// Form ======================================================================
-// ===========================================================================
-  protected $formGroups = array(
-      'Basic Event Data' => array(
-          'fields' => array(
-              'Lead',
-              'eventType',
-              'eventTypeOther',
-              'contactPerson',
-              'date',
-              'description',
-              'notes',
-          )
-      ),
-      'Phone Call Data' => array(
-          'fields' => array(
-              'callStatus',
-              'WhatWasDiscussed',
-              'actionsTaken',
-              'FollowUpItems',
-              'callNotes',
-              'canWeCallBack'
-          ),
-          'collapsed' => false
-      ),
-      'Lighten Up Tompkins Phone Survey Data' => array(
-          'fields' => array(
-              'lutBulb',
-              'lutBulbReplace',
-              'lutLookAtMaterials',
-              'lutMaterialsUseful',
-              'lutStepsTaken',
-              'lutStepsTakenGeneral',
-              'lutRentOrOwn',
-              'lutBarriers',
-              'lutAssessment',
-              'lutSupport',
-              'lutNewsletter',
-              'lutQuestions',
-              'lutCouponMailed',
-              'lutCouponType',
-          ),
-          'collapsed' => true
-      )
-  );
+    protected $maxPerPage = 20;
+    protected $classnameLabel = 'Lead Events';
+    protected $entityLabel = "Lead Event";
+    protected $entityLabelPlural = "Lead Events";
+    protected $entityIconPath = 'images/icons/LeadEvent.png';
+    
+    
+    // Form ======================================================================
+    // ===========================================================================
+    protected function configureFormFields(FormMapper $formMapper)
+    {
+        $formMapper
+            ->with('Basic Event Data')
+                ->add('Lead', null, array(), array('edit' => 'list',
+                    'inline' => 'table',
+                    'sortable' => 'position'))
+                ->add('eventType', 'choice', array(
+                    'label' => 'Event Type',
+                    'required' => false,
+                    'choices' => LeadEvent::getEventTypeChoices()
+                ))
+                ->add('eventTypeOther', null, array('label' => 'Other', 'required' => false))
+                ->add('contactPerson', null, array('label' => 'Contact Person', 'required' => false))
+                ->add('date', null, array('label' => 'Date of event', 'required' => false))
+                ->add('description', null, array('label' => 'Description', 'required' => false))
+                ->add('notes', null, array('label' => 'Notes', 'required' => false))
+            ->end()
+            ->with('Phone Call Data')
+                ->add('callStatus', 'choice', array(
+                    'label' => 'Call status',
+                    'required' => false,
+                    'choices' => LeadEvent::getCallStatusChoices()
+                ))
+                ->add('WhatWasDiscussed', null, array('label' => 'What was discussed?', 'required' => false))
+                ->add('actionsTaken', null, array(
+                    'label' => 'Actions taken',
+                    'required' => false,
+                ))
+                ->add('FollowUpItems', null, array('label' => 'Items to follow-up on in future', 'required' => false))
+                ->add('callNotes', null, array('label' => 'Notes', 'required' => false))
+                ->add('canWeCallBack', null, array('label' => 'Can we call back?', 'required' => false))
+            ->end()
+            ->with('Lighten Up Tompkins Phone Survey Data', array('collapsed' => true))
+                ->add('lutBulb', null, array('label' => 'Did you screw in your light bulb?', 'required' => false))
+                ->add('lutBulbReplace', null, array('label' => 'Did you replace an incandescent?', 'required' => false))
+                ->add('lutLookAtMaterials', null, array('label' => 'Did you get a chance to look at the education materials in the bag?', 'required' => false))
+                ->add('lutMaterialsUseful', null, array('label' => 'Where the educational materials useful?', 'required' => false))
+                ->add('lutStepsTaken', null, array('label' => 'What every savings steps have you taken in your home as a result of Lighten Up Tompkins?', 'required' => false))
+                ->add('lutStepsTakenGeneral', null, array('label' => 'What energy savings steps have you taken in your home in general?', 'required' => false))
+                ->add('lutRentOrOwn', 'choice', array('label' => 'Do you rent or own?', 'required' => false, 'choices' => array('rent' => 'rent', 'own' => 'own')), array('type' => 'choice'))
+                ->add('lutBarriers', null, array('label' => 'What are your barriers to making home energy upgrades?', 'required' => false))
+                ->add('lutAssessment', null, array('label' => 'Have you had an energy assessment by an energy efficieny contractor?', 'required' => false))
+                ->add('lutSupport', null, array('label' => 'What support do you need in taking additional energy saving steps?', 'required' => false))
+                ->add('lutNewsletter', null, array('label' => 'Would you be interested in receiving a monthly e-mail newsletter?', 'required' => false))
+                ->add('lutQuestions', null, array('label' => 'What questions do you have?', 'required' => false))
+                ->add('lutCouponMailed', null, array('label' => 'Coupon mailed?', 'required' => false))
+                ->add('lutCouponType', null, array('label' => 'if so, what type?', 'required' => false))
+             ->end()
+        ;
+    }
+    /*
+    public $brAfterFields = array(
+        'lutBulb' => true,
+        'lutBulbReplace' => true,
+        'lutLookAtMaterials' => true,
+        'lutMaterialsUseful' => true,
+        'lutAssessment' => true,
+        'lutNewsletter' => true,
+    );
+    public $otherFields = array(
+        'lutCouponType' => true,
+        'eventTypeOther' => true
+    );*/
+    
+    // List ======================================================================
+    // ===========================================================================
+    public $listPreHook = 'GJGNYDataToolBundle:LeadEvent:_listPreHook.html.twig';
+    protected function configureListFields(ListMapper $listMapper)
+    {
+        $listMapper
+            ->add('Lead')    
+            ->add('date', 'date', array('label' => 'Date of Event','template' => 'GJGNYDataToolBundle:LeadEvent:_date.html.twig'))
+            ->add('eventType', null, array('label' => 'Event Type', 'template' => 'GJGNYDataToolBundle:LeadEvent:_eventType.html.twig'))
+            ->add('description', null, array('label' => 'Description', 'template' => 'GJGNYDataToolBundle:LeadEvent:_description.html.twig'))
 
-  public function configureFormFields(FormMapper $form)
-  {
-    $form
-// basic event info
-            ->add('Lead', array(), array('edit' => 'list',
-                'inline' => 'table',
-                'sortable' => 'position'))
-            ->add('date', array('label' => 'Date of event', 'required' => false))
-            ->add('eventType', array(
-                'label' => 'Event Type',
-                'required' => false,
-                'choices' => LeadEvent::getEventTypeChoices()
-                    ), array('type' => 'choice'))
-            ->add('eventTypeOther', array('label' => 'Other', 'required' => false))
-            ->add('description', array('label' => 'Description', 'required' => false))
-            ->add('notes', array('label' => 'Notes', 'required' => false))
-
-
-// phone call data
-            ->add('contactPerson', array('label' => 'Contact Person', 'required' => false))
-            ->add('callStatus', array(
-                'label' => 'Call status',
-                'required' => false,
-                'choices' => LeadEvent::getCallStatusChoices()
-                    ), array('type' => 'choice')
-            )
-            ->add('WhatWasDiscussed', array('label' => 'What was discussed?', 'required' => false))
-            ->add('FollowUpItems', array('label' => 'Items to follow-up on in future', 'required' => false))
-            ->add('actionsTaken', array(
-                'label' => 'Actions taken',
-                'required' => false,
+            // add custom action links
+            ->add('_action', 'actions', array(
+                'actions' => array(
+                    'view' => array(),
+                    'edit' => array(),
+                    'delete' => array(),
+                ),
+                'label' => 'Actions'
             ))
-            ->add('canWeCallBack', array('label' => 'Can we call back?', 'required' => false))
-            ->add('callNotes', array('label' => 'Notes', 'required' => false))
+        ;
+    }
+    
+    public function configureDatagridFilters(DatagridMapper $datagrid)
+    {
 
-// LUT phone survey data
-            ->add('lutBulb', array('label' => 'Did you screw in your light bulb?', 'required' => false))
-            ->add('lutBulbReplace', array('label' => 'Did you replace an incandescent?', 'required' => false))
-            ->add('lutLookAtMaterials', array('label' => 'Did you get a chance to look at the education materials in the bag?', 'required' => false))
-            ->add('lutMaterialsUseful', array('label' => 'Where the educational materials useful?', 'required' => false))
-            ->add('lutStepsTaken', array('label' => 'What every savings steps have you taken in your home as a result of Lighten Up Tompkins?', 'required' => false))
-            ->add('lutStepsTakenGeneral', array('label' => 'What energy savings steps have you taken in your home in general?', 'required' => false))
-            ->add('lutRentOrOwn', array('label' => 'Do you rent or own?', 'required' => false, 'choices' => array('rent' => 'rent', 'own' => 'own')), array('type' => 'choice'))
-            ->add('lutBarriers', array('label' => 'What are your barriers to making home energy upgrades?', 'required' => false))
-            ->add('lutAssessment', array('label' => 'Have you had an energy assessment by an energy efficieny contractor?', 'required' => false))
-            ->add('lutSupport', array('label' => 'What support do you need in taking additional energy saving steps?', 'required' => false))
-            ->add('lutNewsletter', array('label' => 'Would you be interested in receiving a monthly e-mail newsletter?', 'required' => false))
-            ->add('lutQuestions', array('label' => 'What questions do you have?', 'required' => false))
-            ->add('lutCouponMailed', array('label' => 'Coupon mailed?', 'required' => false))
-            ->add('lutCouponType', array('label' => 'if so, what type?', 'required' => false)
-    );
-  }
+        $datagrid->add('firstName', 'doctrine_orm_callback', array(
+            'label' => 'First Name',
+            'callback' => function ($queryBuilder, $alias, $field, $values) {
+                if(!$values['value'])
+                {
+                    return;
+                }
 
-  public $brAfterFields = array(
-      'lutBulb' => true,
-      'lutBulbReplace' => true,
-      'lutLookAtMaterials' => true,
-      'lutMaterialsUseful' => true,
-      'lutAssessment' => true,
-      'lutNewsletter' => true,
-  );
-  public $otherFields = array(
-      'lutCouponType' => true,
-      'eventTypeOther' => true
-  );
-// List ======================================================================
-// ===========================================================================
-  protected $list = array(
-      'Lead',
-      'date' => array('name' => 'Date of Event', 'template' => 'GJGNYDataToolBundle:LeadEvent:_date.html.twig'),
-      'eventType' => array('name' => 'Event Type', 'template' => 'GJGNYDataToolBundle:LeadEvent:_eventType.html.twig'),
-      'description' => array('name' => 'Description', 'template' => 'GJGNYDataToolBundle:LeadEvent:_description.html.twig'),
-      '_action' => array(
-          'actions' => array(
-              'delete' => array(),
-              'edit' => array(),
-              'view' => array()
-          )
-      )
-  );
-  public function getBatchActions()
-  {
-    return array(
-        'Delete' => 'Delete Selected',
-    );
-  }
+                if(!$queryBuilder->getParameter('county') && !$queryBuilder->getParameter('lastName'))
+                {
+                    $queryBuilder->leftjoin(sprintf('%s.Lead', $alias), 'l');
+                }
+                $queryBuilder->andWhere('l.FirstName LIKE :firstName');
+                $queryBuilder->setParameter('firstName', '%' . $values['value'] . '%');
+            },
+            'field_options' => array(
+                'required' => false,
+            ),
+        ));
+        $datagrid->add('lastName', 'doctrine_orm_callback', array(
+            'label' => 'Last Name',
+            'callback' => function ($queryBuilder, $alias, $field, $values) {
+                if(!$values['value'])
+                {
+                    return;
+                }
 
-  protected $filter = array(
-      'description'
-  );
-  public $hiddenFilters = array(
-      'contactPerson' => true,
-      'callStatus' => true
-  );
+                if(!$queryBuilder->getParameter('firstName') && !$queryBuilder->getParameter('county'))
+                {
+                    $queryBuilder->leftjoin(sprintf('%s.Lead', $alias), 'l');
+                }
+                $queryBuilder->andWhere('l.LastName LIKE :lastName');
+                $queryBuilder->setParameter('lastName', '%' . $values['value'] . '%');
+            },
+            'field_options' => array(
+                'required' => false,
+            ),
+        ));
+        $datagrid->add('eventType', 'doctrine_orm_callback', array(
+            'label' => 'Event type',
+            'callback' => function ($queryBuilder, $alias, $field, $values) {
+                if(!$values['value'])
+                {
+                    return;
+                }
 
-  public function configureDatagridFilters(DatagridMapper $datagrid)
-  {
-   
-    $datagrid->add('firstName', array(
-        'name' => 'First Name',
-        'template' => 'SonataAdminBundle:CRUD:filter_callback.html.twig',
-        'type' => 'callback',
-        'filter_options' => array(
-            'filter' => array($this, 'handleFirstNameFilter'),
-        ),
-        'filter_field_options' => array(
-            'required' => false,
-        ),
-    ));
-    $datagrid->add('lastName', array(
-        'name' => 'Last Name',
-        'template' => 'SonataAdminBundle:CRUD:filter_callback.html.twig',
-        'type' => 'callback',
-        'filter_options' => array(
-            'filter' => array($this, 'handleLastNameFilter'),
-        ),
-        'filter_field_options' => array(
-            'required' => false,
-        ),
-    ));
-    $datagrid->add('eventType', array(
-        'name' => 'Event type',
-        'template' => 'SonataAdminBundle:CRUD:filter_callback.html.twig',
-        'type' => 'callback',
-        'filter_options' => array(
-            'filter' => array($this, 'handleEventTypeFilter'),
-        ),
-        'filter_field_options' => array(
-            'required' => false,
-        )
-    ));
-    $datagrid->add('callStatus', array(
-        'name' => 'Call status',
-        'type' => 'choice',
-        'filter_field_options' => array(
-            'required' => false,
+                $queryBuilder->andWhere($alias . '.eventType = :type OR ' . $alias . '.eventTypeOther = :type');
+                $queryBuilder->setParameter('type', $values['value']);
+            },
+            'field_options' => array(
+                'required' => false,
+            )
+        ));
+        $datagrid->add('callStatus', 'doctrine_orm_choice', array(
+            'label' => 'Call status',
+            'field_options' => array(
+                'required' => false,
+            ),
             'choices' => LeadEvent::getCallStatusChoices()
-        )
-    ));
-    $datagrid->add('contactPerson', array('name' => 'Contact Person'));
-    $datagrid->add('dataCounty', array(
-        'name' => 'County Data',
-        'template' => 'SonataAdminBundle:CRUD:filter_callback.html.twig',
-        'type' => 'callback',
-        'filter_options' => array(
-            'filter' => array($this, 'handleDataCountyFilter'),
-            'type' => 'choice'
-        ),
-        'filter_field_options' => array(
-            'required' => false,
-            'choices' => array('Broome' => 'Broome', 'Tompkins' => 'Tompkins')
-        )
-    ));
-    
-    $this->initializeDefaultFilters();
-  }
-  
-  public function handleFirstNameFilter($queryBuilder, $alias, $field, $value)
-  {
-    if(!$value)
-    {
-      return;
-    }
-    
-    if(!$queryBuilder->getParameter('county') && !$queryBuilder->getParameter('lastName'))
-    {
-      $queryBuilder->leftjoin(sprintf('%s.Lead', $alias), 'l');
-    }
-    $queryBuilder->andWhere('l.FirstName LIKE :firstName');
-    $queryBuilder->setParameter('firstName', '%' . $value . '%');
-  }
-  
-  public function handleLastNameFilter($queryBuilder, $alias, $field, $value)
-  {
-    if(!$value)
-    {
-      return;
-    }
-    
-    if(!$queryBuilder->getParameter('firstName') && !$queryBuilder->getParameter('county'))
-    {
-      $queryBuilder->leftjoin(sprintf('%s.Lead', $alias), 'l');
-    }
-    $queryBuilder->andWhere('l.LastName LIKE :lastName');
-    $queryBuilder->setParameter('lastName', '%' . $value . '%');
-  }
-  
-  
-  public function handleEventTypeFilter($queryBuilder, $alias, $field, $value)
-  {
-    if(!$value)
-    {
-      return;
+        ));
+        $datagrid->add('contactPerson', null, array('label' => 'Contact Person'));
+        $datagrid->add('dataCounty', 'doctrine_orm_callback', array(
+            'label' => 'County Data',
+            'callback' => function ($queryBuilder, $alias, $field, $values) {
+                if(!$values['value'])
+                {
+                    return;
+                }
+
+                if(!$queryBuilder->getParameter('firstName') && !$queryBuilder->getParameter('lastName'))
+                {
+                    $queryBuilder->leftjoin(sprintf('%s.Lead', $alias), 'l');
+                }
+                $queryBuilder->andWhere('l.dataCounty = :county');
+                $queryBuilder->setParameter('county', $values['value']);
+            },
+            'field_type' => 'choice',
+            'field_options' => array(
+                'required' => false,
+                'choices' => array('Broome' => 'Broome', 'Tompkins' => 'Tompkins')
+            )
+        ));
+
+        $this->initializeDefaultFilters();
     }
 
-    $queryBuilder->andWhere($alias . '.eventType = :type OR '.$alias.'.eventTypeOther = :type');
-    $queryBuilder->setParameter('type', $value);
-  }
-  
-  public function handleDataCountyFilter($queryBuilder, $alias, $field, $value)
-  {
-    if(!$value)
+        
+    public $hiddenFilters = array(
+        'contactPerson' => true,
+        'callStatus' => true
+    );
+
+    public function initializeDefaultFilters()
     {
-      return;
+        $this->filterDefaults['dataCounty'] = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser()->getCounty();
     }
-    
-    if(!$queryBuilder->getParameter('firstName') && !$queryBuilder->getParameter('lastName'))
+
+    // Show ======================================================================
+    // ===========================================================================
+    protected function configureShowField(ShowMapper $showMapper)
     {
-      $queryBuilder->leftjoin(sprintf('%s.Lead', $alias), 'l');
+        $showMapper
+            ->with('Basic Event Data')
+                ->add('Lead', null, array('label' => 'Lead'))
+                ->add('eventType', null, array('label' => 'Event Type'))
+                ->add('eventTypeOther', null, array('label' => 'other'))
+                ->add('date', null, array('label' => 'Date of Event'))
+                ->add('contactPerson', null, array('label' => 'Contact Person'))
+                ->add('description', null, array('label' => 'Description'))
+                ->add('notes', null, array('label' => 'Notes'))
+                ->add('enteredBy', null, array('label' => 'Entered By'))
+                ->add('datetimeEntered', null, array('label' => 'Date Entered'))
+                ->add('lastUpdatedBy', null, array('label' => 'Last Updated By'))
+                ->add('datetimeLastUpdated', null, array('label' => 'Date Last Updated'))
+            ->end()
+            ->with('Phone Call Data')
+                ->add('callStatus', null, array('label' => 'Call Status'))
+                ->add('WhatWasDiscussed', null, array('label' => 'What was discussed?'))
+                ->add('actionsTaken', null, array('label' => 'Actions Taken'))
+                ->add('FollowUpItems', null, array('label' => 'Follow-Up Items'))
+                ->add('callNotes', null, array('label' => 'Call Notes'))
+                ->add('canWeCallBack', null, array('label' => 'Can we call back?'))
+            ->end()
+            ->with('Lighten Up Tompkins Phone Survey Data')
+                ->add('lutBulb', null, array('label' => 'Did you screw in your light bulb?'))
+                ->add('lutBulbReplace', null, array('label' => 'Did you replace an incandescent?'))
+                ->add('lutLookAtMaterials', null, array('label' => 'Did you get a chance to look at the education materials in the bag?'))
+                ->add('lutMaterialsUseful', null, array('label' => 'Where the educational materials useful?'))
+                ->add('lutStepsTaken', null, array('label' => 'What every savings steps have you taken in your home as a result of Lighten Up Tompkins?'))
+                ->add('lutStepsTakenGeneral', null, array('label' => 'What energy savings steps have you taken in your home in general?'))
+                ->add('lutRentOrOwn', null, array('label' => 'Do you rent or own?'))
+                ->add('lutBarriers', null, array('label' => 'What are your barriers to making home energy upgrades?'))
+                ->add('lutAssessment', null, array('label' => 'Have you had an energy assessment by an energy efficieny contractor?'))
+                ->add('lutSupport', null, array('label' => 'What support do you need in taking additional energy saving steps?'))
+                ->add('lutNewsletter', null, array('label' => 'Would you be interested in receiving a monthly e-mail newsletter?'))
+                ->add('lutQuestions', null, array('label' => 'What questions do you have?'))
+                ->add('lutCouponMailed', null, array('label' => 'Coupon mailed?'))
+                ->add('lutCouponType', null, array('label' => 'if so, what type?'))
+            ->end()
+        ;
     }
-    $queryBuilder->andWhere('l.dataCounty = :county');
-    $queryBuilder->setParameter('county', $value);
-  }
-  
-  public function initializeDefaultFilters()
-  {
-      $this->filterDefaults['dataCounty'] = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser()->getCounty();
-  }
-  
+/*    public $viewFieldsToIndent = array(
+        'lutCouponType' => true,
+        'eventTypeOther' => true
+    );
+*/
 
-// View ======================================================================
-// ===========================================================================
-  public $viewLabels = array(
-      'eventType' => 'Event Type',
-      'eventTypeOther' => 'Other',
-      'date' => 'Date',
-      'description' => 'Description',
-      'notes' => 'Notes',
-      'contactPerson' => 'Contact Person',
-      'callStatus' => 'Call Status',
-      'WhatWasDiscussed' => 'What was discussed?',
-      'actionsTaken' => 'Actions Taken',
-      'FollowUpItems' => 'Follow-up Items',
-      'callNotes' => 'Call Notes',
-      'lutBulb' => 'Did you screw in your light bulb?',
-      'lutBulbReplace' => 'Did you replace an incandescent?',
-      'lutLookAtMaterials' => 'Did you get a chance to look at the education materials in the bag?',
-      'lutMaterialsUseful' => 'Where the educational materials useful?',
-      'lutStepsTaken' => 'What every savings steps have you taken in your home as a result of Lighten Up Tompkins?',
-      'lutStepsTakenGeneral' => 'What energy savings steps have you taken in your home in general?',
-      'lutRentOrOwn' => 'Do you rent or own?',
-      'lutBarriers' => 'What are your barriers to making home energy upgrades?',
-      'lutAssessment' => 'Have you had an energy assessment by an energy efficieny contractor?',
-      'lutSupport' => 'What support do you need in taking additional energy saving steps?',
-      'lutNewsletter' => 'Would you be interested in receiving a monthly e-mail newsletter?',
-      'lutQuestions' => 'What questions do you have?',
-      'lutCouponMailed' => 'Coupon mailed?',
-      'lutCouponType' => 'if so, what type?',
-      'enteredBy' => 'Data Entered By',
-      'datetimeEntered' => 'Data Entered: ',
-      'lastUpdatedBy' => 'Data Last Updated By',
-      'datetimeLastUpdated' => 'Data Last Updated:',
-      'canWeCallBack' => 'Can we call back?'
-  );
-  public $viewFieldsToIndent = array(
-      'lutCouponType' => true,
-      'eventTypeOther' => true
-  );
-  protected $view = array(
-      'Lead',
-      'eventType',
-      'eventTypeOther',
-      'date',
-      'description',
-      'notes',
-      'contactPerson',
-      'callStatus',
-      'WhatWasDiscussed',
-      'actionsTaken',
-      'FollowUpItems',
-      'callNotes',
-      'lutBulb',
-      'lutBulbReplace',
-      'lutLookAtMaterials',
-      'lutMaterialsUseful',
-      'lutStepsTaken',
-      'lutStepsTakenGeneral',
-      'lutRentOrOwn',
-      'lutBarriers',
-      'lutAssessment',
-      'lutSupport',
-      'lutNewsletter',
-      'lutQuestions',
-      'lutCouponMailed',
-      'lutCouponType',
-      'enteredBy',
-      'datetimeEntered',
-      'lastUpdatedBy',
-      'datetimeLastUpdated',
-      'canWeCallBack'
-  );
-  public $viewGroups = array(
-      'Basic Event Data' => array(
-          'fields' => array(
-              'Lead',
-              'eventType',
-              'eventTypeOther',
-              'date',
-              'contactPerson',
-              'description',
-              'notes',
-              'enteredBy',
-              'datetimeEntered',
-              'lastUpdatedBy',
-              'datetimeLastUpdated',              
-          )
-      ),
-      'Phone Call Data' => array(
-          'fields' => array(
-              'callStatus',
-              'WhatWasDiscussed',
-              'actionsTaken',
-              'FollowUpItems',
-              'callNotes',
-              'canWeCallBack'
-          ),
-      ),
-      'Lighten Up Tompkins Phone Survey Data' => array(
-          'fields' => array(
-              'lutBulb',
-              'lutBulbReplace',
-              'lutLookAtMaterials',
-              'lutMaterialsUseful',
-              'lutStepsTaken',
-              'lutStepsTakenGeneral',
-              'lutRentOrOwn',
-              'lutBarriers',
-              'lutAssessment',
-              'lutSupport',
-              'lutNewsletter',
-              'lutQuestions',
-              'lutCouponMailed',
-              'lutCouponType',
-          ),
-      )
-  );
+    public function prePersist($LeadEvent)
+    {
+        $LeadEvent->setDatetimeEntered(new \DateTime());
+        $LeadEvent->setDatetimeLastUpdated(new \DateTime());
+        $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
+        $LeadEvent->setEnteredBy($user);
+        $LeadEvent->setLastUpdatedBy($user);
 
-  public function prePersist($LeadEvent)
-  {
-    $LeadEvent->setDatetimeEntered(new \DateTime());
-    $LeadEvent->setDatetimeLastUpdated(new \DateTime());
-    $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
-    $LeadEvent->setEnteredBy($user);
-    $LeadEvent->setLastUpdatedBy($user);
+        parent::prePersist($LeadEvent);
+    }
 
-    parent::prePersist($LeadEvent);      
-  }
-  
-  public function preUpdate($LeadEvent)
-  {
-    $LeadEvent->setDatetimeLastUpdated(new \DateTime());
-    $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
-    $LeadEvent->setLastUpdatedBy($user);
-    
-    parent::preUpdate($LeadEvent);      
-  }
+    public function preUpdate($LeadEvent)
+    {
+        $LeadEvent->setDatetimeLastUpdated(new \DateTime());
+        $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
+        $LeadEvent->setLastUpdatedBy($user);
+
+        parent::preUpdate($LeadEvent);
+    }
+
 }
 

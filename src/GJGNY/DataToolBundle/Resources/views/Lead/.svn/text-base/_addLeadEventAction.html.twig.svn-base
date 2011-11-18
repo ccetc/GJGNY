@@ -1,3 +1,0 @@
-<a href="{{ admin.generateUrl('edit', {'id': admin.id(object)}) }}" class="add_link" title="Add Lead Event">
-    <img src="{{ asset('bundles/sonataadmin/famfamfam/add.png') }}" alt="Add Lead Event" />
-</a>

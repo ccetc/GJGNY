@@ -2,6 +2,6 @@
 
 {% block field%}
     <div>
-        <a href="{{ admin.generateUrl('view', {'id': object.id}) }}">{{ object.description }}</a>
+        <a href="{{ admin.generateUrl('show', {'id': object.id}) }}">{{ object.description }}</a>
    </div>
 {% endblock %}

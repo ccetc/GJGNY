@@ -26,6 +26,13 @@ haggerty
 
 8d93a03d-ad6b-4c02-9527-e151cc397512
 
+FrameworkBundle
+dir
+
+
+
+delete
+
 TwigBundle
 dir
 
@@ -51,9 +58,6 @@ dir
 deleted
 
 db
-dir
-
-FrameworkBundle
 dir
 
 docs

@@ -7,10 +7,13 @@ home:
   pattern:  /home
   defaults: { _controller: SonataAdminBundle:Core:dashboard }
   
-  
-help:
+adminHelp:
   pattern: /help
-  defaults: { _controller: GJGNYDataToolBundle:Help:help }  
+  defaults: { _controller: CCETCErrorReportBundle:ErrorReport:errorReport, usePageHeader: true, flash: sonata_flash_success, redirect: adminHome, baseLayout: "SonataAdminBundle::standard_layout.html.twig", formRoute: adminHelp }
+  
+adminHome:
+  pattern: /admin/dashboard
+  defaults: { _controller: SonataAdminBundle:Core:dashboard }
   
   
 # ADMIN =====================

@@ -1,9 +1,12 @@
 <?php
 namespace GJGNY\DataToolBundle\Controller;
 
-use GJGNY\AdminExtensionBundle\Controller\CustomCRUDController as CustomController;
+use Sonata\AdminBundle\Controller\CRUDController as Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Sonata\AdminBundle\Datagrid\ORM\ProxyQuery;
 
-class LeadAdminController extends CustomController
+class LeadAdminController extends Controller
 {
 
 }

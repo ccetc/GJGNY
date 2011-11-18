@@ -1,9 +1,0 @@
-{% extends 'SonataAdminBundle:CRUD:base_list_field.html.twig' %}
-
-{% block field%}
-    <div>
-        {% if object.date %}
-            {{ object.date|date("F j, Y") }}
-        {% endif %}
-   </div>
-{% endblock %}
