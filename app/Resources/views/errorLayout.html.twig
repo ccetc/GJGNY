@@ -5,6 +5,8 @@
         <title>{% block title %}GJGNY data tool | Error{% endblock %}</title>
 
         {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('bundles/sonataadmin/bootstrap/bootstrap.min.css') }}" type="text/css" media="all" >
+            <link rel="stylesheet" href="{{ asset('styles/errorPages.css') }}" type="text/css">
         {% endblock %}
         
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon" />
@@ -19,11 +21,11 @@
         <div id="content" class="errorPage">
             <div class="errorContent">
                 <h1>{% block errorMessage %}Oops! Something went wrong.{% endblock %}</h1>
-                <span class="errorText">You can <a href="mailto:haggertypat@gmail.com">contact us directly</a> about this error, or <a href="{{ path('help') }}">submit an error report</a>.</span>
+                <span class="errorText">You can <a href="mailto:haggertypat@gmail.com">contact us directly</a> about this error, or <a href="{{ path('adminHelp') }}">submit an error report</a>.</span>
                 
                 <div class="errorOptions">
-                    <a class="errorOption" id="home" href="{{ path('home') }}"><img src="{{ asset('bundles/adminextension/images/Home.png') }}" />Home</a>|
-                    <a class="errorOption" id="help" href="{{ path('help') }}"><img src="{{ asset('bundles/adminextension/images/Help.png') }}" />Help</a>
+                    <a class="errorOption" id="home" href="{{ path('adminHome') }}"><img src="{{ asset('images/icons/Home.png') }}" />Home</a>|
+                    <a class="errorOption" id="help" href="{{ path('adminHelp') }}"><img src="{{ asset('images/icons/Help.png') }}" />Help</a>
                 </div>
             </div>
         </div>
