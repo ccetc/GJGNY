@@ -145,45 +145,50 @@ class LeadAdmin extends Admin
             ->end()
       ;
     }
-
-    /*
-    protected $formLabels = array(
-        'financeChoiceHomeEquity' => 'Project Finance Preference',
-        'newsletterChoiceEnergyTips' => 'Interested in receiving information newsletter about...',
-        'campaignChoiceTalkingToNeighbors' => 'Interested in helping with campagin?',
-        'motivationChoiceComfort' => 'Motivation for making energy upgrades',
+   
+    public $formFieldPreHooks = array(
+        // "other" fields
+        'primaryPhoneType' => 'SonataAdminBundle:Hook:_otherFormFieldPre.html.twig',
+        'motivationChoiceOther' => 'SonataAdminBundle:Hook:_otherFormFieldPre.html.twig',
+        'GJGNYReferenceOther' => 'SonataAdminBundle:Hook:_otherFormFieldPre.html.twig',
+        'otherFuelSupplierTypeOther' => 'SonataAdminBundle:Hook:_otherFormFieldPre.html.twig',
+        'secondaryPhoneType' => 'SonataAdminBundle:Hook:_otherFormFieldPre.html.twig',
+        
+        // indented fields
+        'step1aActionsTaken' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'step2aInterested' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'step2bSubmitted' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'step2cScheduled' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'step2dCompleted' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'step3aContractor' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'step3bWorkDone' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'step3cHowFinanced' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        
+        // field group labels
+       'financeChoiceHomeEquity' => 'GJGNYDataToolBundle:Lead:_financeChoiceFormPreHook.html.twig',
+       'newsletterChoiceEnergyTips' => 'GJGNYDataToolBundle:Lead:_newsletterChoiceFormPreHook.html.twig',
+       'campaignChoiceTalkingToNeighbors' => 'GJGNYDataToolBundle:Lead:_campaignChoiceFormPreHook.html.twig',
+       'motivationChoiceComfort' => 'GJGNYDataToolBundle:Lead:_motivationChoiceFormPreHook.html.twig'
     );
-    // <br/> added after field and label 
-    public $brAfterFields = array(
-        'newsletterChoiceEvents' => true,
-        'campaignChoiceShareExperience' => true,
-        'financeChoicePersonal' => true,
-        'hasCentralAC' => true
+    
+    public $formFieldPostHooks = array(
+        // "other" fields
+        'primaryPhoneType' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'motivationChoiceOther' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'GJGNYReferenceOther' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'otherFuelSupplierTypeOther' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'secondaryPhoneType' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        
+        // indented fields
+        'step1aActionsTaken' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'step2aInterested' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'step2bSubmitted' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'step2cScheduled' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'step2dCompleted' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'step3aContractor' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'step3bWorkDone' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'step3cHowFinanced' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
     );
-    // field and label put in a div classed 'otherField' for styling
-    public $otherFields = array(
-        'motivationChoiceOther' => true,
-        'GJGNYReferenceOther' => true,
-        'otherFuelSupplierTypeOther' => true,
-        'primaryPhoneType' => true,
-        'secondaryPhoneType' => true
-    );
-    public $formFieldsToIndent = array(
-        'step1aActionsTaken' => true,
-        'step2aInterested' => true,
-        'step2bSubmitted' => true,
-        'step2cScheduled' => true,
-        'step2dCompleted' => true,
-        'step3aContractor' => true,
-        'step3bWorkDone' => true,
-        'step3cHowFinanced' => true,
-    );
-    public $fieldsWithTopMargins = array(
-        'step2' => true,
-        'step3' => true,
-        'step4' => true,
-        'step5' => true,
-    );*/
     
     // List ======================================================================
     // ===========================================================================
@@ -199,7 +204,7 @@ class LeadAdmin extends Admin
                 ->add('SourceOfLead', null, array('label' => 'Source of Lead'))
                 ->add('ProgramSource', null, array('label' => 'Program Source'))
                 ->add('DateOfLead', null, array('label' => 'Date of First Contact', 'template' => 'GJGNYDataToolBundle:Lead:_dateOfLead.html.twig'))
-
+                
                 // add custom action links
                 ->add('_action', 'actions', array(
                     'actions' => array(
@@ -318,6 +323,8 @@ class LeadAdmin extends Admin
                 'choices' => array('true' => 'true')
             )
         ));
+        $datagrid->add('DateOfLead', 'doctrine_orm_date', array('label' => 'Date of First Contact'));
+        $datagrid->add('DateOfNextFollowup', 'doctrine_orm_date_range', array('label' => 'Date of Next Follow-up'));
 
         $this->initializeDefaultFilters();
     }
@@ -349,10 +356,64 @@ class LeadAdmin extends Admin
         'step3aContractor' => true,
         'step3bWorkDone' => true,
         'step3cHowFinanced' => true,
-        'october2011Raffle' => true
+        'october2011Raffle' => true,
+        'DateOfLead' => true,
+        'DateOfNextFollowup' => true
     );
 
+    protected function configureSpreadsheetFields(SpreadsheetMapper $spreadsheetMapper)
+    {
+        $spreadsheetMapper
+            ->add('FirstName', array('label' => 'First Name'))
+            ->add('middleInitial', array('label' => 'middle initial'))
+            ->add('LastName', array('label' => 'Last Name'))
+            ->add('Address', array('required' => false))
+            ->add('City', array('label' => 'City (mailing address)'))
+            ->add('State')
+            ->add('Zip')
+            ->add('Town')
+            ->add('county')
+            ->add('phone', array('label' => 'Primary Phone'))
+            ->add('primaryPhoneType', array('label' => 'primary phone type'))
+            ->add('secondaryPhone', array('label' => 'Secondary Phone'))
+            ->add('secondaryPhoneType', array('label' => 'secondary phone type'))
+            ->add('personalEmail', array('label' => 'Personal E-mail'))
+            ->add('workEmail', array('label' => 'Work E-mail'))
+            ->add('SourceOfLead', array('label' => 'Source of Lead'))
+            ->add('ProgramSource', array('label' => 'Program Source'))
+            ->add('leadReferral', array('label' => 'Referral / Nomination'))
+            ->add('DateOfLead', array('label' => 'Date of First Contact', 'type' => 'date'))
+//            ->add('leadType', array('label' => 'Type of Lead'))
+//            ->add('leadStatus', array('label' => 'Lead Status'))
+//            ->add('DateOfNextFollowup', array('label' => 'Date of next Follow-up', 'type' => 'date'))
+//            ->add('organization', array('label' => 'Employer / Organization'))
+//            ->add('orgTitle', array('label' => 'Org Title'))
+//            ->add('orgAddress', array('label' => 'Org Address'))
+//            ->add('orgCity', array('label' => 'Org City'))
+//            ->add('orgState', array('label' => 'Org State'))
+//            ->add('orgZip', array('label' => 'Org Zip'))
+//            ->add('orgCounty', array('label' => 'Org County'))
+//            ->add('website', array('label' => 'Org Website'))
+//            ->add('CommunityGroupsConnectedTo', array('label' => 'Community groups connected to'))
+//            ->add('barriers', array('label' => 'Barriers to making upgrades'))
+//            ->add('interestedInVisit', array('label' => 'Interested in scheduling a home visit', 'type' => 'boolean'))            
+                
 
+        ;
+    }
+    
+/*    protected function configureSummaryFields(SummaryMapper $summaryMapper)
+    {
+        $summaryMapper
+            ->addYField('SourceOfLead', array('label' => 'Source of Lead'))
+            ->addYField('ProgramSource', array('label' => 'Program Source'))
+            ->addYField('DateOfLead', array('label' => 'Date of First Contact', 'type' => 'date'))
+            ->addXField('Town')
+            ->addXField('Zip')
+            ->addXField('leadType')
+        ;
+    }
+*/
     // Show ======================================================================
     // ===========================================================================
     protected function configureShowField(ShowMapper $showMapper)
@@ -461,50 +522,64 @@ class LeadAdmin extends Admin
                 ->add('otherFuelSupplierAcct', null, array('label' => 'accounty #'))
             ->end()   
         ;
+        
+        $this->initializeShowHooks();
     }
         
-    // may need to include LeadEvents in show to generate links to the LeadEvents admin actions
-  
-    /*public $viewChoiceParentFields = array(
-        'motivationChoiceComfort' => 'Motivation for making energy upgrades',
-        'campaignChoiceTalkingToNeighbors' => 'Interested in helping with campaign?',
-        'newsletterChoiceEnergyTips' => 'Interested in receiving monthly newsletters?',
-        'financeChoiceHomeEquity' => 'Project Finance Preference',
+    public $showPreHook = array(
+        'template' => 'GJGNYDataToolBundle:Lead:_leadEventLink.html.twig',
     );
-    public $viewFieldsToIndent = array(
-        'primaryPhoneType' => true,
-        'secondaryPhoneType' => true,
-        'GJGNYReferenceOther' => true,
-        'step1aActionsTaken' => true,
-        'step2aInterested' => true,
-        'step2bSubmitted' => true,
-        'step2cScheduled' => true,
-        'step2dCompleted' => true,
-        'step3aContractor' => true,
-        'step3bWorkDone' => true,
-        'step3cHowFinanced' => true,
-        'electricUtilityAcct' => true,
-        'gasUtilityAcct' => true,
-        'otherFuelSupplierType' => true,
-        'otherFuelSupplierTypeOther' => true,
-        'otherFuelSupplierAcct' => true,
-        'motivationChoiceComfort' => true,
-        'motivationChoiceMoney' => true,
-        'motivationChoiceIndoorAir' => true,
-        'motivationChoiceEnvironment' => true,
-        'motivationChoiceOther' => true,
-        'campaignChoiceTalkingToNeighbors' => true,
-        'campaignChoiceFormEnergyTeam' => true,
-        'campaignChoiceAppearInVideo' => true,
-        'campaignChoiceShareExperience' => true,
-        'newsletterChoiceEnergyTips' => true,
-        'newsletterChoiceSavings' => true,
-        'newsletterChoiceEvents' => true,
-        'financeChoiceHomeEquity' => true,
-        'financeChoiceGJGNY' => true,
-        'financeChoicePocket' => true,
-        'financeChoicePersonal' => true,
-    );*/
+        
+    public $showFieldPreHooks = array (
+        // extra labels for choice groups
+        'motivationChoiceComfort' => 'GJGNYDataToolBundle:Lead:_motivationChoiceShowPreHook.html.twig',
+        'campaignChoiceTalkingToNeighbors' => 'GJGNYDataToolBundle:Lead:_campaignChoiceShowPreHook.html.twig',
+        'newsletterChoiceEnergyTips' => 'GJGNYDataToolBundle:Lead:_newsletterChoiceShowPreHook.html.twig',
+        'financeChoiceHomeEquity' => 'GJGNYDataToolBundle:Lead:_financeChoiceShowPreHook.html.twig',
+    );
+    
+    public function initializeShowHooks()
+    {
+        $this->showPreHook['parameters'] = array(
+            'LeadEventAdmin' =>  $this->configurationPool->getContainer()->get('gjgny.datatool.admin.leadevent')
+        );
+    }
+    
+    public $showFieldClasses = array (
+        'primaryPhoneType' => 'indented',
+        'secondaryPhoneType' => 'indented',
+        'GJGNYReferenceOther' => 'indented',
+        'step1aActionsTaken' => 'indented',
+        'step2aInterested' => 'indented',
+        'step2bSubmitted' => 'indented',
+        'step2cScheduled' => 'indented',
+        'step2dCompleted' => 'indented',
+        'step3aContractor' => 'indented',
+        'step3bWorkDone' => 'indented',
+        'step3cHowFinanced' => 'indented',
+        'electricUtilityAcct' => 'indented',
+        'gasUtilityAcct' => 'indented',
+        'otherFuelSupplierType' => 'indented',
+        'otherFuelSupplierTypeOther' => 'indented',
+        'otherFuelSupplierAcct' => 'indented',
+        'motivationChoiceComfort' => 'indented',
+        'motivationChoiceMoney' => 'indented',
+        'motivationChoiceIndoorAir' => 'indented',
+        'motivationChoiceEnvironment' => 'indented',
+        'motivationChoiceOther' => 'indented',
+        'campaignChoiceTalkingToNeighbors' => 'indented',
+        'campaignChoiceFormEnergyTeam' => 'indented',
+        'campaignChoiceAppearInVideo' => 'indented',
+        'campaignChoiceShareExperience' => 'indented',
+        'newsletterChoiceEnergyTips' => 'indented',
+        'newsletterChoiceSavings' => 'indented',
+        'newsletterChoiceEvents' => 'indented',
+        'financeChoiceHomeEquity' => 'indented',
+        'financeChoiceGJGNY' => 'indented',
+        'financeChoicePocket' => 'indented',
+        'financeChoicePersonal' => 'indented',
+    );
+    
     public function prePersist($Lead)
     {
         $Lead->setDatetimeEntered(new \DateTime());

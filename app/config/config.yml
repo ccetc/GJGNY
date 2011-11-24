@@ -27,6 +27,12 @@ services:
         - { name: sonata.admin, manager_type: orm, group: Lead Data, label: Lead Events }
       arguments: [null, GJGNY\DataToolBundle\Entity\LeadEvent, GJGNYDataToolBundle:LeadEventAdmin]
       
+    ccetc.useradmin.admin.user:
+      class: CCETC\UserAdminBundle\Admin\UserAdmin
+      tags:
+        - { name: sonata.admin, manager_type: orm, group: User Data, label: Users }
+      arguments: [null, GJGNY\DataToolBundle\Entity\User, CCETCUserAdminBundle:UserAdmin]      
+      
     gjgny:
       class: GJGNY\DataToolBundle\Resources\classes\Config
       arguments: [cache/xls, haggertypat@gmail.com, {Broome: 'flint@igc.org', Tompkins : 'scl36@cornell.edu'}]   
@@ -41,7 +47,7 @@ services:
 
     userSettings:
       class: FOS\UserBundle\Resources\config\Settings
-      arguments: [GJGNY Data Tool, haggertypat@gmail.com, SonataAdminBundle::standard_layout.html.twig, false, alert-message success]
+      arguments: [GJGNY Data Tool, haggertypat@gmail.com, SonataAdminBundle::standard_layout.html.twig, true, alert-message success]
 
 
 # Twig Configuration
@@ -51,6 +57,7 @@ twig:
     globals:
       adminTitle: "GJGNY Data Tool"
       adminEmail: "haggertypat@gmail.com"
+      expandedMenu: true
 
 # Assetic Configuration
 assetic:

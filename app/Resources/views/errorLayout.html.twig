@@ -1,33 +1,20 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>{% block title %}GJGNY data tool | Error{% endblock %}</title>
+{% extends "SonataAdminBundle::standard_layout.html.twig" %}
 
-        {% block stylesheets %}
-            <link rel="stylesheet" href="{{ asset('bundles/sonataadmin/bootstrap/bootstrap.min.css') }}" type="text/css" media="all" >
-            <link rel="stylesheet" href="{{ asset('styles/errorPages.css') }}" type="text/css">
-        {% endblock %}
-        
-        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon" />
+{% block page_header %}
+    {% block errorMessage %}Oops! Something went wrong.{% endblock %}
+{% endblock %}
 
-    </head>
-    <body>
-        <div class="errorPageHeader">
-            <span class="logo">
-            </span>
-        </div>
 
-        <div id="content" class="errorPage">
-            <div class="errorContent">
-                <h1>{% block errorMessage %}Oops! Something went wrong.{% endblock %}</h1>
-                <span class="errorText">You can <a href="mailto:haggertypat@gmail.com">contact us directly</a> about this error, or <a href="{{ path('adminHelp') }}">submit an error report</a>.</span>
+{% block content %}
+        <div class="row">
+            <div class="span15">
+                You can <a href="mailto:haggertypat@gmail.com">contact us directly</a> about this error, or <a href="{{ path('adminHelp') }}">submit an error report</a>.
                 
-                <div class="errorOptions">
-                    <a class="errorOption" id="home" href="{{ path('adminHome') }}"><img src="{{ asset('images/icons/Home.png') }}" />Home</a>|
-                    <a class="errorOption" id="help" href="{{ path('adminHelp') }}"><img src="{{ asset('images/icons/Help.png') }}" />Help</a>
+                <div class="actions">
+                    <a class="btn large success" id="home" href="{{ path('adminHome') }}">Home</a>
+                    <a class="btn large danger" id="home" href="{{ path('adminHelp') }}">Submit Error Report</a>
+                    <a class="btn large primary" id="help" href="{{ path('adminHelp') }}">Help</a>
                 </div>
             </div>
         </div>
-    </body>
-</html>
+{% endblock %}

@@ -1,6 +1,54 @@
 GJGNY - FINISHED TODO ====================================================
 =================================================================
+1.1
+============================
 
+//	1.	git init
+	
+//	2.	github
+	
+//	3.	add bundles
+	
+//		- Admin
+		
+//		- DoctrineAdmin
+		
+//		- Help
+		
+//			- work in
+		
+//		- User Admin
+	
+//			- work in
+	
+//		- user
+		
+//			- lost custom user fields and forms
+	
+//		- Knp
+	
+//		- bootstrap?
+	
+//	4.	Admin Syntax
+
+//		- fix filters
+	
+	
+//	10.	Misc
+	
+//		- remove old bundles
+	
+//		- Error templates
+		
+//		- config
+		
+//		- routing
+		
+//		- appkernel
+		
+//		- autoload
+	
+		
 
 1.0
 ============================

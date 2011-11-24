@@ -28,9 +28,7 @@ class LeadEventAdmin extends Admin
     {
         $formMapper
             ->with('Basic Event Data')
-                ->add('Lead', null, array(), array('edit' => 'list',
-                    'inline' => 'table',
-                    'sortable' => 'position'))
+                ->add('Lead', 'sonata_type_model', array(), array('edit' => 'list'))
                 ->add('eventType', 'choice', array(
                     'label' => 'Event Type',
                     'required' => false,
@@ -75,19 +73,19 @@ class LeadEventAdmin extends Admin
              ->end()
         ;
     }
-    /*
-    public $brAfterFields = array(
-        'lutBulb' => true,
-        'lutBulbReplace' => true,
-        'lutLookAtMaterials' => true,
-        'lutMaterialsUseful' => true,
-        'lutAssessment' => true,
-        'lutNewsletter' => true,
+   
+    
+    public $formFieldPreHooks = array(
+        // "other" fields
+        'lutCouponType' => 'SonataAdminBundle:Hook:_otherFormFieldPre.html.twig',
+        'eventTypeOther' => 'SonataAdminBundle:Hook:_otherFormFieldPre.html.twig'
     );
-    public $otherFields = array(
-        'lutCouponType' => true,
-        'eventTypeOther' => true
-    );*/
+    
+    public $formFieldPostHooks = array(
+        // "other" fields
+        'lutCouponType' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'eventTypeOther' => 'SonataAdminBundle:Hook:_closingDiv.html.twig'
+    );
     
     // List ======================================================================
     // ===========================================================================
@@ -211,6 +209,25 @@ class LeadEventAdmin extends Admin
     {
         $this->filterDefaults['dataCounty'] = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser()->getCounty();
     }
+    
+    protected function configureSpreadsheetFields(SpreadsheetMapper $spreadsheetMapper)
+    {
+        $spreadsheetMapper
+            ->add('Lead')
+            ->add('eventType', array('label' => 'Event Type'))
+            ->add('eventTypeOther', array('label' => 'Other Event Type'))
+            ->add('contactPerson', array('label' => 'Contact Person'))
+            ->add('date', array('label' => 'Date of event', 'type' => 'date'))
+            ->add('description', array('label' => 'Description'))
+            ->add('notes', array('label' => 'Notes'))
+            ->add('callStatus', array('label' => 'Call status'))
+            ->add('WhatWasDiscussed', array('label' => 'What was discussed?'))
+            ->add('actionsTaken', array('label' => 'Actions taken'))
+            ->add('FollowUpItems', array('label' => 'Items to follow-up on in future'))
+            ->add('callNotes', array('label' => 'Notes'))
+            ->add('canWeCallBack', array('label' => 'Can we call back?', 'type' => 'boolean'))
+        ;
+    }
 
     // Show ======================================================================
     // ===========================================================================
@@ -255,13 +272,14 @@ class LeadEventAdmin extends Admin
                 ->add('lutCouponType', null, array('label' => 'if so, what type?'))
             ->end()
         ;
-    }
-/*    public $viewFieldsToIndent = array(
-        'lutCouponType' => true,
-        'eventTypeOther' => true
-    );
-*/
+    }    
 
+    public $showFieldClasses = array (
+        'lutCouponType' => 'indented',
+        'eventTypeOther' => 'indented'
+    );
+
+    
     public function prePersist($LeadEvent)
     {
         $LeadEvent->setDatetimeEntered(new \DateTime());

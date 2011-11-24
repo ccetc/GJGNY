@@ -1,102 +1,38 @@
 GJGNY - TODO ====================================================
 =================================================================
 
+0.0
+============
+
+	M2M!!!!!
+	
+	- relation field on Lead Event form!
+
 ideas
 ====================================
 	
 	- simpler create form?
-
-1.1
-============================
-
-//	1.	git init
-	
-//	2.	github
-	
-	3.	add bundles
-	
-//		- Admin
-		
-//		- DoctrineAdmin
-		
-//		- Help
-		
-			- work in
-		
-//		- User Admin
-	
-			- work in
-	
-//		- user
-
-			- no why register text?
-			
-			- lost custom user fields and forms
-	
-//		- Knp
-	
-		- bootstrap
-	
-//	4.	Admin Syntax
-
-//		- fix filters
-	
-	
-	10.	Misc
-	
-//		- remove old bundles
-	
-		- Error templates
-		
-//		- config
-		
-//		- routing
-		
-//		- appkernel
-		
-//		- autoload
-	
-		
-		
 	
 1.2
 ============================
 
 	0.	features lost from new Admin
 
-		- Lead Events
-		
-			- use preFormHook
+//		- Lead Events
 			
-				-> may need to modify to include object
+//		- Other fields
+					
+//		- Form fields to indent
 	
-	
-		- Other fields
+//		- edit description
 		
-			-> use preFieldHook AND postFieldHook
-			
-			
-		- Form fields to indent
-	
-			-> use preFieldHook AND postFieldHook
-	
-		- edit description
+//		- entity description
 		
-			- formPreHook
-			
-		- entity description
+//		- extra form Labels (for groups)
 		
-			- listPreHook!		
-			
-		- extra form Labels (for groups)
+//		- parent fields/labels on show
 		
-			- use preFormFieldHooks
-			
-		- parent fields/labels on show
-		
-			- use preShowFieldHooks
-
-		- Lead name duplication
+//		- show field indents
 		
 		- user levels
 		
@@ -115,8 +51,9 @@ ideas
 	
 	1.	Excel exporting
 	
-		- export all?most? fields from filter result
-	
+//		- configure
+
+		- memory problem
 	
 	2.	Make Program Source a drop down field
 	
@@ -138,20 +75,17 @@ ideas
 	
 	3.	Report Summaries
 	
-		- summarize certain fields for objects in filter results
-	
+		- memory problem
+		
+		- sum problem
 	
 	4.	Refinements
 	
 		- add help fields
 		
 	
-	10.	Performance
+//	10.	Performance
 	
-		- does new Admin help at all?  I hope so
-		
-			- ask Jim about server statistics
-			
 	
 	11.	small misc changes
 	
@@ -165,22 +99,16 @@ ideas
 
 		- check address when creating lead to limit duplicates
 		
+				- double check Lead name duplication
+		
 		- fix boolean yes/no/empty problem
 		
 			- switch to yes/no/empty, add extra field, do simple query
 				
 				- default no to empty
+				
+				- check spreadsheets
 
-	12.	Misc	
-
-		a.	move Tompkins LUT data to Lead
-		
-		b.	trim values?
-		
-		c.	follow up in 2 weeks button
-		
-		d.	date picker?
-		
 
 1.3		
 ===============================
@@ -192,7 +120,7 @@ ideas
 			- not all fields
 			
 				- basic info + event
-				
+			
 				
 	10.	Cleanup
 	
@@ -204,3 +132,15 @@ ideas
 
 			
 		b.  make admin and county entities/interfaces
+
+
+	12.	Misc	
+
+		a.	move Tompkins LUT data to Lead
+		
+		b.	trim values?
+		
+		c.	follow up in 2 weeks button
+		
+		d.	date picker?
+		
