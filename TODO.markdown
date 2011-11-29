@@ -3,20 +3,37 @@ GJGNY - TODO ====================================================
 
 0.0
 ============
-
-	M2M!!!!!
 	
 	- relation field on Lead Event form!
+
+	- bool on form
+	
+	- user admin
+	
+		- fix list labels
+		
+		- fix create
 
 ideas
 ====================================
 	
 	- simpler create form?
 	
+	
+roll out
+====================================
+
+	- run boolfix.sql
+	
+	- doctrine:schema:update --force
+	
+	- add interns to notification list	
+	
+	
 1.2
 ============================
 
-	0.	features lost from new Admin
+#	0.	features lost from new Admin
 
 //		- Lead Events
 			
@@ -49,13 +66,17 @@ ideas
 				- on create/update redirect to list if show is not a route
 
 	
-	1.	Excel exporting
+//	1.	Excel exporting
 	
 //		- configure
 
-		- memory problem
+//		- memory problem
+
+//			- doctrine
+			
+//			- phpexcel
 	
-	2.	Make Program Source a drop down field
+#	2.	Make Program Source a drop down field
 	
 		a. Form
 		
@@ -73,42 +94,37 @@ ideas
 				- include only county programs
 			
 	
-	3.	Report Summaries
+//	3.	Report Summaries
 	
-		- memory problem
+//		- memory problem
 		
-		- sum problem
+//		- sum problem
 	
-	4.	Refinements
+#	4.	Refinements
 	
 		- add help fields
 		
+		- adjust date formats
 	
 //	10.	Performance
 	
 	
-	11.	small misc changes
+#	11.	small misc changes
 	
-		- add renter/landlord/homeowner checkboxes
+//		- add renter/landlord/homeowner checkboxes
 		
-		- default to current date
+//		- default to current date
 
 		- add button to lead page to create an event for that lead
 
-		- add interns to notification e-mails
+//		- let notification e-mails handle multiple toAddresses
 
 		- check address when creating lead to limit duplicates
 		
 				- double check Lead name duplication
 		
-		- fix boolean yes/no/empty problem
+//		- fix boolean yes/no/empty problem
 		
-			- switch to yes/no/empty, add extra field, do simple query
-				
-				- default no to empty
-				
-				- check spreadsheets
-
 
 1.3		
 ===============================
@@ -120,6 +136,9 @@ ideas
 			- not all fields
 			
 				- basic info + event
+			
+	2.	Lead Events
+	
 			
 				
 	10.	Cleanup

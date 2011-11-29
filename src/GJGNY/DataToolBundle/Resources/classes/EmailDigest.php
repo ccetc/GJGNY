@@ -5,7 +5,7 @@ namespace GJGNY\DataToolBundle\Resources\classes;
 class EmailDigest
 {
 
-    public function getLeadsToCallAndSendEmails($leadRepository, $adminEmails, $mailer, $fromAddress)
+    public function getLeadsToCallAndSendEmails($leadRepository, $emailAddresses, $mailer, $fromAddress)
     {
         $leadsToCall = $leadRepository->findBy(array("leadStatus" => "need to call"));
 
@@ -25,10 +25,16 @@ class EmailDigest
             }
         }
         
-        if($BroomeLeadCount > 0) $this->sendLeadsToCallEmail($mailer, $adminEmails['Broome'], $fromAddress, $BroomeLeadCount, 'Broome' );
-        if($TompkinsLeadCount > 0) $this->sendLeadsToCallEmail($mailer, $adminEmails['Tompkins'], $fromAddress, $TompkinsLeadCount, 'Tompkins' );
-
-        return array("Broome" => $BroomeLeadCount, "Tompkins" => $TompkinsLeadCount);
+        if($BroomeLeadCount > 0) {
+            foreach($emailAddresses['Broome'] as $toAddress) {
+                $this->sendLeadsToCallEmail($mailer, $toAddress, $fromAddress, $BroomeLeadCount, 'Broome' );
+            }
+        }
+        if($TompkinsLeadCount > 0) {
+            foreach($emailAddresses['Tompkins'] as $toAddress) {
+                $this->sendLeadsToCallEmail($mailer, $toAddress, $fromAddress, $TompkinsLeadCount, 'Tompkins' );
+            }
+        }
     }
 
     private function sendLeadsToCallEmail($mailer, $toAddress, $fromAddress, $count, $county)

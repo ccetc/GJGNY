@@ -35,7 +35,7 @@ services:
       
     gjgny:
       class: GJGNY\DataToolBundle\Resources\classes\Config
-      arguments: [cache/xls, haggertypat@gmail.com, {Broome: 'flint@igc.org', Tompkins : 'scl36@cornell.edu'}]   
+      arguments: [cache/xls, haggertypat@gmail.com, {Broome: flint@igc.org, Tompkins : scl36@cornell.edu}, {Broome: [a, b], Tompkins: [c, d] }]   
     
     errorReports:
       class: CCETC\ErrorReportBundle\Resources\config\Config

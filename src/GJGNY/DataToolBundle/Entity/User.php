@@ -245,4 +245,24 @@ class User extends BaseUser
     {
         return $this->LeadsUpdated;
     }
+
+    /**
+     * Add LeadEventsEntered
+     *
+     * @param GJGNY\DataToolBundle\Entity\LeadEvent $leadEventsEntered
+     */
+    public function addLeadEvent(\GJGNY\DataToolBundle\Entity\LeadEvent $leadEventsEntered)
+    {
+        $this->LeadEventsEntered[] = $leadEventsEntered;
+    }
+
+    /**
+     * Add LeadsEntered
+     *
+     * @param GJGNY\DataToolBundle\Entity\Lead $leadsEntered
+     */
+    public function addLead(\GJGNY\DataToolBundle\Entity\Lead $leadsEntered)
+    {
+        $this->LeadsEntered[] = $leadsEntered;
+    }
 }

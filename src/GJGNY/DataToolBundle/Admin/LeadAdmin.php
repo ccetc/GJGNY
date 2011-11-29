@@ -53,10 +53,10 @@ class LeadAdmin extends Admin
                 ->add('SourceOfLead', 'choice', array('required' => false, 'label' => 'Source of Lead', 'choices' => Lead::getSourceOfLeadChoices()))
                 ->add('ProgramSource', null, array('required' => false, 'label' => 'Program Source'))
                 ->add('leadReferral', null, array('required' => false, 'label' => 'Referral / Nomination'))
-                ->add('DateOfLead', null, array('label' => 'Date of First Contact', 'required' => false))
+                ->add('DateOfLead', null, array('label' => 'Date of First Contact', 'required' => false, 'widget' => 'choice', 'format' => 'MM/dd/yyyy'))
                 ->add('leadType', 'choice', array('required' => false, 'label' => 'Type of Lead', 'choices' => Lead::getLeadTypeChoices()))
                 ->add('leadStatus', 'choice', array('required' => false, 'label' => 'Lead Status', 'choices' => Lead::getLeadStatusChoices()))
-                ->add('DateOfNextFollowup', null, array('label' => 'Date of next Follow-up', 'required' => false))
+                ->add('DateOfNextFollowup', null, array('label' => 'Date of next Follow-up', 'required' => false, 'widget' => 'choice', 'format' => 'MM/dd/yyyy'))
             ->end()
             ->with('Employer / Organization Information')
                 ->add('organization', null, array('label' => 'Employer / Organization', 'required' => false))
@@ -75,6 +75,9 @@ class LeadAdmin extends Admin
             ->end()
             ->with('Other Information')
                 ->add('CommunityGroupsConnectedTo', null, array('label' => 'Community groups connected to', 'required' => false))
+                ->add('homeowner', null, array('label' => 'Homeowner', 'required' => false))
+                ->add('renter', null, array('label' => 'Renter', 'required' => false))
+                ->add('landlord', null, array('label' => 'Landlord', 'required' => false))
                 ->add('barriers', null, array('label' => 'Barriers to making upgrades', 'required' => false))
                 ->add('interestedInVisit', null, array('label' => 'Interested in scheduling a home visit', 'required' => false))
 
@@ -92,7 +95,6 @@ class LeadAdmin extends Admin
                 ->add('newsletterChoiceEnergyTips', null, array('label' => 'Energy saving tips', 'required' => false))
                 ->add('newsletterChoiceSavings', null, array('label' => 'Energy saving programs and incentives', 'required' => false))
                 ->add('newsletterChoiceEvents', null, array('label' => 'Upcoming workshops and events', 'required' => false))
-
                 ->add('otherNotes', null, array('label' => 'Other Notes', 'required' => false))
             ->end()
             ->with('Energy Path steps')    
@@ -323,9 +325,14 @@ class LeadAdmin extends Admin
                 'choices' => array('true' => 'true')
             )
         ));
-        $datagrid->add('DateOfLead', 'doctrine_orm_date', array('label' => 'Date of First Contact'));
-        $datagrid->add('DateOfNextFollowup', 'doctrine_orm_date_range', array('label' => 'Date of Next Follow-up'));
+        $datagrid->add('homeowner', null, array('label' => 'Homeowner'));
+        $datagrid->add('renter', null, array('label' => 'Renter'));
+        $datagrid->add('landlord', null, array('label' => 'Landlord'));
 
+        // leave the dates for last since they are tall
+        $datagrid->add('DateOfLead', 'doctrine_orm_date_range', array('label' => 'Date of First Contact'));
+        $datagrid->add('DateOfNextFollowup', 'doctrine_orm_date_range', array('label' => 'Date of Next Follow-up'));
+        
         $this->initializeDefaultFilters();
     }
 
@@ -358,7 +365,10 @@ class LeadAdmin extends Admin
         'step3cHowFinanced' => true,
         'october2011Raffle' => true,
         'DateOfLead' => true,
-        'DateOfNextFollowup' => true
+        'DateOfNextFollowup' => true,
+        'homeowner' => true,
+        'renter' => true,
+        'landlord' => true,
     );
 
     protected function configureSpreadsheetFields(SpreadsheetMapper $spreadsheetMapper)
@@ -402,18 +412,17 @@ class LeadAdmin extends Admin
         ;
     }
     
-/*    protected function configureSummaryFields(SummaryMapper $summaryMapper)
+    protected function configureSummaryFields(SummaryMapper $summaryMapper)
     {
         $summaryMapper
             ->addYField('SourceOfLead', array('label' => 'Source of Lead'))
             ->addYField('ProgramSource', array('label' => 'Program Source'))
             ->addYField('DateOfLead', array('label' => 'Date of First Contact', 'type' => 'date'))
-            ->addXField('Town')
+            ->addXField('City')
             ->addXField('Zip')
-            ->addXField('leadType')
         ;
     }
-*/
+
     // Show ======================================================================
     // ===========================================================================
     protected function configureShowField(ShowMapper $showMapper)
@@ -457,6 +466,9 @@ class LeadAdmin extends Admin
             ->end()
             ->with('Other Information')
                 ->add('CommunityGroupsConnectedTo', null, array('label' => 'Community groups connected to'))
+                ->add('homeowner', null, array('label' => 'Homeowner'))
+                ->add('renter', null, array('label' => 'Renter'))
+                ->add('landlord', null, array('label' => 'Landlord'))
                 ->add('barriers', null, array('label' => 'Barriers to making upgrades'))
                 ->add('interestedInVisit', null, array('label' => 'Interested in scheduling a home visit'))
                 ->add('motivationChoiceComfort', null, array('label' => 'comfort'))

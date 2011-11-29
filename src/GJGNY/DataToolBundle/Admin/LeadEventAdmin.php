@@ -36,7 +36,7 @@ class LeadEventAdmin extends Admin
                 ))
                 ->add('eventTypeOther', null, array('label' => 'Other', 'required' => false))
                 ->add('contactPerson', null, array('label' => 'Contact Person', 'required' => false))
-                ->add('date', null, array('label' => 'Date of event', 'required' => false))
+                ->add('date', null, array('label' => 'Date of event', 'required' => false, 'time_widget' => 'choice', 'date_widget' => 'choice', 'date_format' => 'MM/dd/yyyy'))
                 ->add('description', null, array('label' => 'Description', 'required' => false))
                 ->add('notes', null, array('label' => 'Notes', 'required' => false))
             ->end()
@@ -231,11 +231,21 @@ class LeadEventAdmin extends Admin
 
     // Show ======================================================================
     // ===========================================================================
+    public $showPreHook = array(
+        'template' => 'GJGNYDataToolBundle:LeadEvent:_leadLink.html.twig',
+    );
+    
+    public function initializeShowHooks()
+    {
+        $this->showPreHook['parameters'] = array(
+            'LeadAdmin' =>  $this->configurationPool->getContainer()->get('gjgny.datatool.admin.lead')
+        );
+    }
+
     protected function configureShowField(ShowMapper $showMapper)
     {
         $showMapper
             ->with('Basic Event Data')
-                ->add('Lead', null, array('label' => 'Lead'))
                 ->add('eventType', null, array('label' => 'Event Type'))
                 ->add('eventTypeOther', null, array('label' => 'other'))
                 ->add('date', null, array('label' => 'Date of Event'))
@@ -272,6 +282,8 @@ class LeadEventAdmin extends Admin
                 ->add('lutCouponType', null, array('label' => 'if so, what type?'))
             ->end()
         ;
+        
+        $this->initializeShowHooks();
     }    
 
     public $showFieldClasses = array (

@@ -1,0 +1,11 @@
+<h2>
+    This is an event for <a href="{{ LeadAdmin.generateUrl('show', {'id' : object.Lead.id }) }} ">{{ object.Lead }}</a>
+{#{{ object }} has
+    {% if object.LeadEvents|length > 0 %}
+        <a href="{{ LeadEventAdmin.generateUrl('list', {'filter[firstName][value]':object.firstName, 'filter[lastName][value]':object.lastName}) }}">
+    {% endif %}
+{{ object.LeadEvents|length }}  event{% if object.LeadEvents|length != 1 %}s{% endif %} &rarr;
+    {% if object.LeadEvents|length > 0 %}
+        </a>
+    {% endif %}#}
+</h2>

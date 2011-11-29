@@ -415,31 +415,31 @@ class Lead
   /**
    * @var smallint $step1
    *
-   * @ORM\Column(name="step1", type="boolean", nullable="true")
+   * @ORM\Column(name="step1", type="boolean")
    */
   private $step1;
   /**
    * @var smallint $step2
    *
-   * @ORM\Column(name="step2", type="boolean", nullable="true")
+   * @ORM\Column(name="step2", type="boolean")
    */
   private $step2;
   /**
    * @var smallint $step3
    *
-   * @ORM\Column(name="step3", type="boolean", nullable="true")
+   * @ORM\Column(name="step3", type="boolean")
    */
   private $step3;
   /**
    * @var smallint $step4
    *
-   * @ORM\Column(name="step4", type="boolean", nullable="true")
+   * @ORM\Column(name="step4", type="boolean")
    */
   private $step4;
   /**
    * @var smallint $step5
    *
-   * @ORM\Column(name="step5", type="boolean", nullable="true")
+   * @ORM\Column(name="step5", type="boolean")
    */
   private $step5;
   /**
@@ -451,25 +451,25 @@ class Lead
   /**
    * @var smallint $step2aInterested
    *
-   * @ORM\Column(name="step2aInterested", type="boolean", nullable="true")
+   * @ORM\Column(name="step2aInterested", type="boolean")
    */
   private $step2aInterested;
   /**
    * @var smallint $step2bSubmitted
    *
-   * @ORM\Column(name="step2bSubmitted", type="boolean", nullable="true")
+   * @ORM\Column(name="step2bSubmitted", type="boolean")
    */
   private $step2bSubmitted;
   /**
    * @var smallint $step2cScheduled
    *
-   * @ORM\Column(name="step2cScheduled", type="boolean", nullable="true")
+   * @ORM\Column(name="step2cScheduled", type="boolean")
    */
   private $step2cScheduled;
   /**
    * @var smallint $step2dCompleted
    *
-   * @ORM\Column(name="step2dCompleted", type="boolean", nullable="true")
+   * @ORM\Column(name="step2dCompleted", type="boolean")
    */
   private $step2dCompleted;
   /**
@@ -507,73 +507,73 @@ class Lead
   /**
    * @var smallint $interestedInVisit
    *
-   * @ORM\Column(name="interestedInVisit", type="boolean", nullable="true")
+   * @ORM\Column(name="interestedInVisit", type="boolean")
    */
   private $interestedInVisit;
   /**
    * @var smallint $newsletterChoiceEnergyTips
    *
-   * @ORM\Column(name="newsletterChoiceEnergyTips", type="boolean", nullable="true")
+   * @ORM\Column(name="newsletterChoiceEnergyTips", type="boolean")
    */
   private $newsletterChoiceEnergyTips;
   /**
    * @var smallint $newsletterChoiceEvents
    *
-   * @ORM\Column(name="newsletterChoiceEvents", type="boolean", nullable="true")
+   * @ORM\Column(name="newsletterChoiceEvents", type="boolean")
    */
   private $newsletterChoiceEvents;
   /**
    * @var smallint $newsletterChoiceSavings
    *
-   * @ORM\Column(name="newsletterChoiceSavings", type="boolean", nullable="true")
+   * @ORM\Column(name="newsletterChoiceSavings", type="boolean")
    */
   private $newsletterChoiceSavings;
   /**
    * @var smallint $campaignChoiceTalkingToNeighbors
    *
-   * @ORM\Column(name="campaignChoiceTalkingToNeighbors", type="boolean", nullable="true")
+   * @ORM\Column(name="campaignChoiceTalkingToNeighbors", type="boolean")
    */
   private $campaignChoiceTalkingToNeighbors;
   /**
    * @var smallint $campaignChoiceFormEnergyTeam
    *
-   * @ORM\Column(name="campaignChoiceFormEnergyTeam", type="boolean", nullable="true")
+   * @ORM\Column(name="campaignChoiceFormEnergyTeam", type="boolean")
    */
   private $campaignChoiceFormEnergyTeam;
   /**
    * @var smallint $campaignChoiceAppearInVideo
    *
-   * @ORM\Column(name="campaignChoiceAppearInVideo", type="boolean", nullable="true")
+   * @ORM\Column(name="campaignChoiceAppearInVideo", type="boolean")
    */
   private $campaignChoiceAppearInVideo;
   /**
    * @var smallint $campaignChoiceShareExperience
    *
-   * @ORM\Column(name="campaignChoiceShareExperience", type="boolean", nullable="true")
+   * @ORM\Column(name="campaignChoiceShareExperience", type="boolean")
    */
   private $campaignChoiceShareExperience;
   /**
    * @var smallint $motivationChoiceComfort
    *
-   * @ORM\Column(name="motivationChoiceComfort", type="boolean", nullable="true")
+   * @ORM\Column(name="motivationChoiceComfort", type="boolean")
    */
   private $motivationChoiceComfort;
   /**
    * @var smallint $motivationChoiceMoney
    *
-   * @ORM\Column(name="motivationChoiceMoney", type="boolean", nullable="true")
+   * @ORM\Column(name="motivationChoiceMoney", type="boolean")
    */
   private $motivationChoiceMoney;
   /**
    * @var smallint $motivationChoiceIndoorAir
    *
-   * @ORM\Column(name="motivationChoiceIndoorAir", type="boolean", nullable="true")
+   * @ORM\Column(name="motivationChoiceIndoorAir", type="boolean")
    */
   private $motivationChoiceIndoorAir;
   /**
    * @var smallint $motivationChoiceEnvironment
    *
-   * @ORM\Column(name="motivationChoiceEnvironment", type="boolean", nullable="true")
+   * @ORM\Column(name="motivationChoiceEnvironment", type="boolean")
    */
   private $motivationChoiceEnvironment;
   /**
@@ -594,6 +594,24 @@ class Lead
    * @ORM\Column(name="website", type="string", length=255, nullable="true")
    */
   private $website;
+  /**
+   * @var smallint $homeowner
+   *
+   * @ORM\Column(name="homeowner", type="boolean")
+   */
+  private $homeowner;
+  /**
+   * @var smallint $renter
+   *
+   * @ORM\Column(name="renter", type="boolean")
+   */
+  private $renter;
+  /**
+   * @var smallint $landlord
+   *
+   * @ORM\Column(name="landlord", type="boolean")
+   */
+  private $landlord;
 // GJGNY APPLICATION DATA ======================================================
 // =============================================================================
   /**
@@ -611,25 +629,25 @@ class Lead
   /**
    * @var smallint $financeChoiceGJGNY
    *
-   * @ORM\Column(name="financeChoiceGJGNY", type="boolean", nullable="true")
+   * @ORM\Column(name="financeChoiceGJGNY", type="boolean")
    */
   private $financeChoiceGJGNY;
   /**
    * @var smallint $financeChoiceHomeEquity
    *
-   * @ORM\Column(name="financeChoiceHomeEquity", type="boolean", nullable="true")
+   * @ORM\Column(name="financeChoiceHomeEquity", type="boolean")
    */
   private $financeChoiceHomeEquity;
   /**
    * @var smallint $financeChoicePocket
    *
-   * @ORM\Column(name="financeChoicePocket", type="boolean", nullable="true")
+   * @ORM\Column(name="financeChoicePocket", type="boolean")
    */
   private $financeChoicePocket;
   /**
    * @var smallint $financeChoicePersonal
    *
-   * @ORM\Column(name="financeChoicePersonal", type="boolean", nullable="true")
+   * @ORM\Column(name="financeChoicePersonal", type="boolean")
    */
   private $financeChoicePersonal;
   /**
@@ -677,7 +695,7 @@ class Lead
   /**
    * @var smallint $hasCentralAC
    *
-   * @ORM\Column(name="hasCentralAC", type="boolean", nullable="true")
+   * @ORM\Column(name="hasCentralAC", type="boolean")
    */
   private $hasCentralAC;
   /**
@@ -733,7 +751,7 @@ class Lead
   /**
    * @var smallint $october2011Raffle
    *
-   * @ORM\Column(name="october2011Raffle", type="boolean", nullable="true")
+   * @ORM\Column(name="october2011Raffle", type="boolean")
    */
   private $october2011Raffle;
   
@@ -2591,5 +2609,25 @@ class Lead
     public function getOctober2011Raffle()
     {
         return $this->october2011Raffle;
+    }
+
+    /**
+     * Set interestedInVisit
+     *
+     * @param boolean $interestedInVisit
+     */
+    public function setInterestedInVisit($interestedInVisit)
+    {
+        $this->interestedInVisit = $interestedInVisit;
+    }
+
+    /**
+     * Get interestedInVisit
+     *
+     * @return boolean 
+     */
+    public function getInterestedInVisit()
+    {
+        return $this->interestedInVisit;
     }
 }
