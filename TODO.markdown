@@ -1,13 +1,5 @@
 GJGNY - TODO ====================================================
-=================================================================
-
-
-	- remove .svn
-	
-//	- + on LeadEvent
-	
-	- move summary
-	
+=================================================================	
 
 roll out
 ====================================
@@ -21,6 +13,18 @@ roll out
 	- add interns to notification list	
 	
 	- change mem on server to 32
+	
+	
+after roll out
+============================
+
+	- guide
+	
+	- name and address check
+	
+	- date setting
+
+	
 	
 1.2
 ============================
