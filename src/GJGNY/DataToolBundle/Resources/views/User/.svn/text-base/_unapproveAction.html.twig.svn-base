@@ -1,3 +1,0 @@
-<a href="{{ admin.generateUrl('unapprove', {'user_id': admin.id(object)}) }}" class="add_link" title="Unapprove User">
-    <img src="{{ asset('bundles/sonataadmin/famfamfam/exclamation.png') }}" alt="Unapprove User" /> 
-</a>
