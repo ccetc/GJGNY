@@ -113,7 +113,7 @@ fos_user:
     address: noreply@ccetompkins.org
     sender_name:    GJGNY Data Tool
   registration:
-    confirmation:
+    approval:
       enabled:    true
       template:   FOSUserBundle:Registration:email.txt.twig
     #form:
