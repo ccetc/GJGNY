@@ -15,6 +15,11 @@ adminHome:
   pattern: /admin/dashboard
   defaults: { _controller: SonataAdminBundle:Core:dashboard }
   
+getProgramDate:
+  pattern: /getProgramDate/{id}
+  defaults: { _controller: GJGNYDataToolBundle:Program:getProgramDate, id: 0 }
+  
+  
   
 # ADMIN =====================
 admin:

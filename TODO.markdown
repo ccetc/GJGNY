@@ -17,9 +17,9 @@ roll out
 		
 //		- run program sql files
 
-	2.
+//	2.
 	
-		- add interns to notification list	
+//		- add interns to notification list	
 
 //		- change mem on server to 32
 
@@ -48,8 +48,8 @@ after roll out
 	
 	- name and address check
 	
-	- date setting
-
+//	- date setting
+	
 	
 	
 1.2
@@ -86,11 +86,11 @@ after roll out
 			
 //			- phpexcel
 	
-#	2.	Make Program Source a drop down field
+//	2.	Make Program Source a drop down field
 	
-		- relation
+//		- relation
 		
-			- auto set date
+//			- auto set date
 			
 	
 //	3.	Report Summaries

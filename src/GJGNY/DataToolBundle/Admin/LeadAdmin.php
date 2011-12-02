@@ -89,19 +89,19 @@ class LeadAdmin extends Admin
                 ->add('otherNotes', null, array('label' => 'Other Notes', 'required' => false))
             ->end()
             ->with('Energy Path steps')    
-                ->add('step1', null, array('label' => 'Low cost / no-cost actions and tune up energy users', 'required' => false))
-                ->add('step1aActionsTaken', null, array('label' => 'List specific actions taken', 'required' => false))
-                ->add('step2', null, array('label' => 'Energy Assessment', 'required' => false))
-                ->add('step2aInterested', null, array('label' => 'Interested in getting assessment', 'required' => false))
-                ->add('step2bSubmitted', null, array('label' => 'GJGNY application submitted', 'required' => false))
-                ->add('step2cScheduled', null, array('label' => 'Assessment scheduled', 'required' => false))
-                ->add('step2dCompleted', null, array('label' => 'Assessment completed and report received', 'required' => false))
-                ->add('step3', null, array('label' => 'Whole house upgrade', 'required' => false))
-                ->add('step3aContractor', null, array('label' => 'Name of contractor', 'required' => false))
-                ->add('step3bWorkDone', null, array('label' => 'What was done (air sealing, insulating, upgrade heating system, etc.)', 'required' => false))
-                ->add('step3cHowFinanced', 'choice', array('required' => false, 'label' => 'How was it financed', 'choices' => Lead::getHowAssessmentFinancedChoices()))
-                ->add('step4', null, array('label' => 'Upgrade Appliances', 'required' => false))
-                ->add('step5', null, array('label' => 'Renewable energy', 'required' => false))
+                ->add('step1', null, array('label' => '1. Low cost / no-cost actions and tune up energy users', 'required' => false))
+                ->add('step1aActionsTaken', null, array('label' => '1a. List specific actions taken', 'required' => false))
+                ->add('step2', null, array('label' => '2. Energy Assessment', 'required' => false))
+                ->add('step2aInterested', null, array('label' => '2a. Interested in getting assessment', 'required' => false))
+                ->add('step2bSubmitted', null, array('label' => '2b. GJGNY application submitted', 'required' => false))
+                ->add('step2cScheduled', null, array('label' => '2c. Assessment scheduled', 'required' => false))
+                ->add('step2dCompleted', null, array('label' => '2d. Assessment completed and report received', 'required' => false))
+                ->add('step3', null, array('label' => '3. Whole house upgrade', 'required' => false))
+                ->add('step3aContractor', null, array('label' => '3a. Name of contractor', 'required' => false))
+                ->add('step3bWorkDone', null, array('label' => '3b. What was done (air sealing, insulating, upgrade heating system, etc.)', 'required' => false))
+                ->add('step3cHowFinanced', 'choice', array('required' => false, 'label' => '3c. How was it financed', 'choices' => Lead::getHowAssessmentFinancedChoices()))
+                ->add('step4', null, array('label' => '4. Upgrade Appliances', 'required' => false))
+                ->add('step5', null, array('label' => '5. Renewable energy', 'required' => false))
             ->end()
             ->with('Employer / Organization Information', array('collapsed' => true))
                 ->add('organization', null, array('label' => 'Employer / Organization', 'required' => false))
@@ -232,6 +232,11 @@ class LeadAdmin extends Admin
         'financeChoicePocket' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'financeChoicePersonal' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
     );
+    
+    public $formPostHook = array(
+        'template' => 'GJGNYDataToolBundle:Lead:_editPostHook.html.twig',
+    );
+
     
     // List ======================================================================
     // ===========================================================================

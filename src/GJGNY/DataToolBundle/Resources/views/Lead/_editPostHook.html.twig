@@ -1,0 +1,22 @@
+<script>
+    
+    $('select[id$="_Program"]').live("change", function(e){
+
+        $.ajax({
+            url: '{{ url('getProgramDate') }}/' + $(this).val(),
+            success: function(html) {
+                if(html != "") {
+                    html = html.split("/");
+                    var month = html[0];
+                    var day = html[1];
+                    var year = html[2];
+                    
+                    $('select[id$="_DateOfLead_month"]').val(month);
+                    $('select[id$="_DateOfLead_day"]').val(day);
+                    $('select[id$="_DateOfLead_year"]').val(year);
+                }
+            }
+        });
+    });
+
+</script>
