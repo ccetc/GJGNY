@@ -142,7 +142,7 @@ class LeadEvent
   /**
    * @var smallint $canWeCallBack
    *
-   * @ORM\Column(name="canWeCallBack", type="boolean", nullable="true")
+   * @ORM\Column(name="canWeCallBack", type="boolean")
    */
   private $canWeCallBack;
   
@@ -158,25 +158,25 @@ class LeadEvent
   /**
    * @var smallint $lutBulb
    *
-   * @ORM\Column(name="lutBulb", type="boolean", nullable="true")
+   * @ORM\Column(name="lutBulb", type="boolean")
    */
   private $lutBulb;
   /**
    * @var smallint $lutBulbReplace
    *
-   * @ORM\Column(name="lutBulbReplace", type="boolean", nullable="true")
+   * @ORM\Column(name="lutBulbReplace", type="boolean")
    */
   private $lutBulbReplace;
   /**
    * @var smallint $lutLookAtMaterials
    *
-   * @ORM\Column(name="lutLookAtMaterials", type="boolean", nullable="true")
+   * @ORM\Column(name="lutLookAtMaterials", type="boolean")
    */
   private $lutLookAtMaterials;
   /**
    * @var smallint $lutMaterialsUseful
    *
-   * @ORM\Column(name="lutMaterialsUseful", type="boolean", nullable="true")
+   * @ORM\Column(name="lutMaterialsUseful", type="boolean")
    */
   private $lutMaterialsUseful;
   /**
@@ -206,7 +206,7 @@ class LeadEvent
   /**
    * @var smallint $lutAssessment
    *
-   * @ORM\Column(name="lutAssessment", type="boolean", nullable="true")
+   * @ORM\Column(name="lutAssessment", type="boolean")
    */
   private $lutAssessment;
   /**
@@ -218,7 +218,7 @@ class LeadEvent
   /**
    * @var smallint $lutNewsletter
    *
-   * @ORM\Column(name="lutNewsletter", type="boolean", nullable="true")
+   * @ORM\Column(name="lutNewsletter", type="boolean")
    */
   private $lutNewsletter;
   /**
@@ -230,7 +230,7 @@ class LeadEvent
   /**
    * @var smallint $lutCouponMailed
    *
-   * @ORM\Column(name="lutCouponMailed", type="boolean", nullable="true")
+   * @ORM\Column(name="lutCouponMailed", type="boolean")
    */
   private $lutCouponMailed;
   /**
@@ -240,6 +240,11 @@ class LeadEvent
    */
   private $lutCouponType;
     
+  public function __construct()
+  {
+    $this->date = new \DateTime();
+  }
+  
   /**
    * Get id
    *
@@ -312,7 +317,8 @@ class LeadEvent
     
     public function __toString()
     {
-      if(isset($this->date))
+      // only return a string if this LeadEvent has been saved
+      if(isset($this->datetimeEntered))
       {
         if(isset($this->eventType)) $eventType = $this->eventType;
         else if(isset($this->eventTypeOther)) $eventType = $this->eventTypeOther;

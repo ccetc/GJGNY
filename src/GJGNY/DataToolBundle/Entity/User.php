@@ -22,6 +22,12 @@ class User extends BaseUser
   
     /** @ORM\OneToMany(targetEntity="Lead", mappedBy="lastUpdatedBy") */
     protected $LeadsUpdated;
+    
+    /** @ORM\OneToMany(targetEntity="Program", mappedBy="lastUpdatedBy") */
+    protected $ProgramsUpdated;
+    
+     /** @ORM\OneToMany(targetEntity="Program", mappedBy="enteredBy") */
+    protected $ProgramsEntered;
   
     public function __toString()
     {
@@ -264,5 +270,35 @@ class User extends BaseUser
     public function addLead(\GJGNY\DataToolBundle\Entity\Lead $leadsEntered)
     {
         $this->LeadsEntered[] = $leadsEntered;
+    }
+
+    /**
+     * Add ProgramsUpdated
+     *
+     * @param GJGNY\DataToolBundle\Entity\Program $programsUpdated
+     */
+    public function addProgram(\GJGNY\DataToolBundle\Entity\Program $programsUpdated)
+    {
+        $this->ProgramsUpdated[] = $programsUpdated;
+    }
+
+    /**
+     * Get ProgramsUpdated
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getProgramsUpdated()
+    {
+        return $this->ProgramsUpdated;
+    }
+
+    /**
+     * Get ProgramsEntered
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getProgramsEntered()
+    {
+        return $this->ProgramsEntered;
     }
 }

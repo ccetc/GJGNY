@@ -43,7 +43,8 @@ class LeadEvent
       'generic' => 'generic',
       'phone call' => 'phone call',
       'in person' => 'in person',
-      'e-mail' => 'e-mail'
+      'e-mail' => 'e-mail',
+      'lead acquisition' => 'lead acquisition'
   );
   
   private static $callStatusChoices = array (
@@ -243,6 +244,14 @@ class LeadEvent
   public function __construct()
   {
     $this->date = new \DateTime();
+    $this->canWeCallBack = false;
+    $this->lutBulb = false;
+    $this->lutAssessment = false;
+    $this->lutBulbReplace = false;
+    $this->lutCouponMailed = false;
+    $this->lutLookAtMaterials = false;
+    $this->lutMaterialsUseful = false;
+    $this->lutNewsletter = false;
   }
   
   /**
@@ -317,7 +326,8 @@ class LeadEvent
     
     public function __toString()
     {
-      if(isset($this->date))
+      // only return a string if this LeadEvent has been saved
+      if(isset($this->datetimeEntered))
       {
         if(isset($this->eventType)) $eventType = $this->eventType;
         else if(isset($this->eventTypeOther)) $eventType = $this->eventTypeOther;

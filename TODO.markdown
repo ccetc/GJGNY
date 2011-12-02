@@ -1,25 +1,7 @@
 GJGNY - TODO ====================================================
 =================================================================
 
-0.0
-============
-	
-	- relation field on Lead Event form!
 
-	- bool on form
-	
-	- user admin
-	
-		- fix list labels
-		
-		- fix create
-
-ideas
-====================================
-	
-	- simpler create form?
-	
-	
 roll out
 ====================================
 
@@ -27,8 +9,11 @@ roll out
 	
 	- doctrine:schema:update --force
 	
+	- check server for new programs and run program sql files
+	
 	- add interns to notification list	
 	
+	- change mem on server to 32
 	
 1.2
 ============================
@@ -51,20 +36,8 @@ roll out
 		
 //		- show field indents
 		
-		- user levels
+//		- user levels
 		
-			- hide some entities on dashboard
-		
-			- hide Create link in base_list.html.twig sometimes
-		
-				- find a way to define which admins should not have this
-		
-					- now checks that the route is defined?
-			
-				- would like to disable create/edit for some entities / some users
-
-				- on create/update redirect to list if show is not a route
-
 	
 //	1.	Excel exporting
 	
@@ -78,20 +51,9 @@ roll out
 	
 #	2.	Make Program Source a drop down field
 	
-		a. Form
+		- relation
 		
-			- dropdown + other
-
-				- include only county programs
-			
-			- autofill information?
-			
-
-		b.	Filter
-		
-			- dropdown
-			
-				- include only county programs
+			- auto set date
 			
 	
 //	3.	Report Summaries
@@ -100,11 +62,31 @@ roll out
 		
 //		- sum problem
 	
-#	4.	Refinements
-	
-		- add help fields
+//		- object problem
 		
-		- adjust date formats
+//		- set memory
+		
+//			- in controller and class methods
+		
+//		- other fields
+		
+//			- event type
+
+	
+//	4.	Refinements
+	
+//		- add help fields
+		
+//		- adjust date formats
+	
+//		- add summary to Lead Events
+				
+//	5.	Auto Events
+	
+//		- program source, call, e-mail		
+			
+		
+		
 	
 //	10.	Performance
 	
@@ -115,7 +97,7 @@ roll out
 		
 //		- default to current date
 
-		- add button to lead page to create an event for that lead
+//		- add button to lead page to create an event for that lead
 
 //		- let notification e-mails handle multiple toAddresses
 
@@ -137,8 +119,6 @@ roll out
 			
 				- basic info + event
 			
-	2.	Lead Events
-	
 			
 				
 	10.	Cleanup
@@ -163,3 +143,7 @@ roll out
 		
 		d.	date picker?
 		
+ideas
+====================================
+	
+	

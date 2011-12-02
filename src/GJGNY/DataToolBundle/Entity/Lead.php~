@@ -214,6 +214,10 @@ class Lead
   /** @ORM\OneToMany(targetEntity="LeadEvent", mappedBy="Lead", cascade={"persist", "remove"}) */
   protected $LeadEvents;
   
+  /** @ORM\ManyToOne(targetEntity="Program", inversedBy="Leads") 
+  *  @ORM\JoinColumn(name="Program_id", referencedColumnName="id", onDelete="SET NULL") */
+  protected $Program;
+  
   /**
    * @var string $dataCounty
    *
@@ -1008,6 +1012,10 @@ class Lead
   public function __construct()
   {
     $this->LeadEvents = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->DateOfLead = new \DateTime();
+
+    $this->State = 'NY';
+    $this->leadType = 'energy upgrade';
   }
 
   /**
@@ -2629,5 +2637,95 @@ class Lead
     public function getInterestedInVisit()
     {
         return $this->interestedInVisit;
+    }
+
+    /**
+     * Set homeowner
+     *
+     * @param boolean $homeowner
+     */
+    public function setHomeowner($homeowner)
+    {
+        $this->homeowner = $homeowner;
+    }
+
+    /**
+     * Get homeowner
+     *
+     * @return boolean 
+     */
+    public function getHomeowner()
+    {
+        return $this->homeowner;
+    }
+
+    /**
+     * Set renter
+     *
+     * @param boolean $renter
+     */
+    public function setRenter($renter)
+    {
+        $this->renter = $renter;
+    }
+
+    /**
+     * Get renter
+     *
+     * @return boolean 
+     */
+    public function getRenter()
+    {
+        return $this->renter;
+    }
+
+    /**
+     * Set landlord
+     *
+     * @param boolean $landlord
+     */
+    public function setLandlord($landlord)
+    {
+        $this->landlord = $landlord;
+    }
+
+    /**
+     * Get landlord
+     *
+     * @return boolean 
+     */
+    public function getLandlord()
+    {
+        return $this->landlord;
+    }
+
+    /**
+     * Add LeadEvents
+     *
+     * @param GJGNY\DataToolBundle\Entity\LeadEvent $leadEvents
+     */
+    public function addLeadEvent(\GJGNY\DataToolBundle\Entity\LeadEvent $leadEvents)
+    {
+        $this->LeadEvents[] = $leadEvents;
+    }
+
+    /**
+     * Set Program
+     *
+     * @param GJGNY\DataToolBundle\Entity\Program $program
+     */
+    public function setProgram(\GJGNY\DataToolBundle\Entity\Program $program)
+    {
+        $this->Program = $program;
+    }
+
+    /**
+     * Get Program
+     *
+     * @return GJGNY\DataToolBundle\Entity\Program 
+     */
+    public function getProgram()
+    {
+        return $this->Program;
     }
 }

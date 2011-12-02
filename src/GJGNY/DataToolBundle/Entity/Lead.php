@@ -214,6 +214,10 @@ class Lead
   /** @ORM\OneToMany(targetEntity="LeadEvent", mappedBy="Lead", cascade={"persist", "remove"}) */
   protected $LeadEvents;
   
+  /** @ORM\ManyToOne(targetEntity="Program", inversedBy="Leads") 
+  *  @ORM\JoinColumn(name="Program_id", referencedColumnName="id", onDelete="SET NULL") */
+  protected $Program;
+  
   /**
    * @var string $dataCounty
    *
@@ -1009,8 +1013,9 @@ class Lead
   {
     $this->LeadEvents = new \Doctrine\Common\Collections\ArrayCollection();
     $this->DateOfLead = new \DateTime();
-    $this->DateOfNextFollowup = new \DateTime();
-    $this->DateOfNextFollowup->modify('+2 weeks');
+
+    $this->State = 'NY';
+    $this->leadType = 'energy upgrade';
   }
 
   /**
@@ -2702,5 +2707,25 @@ class Lead
     public function addLeadEvent(\GJGNY\DataToolBundle\Entity\LeadEvent $leadEvents)
     {
         $this->LeadEvents[] = $leadEvents;
+    }
+
+    /**
+     * Set Program
+     *
+     * @param GJGNY\DataToolBundle\Entity\Program $program
+     */
+    public function setProgram(\GJGNY\DataToolBundle\Entity\Program $program)
+    {
+        $this->Program = $program;
+    }
+
+    /**
+     * Get Program
+     *
+     * @return GJGNY\DataToolBundle\Entity\Program 
+     */
+    public function getProgram()
+    {
+        return $this->Program;
     }
 }

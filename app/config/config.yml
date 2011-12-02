@@ -19,18 +19,23 @@ services:
     gjgny.datatool.admin.lead:
       class: GJGNY\DataToolBundle\Admin\LeadAdmin
       tags:
-        - { name: sonata.admin, manager_type: orm, group: Lead Data, label: Leads }
+        - { name: sonata.admin, manager_type: orm, group: Leads, label: Leads }
       arguments: [null, GJGNY\DataToolBundle\Entity\Lead, GJGNYDataToolBundle:LeadAdmin]
     gjgny.datatool.admin.leadevent:
       class: GJGNY\DataToolBundle\Admin\LeadEventAdmin
       tags:
-        - { name: sonata.admin, manager_type: orm, group: Lead Data, label: Lead Events }
+        - { name: sonata.admin, manager_type: orm, group: Leads, label: Lead Events }
       arguments: [null, GJGNY\DataToolBundle\Entity\LeadEvent, GJGNYDataToolBundle:LeadEventAdmin]
+    gjgny.datatool.admin.program:
+      class: GJGNY\DataToolBundle\Admin\ProgramAdmin
+      tags:
+        - { name: sonata.admin, manager_type: orm, group: Programs, label: Programs }
+      arguments: [null, GJGNY\DataToolBundle\Entity\Program, GJGNYDataToolBundle:ProgramAdmin]
       
     ccetc.useradmin.admin.user:
       class: CCETC\UserAdminBundle\Admin\UserAdmin
       tags:
-        - { name: sonata.admin, manager_type: orm, group: User Data, label: Users }
+        - { name: sonata.admin, manager_type: orm, group: Users, label: Users }
       arguments: [null, GJGNY\DataToolBundle\Entity\User, CCETCUserAdminBundle:UserAdmin]      
       
     gjgny:

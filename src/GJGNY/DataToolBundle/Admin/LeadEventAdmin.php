@@ -40,6 +40,9 @@ class LeadEventAdmin extends Admin
                 ->add('description', null, array('label' => 'Description', 'required' => false))
                 ->add('notes', null, array('label' => 'Notes', 'required' => false))
             ->end()
+            ->setHelps(array(
+                'Lead' => 'Click the list icon above to view a list of Leads.  Click the name of the Lead you want.'
+            ))
             ->with('Phone Call Data')
                 ->add('callStatus', 'choice', array(
                     'label' => 'Call status',
@@ -53,7 +56,7 @@ class LeadEventAdmin extends Admin
                 ))
                 ->add('FollowUpItems', null, array('label' => 'Items to follow-up on in future', 'required' => false))
                 ->add('callNotes', null, array('label' => 'Notes', 'required' => false))
-                ->add('canWeCallBack', null, array('label' => 'Can we call back?', 'required' => false))
+//                ->add('canWeCallBack', null, array('label' => 'Can we call back?', 'required' => false))
             ->end()
             ->with('Lighten Up Tompkins Phone Survey Data', array('collapsed' => true))
                 ->add('lutBulb', null, array('label' => 'Did you screw in your light bulb?', 'required' => false))
@@ -213,7 +216,7 @@ class LeadEventAdmin extends Admin
     protected function configureSpreadsheetFields(SpreadsheetMapper $spreadsheetMapper)
     {
         $spreadsheetMapper
-            ->add('Lead')
+            ->add('Lead', array('type' => 'model', 'field_name' => 'Lead_id', 'repository' => 'GJGNYDataToolBundle:Lead'))
             ->add('eventType', array('label' => 'Event Type'))
             ->add('eventTypeOther', array('label' => 'Other Event Type'))
             ->add('contactPerson', array('label' => 'Contact Person'))
@@ -225,7 +228,15 @@ class LeadEventAdmin extends Admin
             ->add('actionsTaken', array('label' => 'Actions taken'))
             ->add('FollowUpItems', array('label' => 'Items to follow-up on in future'))
             ->add('callNotes', array('label' => 'Notes'))
-            ->add('canWeCallBack', array('label' => 'Can we call back?', 'type' => 'boolean'))
+        ;
+    }
+    
+    protected function configureSummaryFields(SummaryMapper $summaryMapper)
+    {
+        $summaryMapper
+            ->addXField('eventType', array('label' => 'Event Type', 'other_field' => 'eventTypeOther'))
+            ->addXField('contactPerson', array('label' => 'Contact Person'))
+            ->addYField('date', array('label' => 'Date', 'type' => 'date'))
         ;
     }
 
@@ -263,7 +274,7 @@ class LeadEventAdmin extends Admin
                 ->add('actionsTaken', null, array('label' => 'Actions Taken'))
                 ->add('FollowUpItems', null, array('label' => 'Follow-Up Items'))
                 ->add('callNotes', null, array('label' => 'Call Notes'))
-                ->add('canWeCallBack', null, array('label' => 'Can we call back?'))
+//                ->add('canWeCallBack', null, array('label' => 'Can we call back?'))
             ->end()
             ->with('Lighten Up Tompkins Phone Survey Data')
                 ->add('lutBulb', null, array('label' => 'Did you screw in your light bulb?'))

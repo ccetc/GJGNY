@@ -50,36 +50,27 @@ class LeadAdmin extends Admin
                 ->add('workEmail', null, array('label' => 'Work E-mail', 'required' => false))
             ->end()
             ->with('Lead History')
+                ->add('Program', 'sonata_type_model', array('label' => 'Program Source', 'required' => false), array('edit' => 'standard'))
                 ->add('SourceOfLead', 'choice', array('required' => false, 'label' => 'Source of Lead', 'choices' => Lead::getSourceOfLeadChoices()))
-                ->add('ProgramSource', null, array('required' => false, 'label' => 'Program Source'))
                 ->add('leadReferral', null, array('required' => false, 'label' => 'Referral / Nomination'))
                 ->add('DateOfLead', null, array('label' => 'Date of First Contact', 'required' => false, 'widget' => 'choice', 'format' => 'MM/dd/yyyy'))
                 ->add('leadType', 'choice', array('required' => false, 'label' => 'Type of Lead', 'choices' => Lead::getLeadTypeChoices()))
                 ->add('leadStatus', 'choice', array('required' => false, 'label' => 'Lead Status', 'choices' => Lead::getLeadStatusChoices()))
                 ->add('DateOfNextFollowup', null, array('label' => 'Date of next Follow-up', 'required' => false, 'widget' => 'choice', 'format' => 'MM/dd/yyyy'))
             ->end()
-            ->with('Employer / Organization Information')
-                ->add('organization', null, array('label' => 'Employer / Organization', 'required' => false))
-                ->add('orgTitle', null, array('label' => 'Title', 'required' => false))
-                ->add('orgAddress', null, array('label' => 'Address', 'required' => false))
-                ->add('orgCity', null, array('label' => 'City', 'required' => false))
-                ->add('orgState', 'choice', array(
-                    'label' => 'State',
-                    'required' => false,
-                   'choices' => Lead::getStateChoices(),
-                    'preferred_choices' => array('NY')
-                        ), array('type' => 'choice'))
-                ->add('orgZip', null, array('label' => 'Zip', 'required' => false))
-                ->add('orgCounty', null, array('label' => 'County', 'required' => false))
-                ->add('website', null, array('required' => false))
-            ->end()
+            ->setHelps(array(
+                'Program' => 'An Lead Event will automatically be created for the selected program',
+                'SourceOfLead' => 'If e-mail or phone a Lead Event will automatically be created.',
+                'leadStatus' => 'Your team will receive e-mail updates about Leads with the status "need to call".',
+                'DateOfNextFollowup' => 'This is the date your team will start receiving e-mail updates if your Lead\'s status is "awaiting follow up"'
+            ))
             ->with('Other Information')
-                ->add('CommunityGroupsConnectedTo', null, array('label' => 'Community groups connected to', 'required' => false))
                 ->add('homeowner', null, array('label' => 'Homeowner', 'required' => false))
                 ->add('renter', null, array('label' => 'Renter', 'required' => false))
                 ->add('landlord', null, array('label' => 'Landlord', 'required' => false))
-                ->add('barriers', null, array('label' => 'Barriers to making upgrades', 'required' => false))
                 ->add('interestedInVisit', null, array('label' => 'Interested in scheduling a home visit', 'required' => false))
+                ->add('CommunityGroupsConnectedTo', null, array('label' => 'Community groups connected to', 'required' => false))
+                ->add('barriers', null, array('label' => 'Barriers to making upgrades', 'required' => false))
 
                 ->add('motivationChoiceComfort', null, array('label' => 'Comfort', 'required' => false))
                 ->add('motivationChoiceMoney', null, array('label' => 'Money', 'required' => false))
@@ -112,16 +103,31 @@ class LeadAdmin extends Admin
                 ->add('step4', null, array('label' => 'Upgrade Appliances', 'required' => false))
                 ->add('step5', null, array('label' => 'Renewable energy', 'required' => false))
             ->end()
-            ->with('Broome Fields')
+            ->with('Employer / Organization Information', array('collapsed' => true))
+                ->add('organization', null, array('label' => 'Employer / Organization', 'required' => false))
+                ->add('orgTitle', null, array('label' => 'Title', 'required' => false))
+                ->add('orgAddress', null, array('label' => 'Address', 'required' => false))
+                ->add('orgCity', null, array('label' => 'City', 'required' => false))
+                ->add('orgState', 'choice', array(
+                    'label' => 'State',
+                    'required' => false,
+                   'choices' => Lead::getStateChoices(),
+                    'preferred_choices' => array('NY')
+                        ), array('type' => 'choice'))
+                ->add('orgZip', null, array('label' => 'Zip', 'required' => false))
+                ->add('orgCounty', null, array('label' => 'County', 'required' => false))
+                ->add('website', null, array('required' => false))
+            ->end()
+            ->with('Broome Fields', array('collapsed' => true))
                 ->add('pledge', null, array('label' => 'Pledge', 'required' => false))
                 ->add('visitPeriod', null, array('label' => 'Visit Period', 'required' => false))
                 ->add('BECCTeam', null, array('label' => 'BECC Team', 'required' => false))
                 ->add('rank', null, array('label' => 'Rank', 'required' => false))
             ->end()
-            ->with('Tompkins Fields')
+            ->with('Tompkins Fields', array('collapsed' => true))
                 ->add('october2011Raffle', null, array('label' => 'October 2011 Raffle', 'required' => false))
             ->end()
-            ->with('GJGNY Application Fields')
+            ->with('GJGNY Application Fields', array('collapsed' => true))
                 ->add('hasCentralAC', null, array('label' => 'Central AC?', 'required' => false))
 
                 ->add('incomeRange', 'choice', array('required' => false, 'label' => 'Household Income Range', 'choices' => Lead::getIncomeRangeChoices()))
@@ -166,6 +172,23 @@ class LeadAdmin extends Admin
         'step3bWorkDone' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'step3cHowFinanced' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         
+        // indent choice options
+        // NOTE: the indent divs for the first choices are included in the field group label hooks below
+        'motivationChoiceMoney' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'motivationChoiceIndoorAir' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'motivationChoiceEnvironment' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'motivationChoiceOther' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'campaignChoiceFormEnergyTeam' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'campaignChoiceAppearInVideo' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'campaignChoiceShareExperience' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'newsletterChoiceSavings' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'newsletterChoiceEvents' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'financeChoiceGJGNY' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'financeChoicePocket' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'financeChoicePersonal' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+
+        
+        
         // field group labels
        'financeChoiceHomeEquity' => 'GJGNYDataToolBundle:Lead:_financeChoiceFormPreHook.html.twig',
        'newsletterChoiceEnergyTips' => 'GJGNYDataToolBundle:Lead:_newsletterChoiceFormPreHook.html.twig',
@@ -190,6 +213,24 @@ class LeadAdmin extends Admin
         'step3aContractor' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'step3bWorkDone' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'step3cHowFinanced' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        
+         // choice options
+        'motivationChoiceComfort' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'motivationChoiceMoney' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'motivationChoiceIndoorAir' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'motivationChoiceEnvironment' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'motivationChoiceOther' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'campaignChoiceTalkingToNeighbors' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'campaignChoiceFormEnergyTeam' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'campaignChoiceAppearInVideo' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'campaignChoiceShareExperience' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'newsletterChoiceEnergyTips' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'newsletterChoiceSavings' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'newsletterChoiceEvents' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'financeChoiceHomeEquity' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'financeChoiceGJGNY' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'financeChoicePocket' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'financeChoicePersonal' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
     );
     
     // List ======================================================================
@@ -204,7 +245,7 @@ class LeadAdmin extends Admin
                 ->add('Address', null, array('template' => 'GJGNYDataToolBundle:Lead:_address.html.twig'))
                 
                 ->add('SourceOfLead', null, array('label' => 'Source of Lead'))
-                ->add('ProgramSource', null, array('label' => 'Program Source'))
+                ->add('Program', null, array('label' => 'Program Source'))
                 ->add('DateOfLead', null, array('label' => 'Date of First Contact', 'template' => 'GJGNYDataToolBundle:Lead:_dateOfLead.html.twig'))
                 
                 // add custom action links
@@ -233,7 +274,7 @@ class LeadAdmin extends Admin
             ),
             'field_type' => 'choice'
         ));
-        $datagrid->add('ProgramSource', null, array('label' => 'Program Source'));
+        $datagrid->add('Program', null, array('label' => 'Program Source'));
         $datagrid->add('leadType', 'doctrine_orm_choice', array(
             'label' => 'Type of Lead',
             'field_type' => 'choice',
@@ -390,7 +431,7 @@ class LeadAdmin extends Admin
             ->add('personalEmail', array('label' => 'Personal E-mail'))
             ->add('workEmail', array('label' => 'Work E-mail'))
             ->add('SourceOfLead', array('label' => 'Source of Lead'))
-            ->add('ProgramSource', array('label' => 'Program Source'))
+            ->add('Program', array('label' => 'Program Source','type' => 'model', 'field_name' => 'Program_id', 'repository' => 'GJGNYDataToolBundle:Program'))
             ->add('leadReferral', array('label' => 'Referral / Nomination'))
             ->add('DateOfLead', array('label' => 'Date of First Contact', 'type' => 'date'))
 //            ->add('leadType', array('label' => 'Type of Lead'))
@@ -416,7 +457,7 @@ class LeadAdmin extends Admin
     {
         $summaryMapper
             ->addYField('SourceOfLead', array('label' => 'Source of Lead'))
-            ->addYField('ProgramSource', array('label' => 'Program Source'))
+            ->addYField('Program', array('label' => 'Program Source','type' => 'model', 'field_name' => 'Program_id', 'repository' => 'GJGNYDataToolBundle:Program'))
             ->addYField('DateOfLead', array('label' => 'Date of First Contact', 'type' => 'date'))
             ->addXField('City')
             ->addXField('Zip')
@@ -447,7 +488,7 @@ class LeadAdmin extends Admin
             ->end()
             ->with('Lead History')
                 ->add('SourceOfLead', null, array('label' => 'Source of Lead'))
-                ->add('ProgramSource', null, array('label' => 'Program Source'))
+                ->add('Program', null, array('label' => 'Program Source'))
                 ->add('leadReferral', null, array('label' => 'Lead Referral'))
                 ->add('DateOfLead', null, array('label' => 'Date of Lead'))
                 ->add('leadType', null, array('label' => 'Type of Lead'))
@@ -602,6 +643,41 @@ class LeadAdmin extends Admin
         $Lead->setDataCounty($user->getCounty());
 
         parent::prePersist($Lead);
+    }
+    
+    public function postPersist($Lead)
+    {
+        // automatically create lead acquisitions for some Leads
+        if($Lead->getProgram() || $Lead->getSourceOfLead() == "Phone" || $Lead->getSourceOfLead() == "E-mail") {
+            $LeadEvent = new \GJGNY\DataToolBundle\Entity\LeadEvent();
+            $LeadEvent->setLead($Lead);
+            
+            $LeadEvent->setDatetimeEntered(new \DateTime());
+            $LeadEvent->setDatetimeLastUpdated(new \DateTime());
+            $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
+            $LeadEvent->setEnteredBy($user);
+            $LeadEvent->setLastUpdatedBy($user);
+            
+            if($Lead->getProgram()) {
+                $LeadEvent->setDescription($Lead->getProgram()->getName());
+            } else if($Lead->getSourceOfLead() == "Phone") {
+                $LeadEvent->setDescription("phone call received");
+            } else if($Lead->getSourceOfLead() == "E-mail") {
+                $LeadEvent->setDescription("e-mail received");
+            }
+            
+            
+            $LeadEvent->setDate($Lead->getDateOfLead());
+            $LeadEvent->setEventType("lead acquisition");
+            
+            
+            $em = $this->getConfigurationPool()->getContainer()->get('doctrine')->getEntityManager();
+            $em->persist($LeadEvent);
+            $em->flush();
+          
+        }
+		
+        parent::postPersist($Lead);
     }
 
     public function preUpdate($Lead)
