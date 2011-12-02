@@ -40,7 +40,7 @@ services:
       
     gjgny:
       class: GJGNY\DataToolBundle\Resources\classes\Config
-      arguments: [cache/xls, haggertypat@gmail.com, {Broome: flint@igc.org, Tompkins : scl36@cornell.edu}, {Broome: [a, b], Tompkins: [c, d] }]   
+      arguments: [cache/xls, haggertypat@gmail.com, {Broome: flint@igc.org, Tompkins : scl36@cornell.edu}, {Broome: [moniquereeser@gmail.com, flint@igc.org, murdanick@gmail.com], Tompkins: [scl36@cornell.edu, ml637@cornell.edu ] }]   
     
     errorReports:
       class: CCETC\ErrorReportBundle\Resources\config\Config

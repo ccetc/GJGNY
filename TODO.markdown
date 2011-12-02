@@ -30,16 +30,14 @@ roll out
 		
 //			- no message
 		
-		- spreadsheets
+//		- spreadsheets
 	
 //			- object issue on Lead
 			
 //			- issue on Summary
 	
-		- notifications?
-	
-			app/console --env=dev digest:send
-	
+//		- notifications?
+		
 		- cross browser
 	
 	
