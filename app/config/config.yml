@@ -52,7 +52,7 @@ services:
 
     userSettings:
       class: FOS\UserBundle\Resources\config\Settings
-      arguments: [GJGNY Data Tool, haggertypat@gmail.com, SonataAdminBundle::standard_layout.html.twig, true, alert-message success]
+      arguments: [GJGNY Data Tool, haggertypat@gmail.com, SonataAdminBundle::standard_layout.html.twig, true, sonata_flash_success]
 
 
 # Twig Configuration

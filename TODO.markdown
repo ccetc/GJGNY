@@ -4,28 +4,35 @@ GJGNY - TODO ====================================================
 roll out
 ====================================
 
-	1.
+//	1.
 //		- under construction
 	
 //		- check server for new programs
 	
 //		- run boolfix.sql
 		
-		- set app and bundles up	
+//		- set app and bundles up	
 	
-		- doctrine:schema:update --force
+//		- doctrine:schema:update --force
 		
-		- run program sql files
+//		- run program sql files
 
 	2.
 	
 		- add interns to notification list	
 		
-		- change mem on server to 32
+//		- change mem on server to 32
 
 
 	3. Test
 	
+		- registration
+		
+		- spreadsheets
+		
+		- notifications?
+	
+		- cross browser
 	
 	
 after roll out
