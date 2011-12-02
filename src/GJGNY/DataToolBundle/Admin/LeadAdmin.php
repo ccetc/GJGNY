@@ -291,18 +291,8 @@ class LeadAdmin extends Admin
                 'choices' => Lead::getLeadStatusChoices()
             )
         ));
-        $datagrid->add('dataCounty', 'doctrine_orm_callback', array(
+        $datagrid->add('dataCounty', 'doctrine_orm_choice', array(
             'label' => 'County Data',
-            'callback' => function($queryBuilder, $alias, $field, $values){
-                if(!$values['value'])
-                {
-                    return;
-                }
-
-                $queryBuilder->leftJoin(sprintf('%s.enteredBy', $alias), 'u');
-                $queryBuilder->andWhere('u.county = :county');
-                $queryBuilder->setParameter('county', $values['value']);
-            },
             'field_type' => 'choice',
             'field_options' => array(
                 'required' => false,

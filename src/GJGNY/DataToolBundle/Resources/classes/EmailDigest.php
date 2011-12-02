@@ -35,6 +35,8 @@ class EmailDigest
                 $this->sendLeadsToCallEmail($mailer, $toAddress, $fromAddress, $TompkinsLeadCount, 'Tompkins' );
             }
         }
+        
+        return array('Tompkins' => $TompkinsLeadCount, 'Broome' => $BroomeLeadCount);
     }
 
     private function sendLeadsToCallEmail($mailer, $toAddress, $fromAddress, $count, $county)

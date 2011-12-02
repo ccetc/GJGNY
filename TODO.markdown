@@ -20,17 +20,25 @@ roll out
 	2.
 	
 		- add interns to notification list	
-		
+
 //		- change mem on server to 32
 
 
 	3. Test
 	
-		- registration
+//		- registration
+		
+//			- no message
 		
 		- spreadsheets
-		
+	
+//			- object issue on Lead
+			
+//			- issue on Summary
+	
 		- notifications?
+	
+			app/console --env=dev digest:send
 	
 		- cross browser
 	
