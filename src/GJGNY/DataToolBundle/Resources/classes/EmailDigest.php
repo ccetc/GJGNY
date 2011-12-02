@@ -63,7 +63,7 @@ class EmailDigest
                 ->setBody('<html>
                There '.$verb.' '.$count.' '.$county.' County '.$noun.' that '.$callVerb.' to be called.<br/><br/>
                To view '.$who.', follow the link below.<br/>
-               <a href="http://gjgny.ccext.net/admin/gjgny/datatool/lead/list?leadStatus=need+to+call">http://gjgny.ccext.net/admin/gjgny/datatool/lead/list?leadStatus=need+to+call</a></html>')
+               <a href="http://gjgny.ccext.net/admin/gjgny/datatool/lead/list?filter[leadStatus][value]=need+to+call">http://gjgny.ccext.net/admin/gjgny/datatool/lead/list?leadStatus=need+to+call</a></html>')
         ;
         $mailer->send($message);
     }
