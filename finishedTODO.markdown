@@ -1,5 +1,98 @@
 GJGNY - FINISHED TODO ====================================================
 =================================================================
+1.2
+============================
+
+#	0.	features lost from new Admin
+
+//		- Lead Events
+			
+//		- Other fields
+					
+//		- Form fields to indent
+	
+//		- edit description
+		
+//		- entity description
+		
+//		- extra form Labels (for groups)
+		
+//		- parent fields/labels on show
+		
+//		- show field indents
+		
+//		- user levels
+		
+	
+//	1.	Excel exporting
+	
+//		- configure
+
+//		- memory problem
+
+//			- doctrine
+			
+//			- phpexcel
+	
+//	2.	Make Program Source a drop down field
+	
+//		- relation
+		
+//			- auto set date
+			
+	
+//	3.	Report Summaries
+	
+//		- memory problem
+		
+//		- sum problem
+	
+//		- object problem
+		
+//		- set memory
+		
+//			- in controller and class methods
+		
+//		- other fields
+		
+//			- event type
+
+	
+//	4.	Refinements
+	
+//		- add help fields
+		
+//		- adjust date formats
+	
+//		- add summary to Lead Events
+				
+//	5.	Auto Events
+	
+//		- program source, call, e-mail		
+			
+		
+		
+	
+//	10.	Performance
+	
+	
+//	11.	small misc changes
+	
+//		- add renter/landlord/homeowner checkboxes
+		
+//		- default to current date
+
+//		- add button to lead page to create an event for that lead
+
+//		- let notification e-mails handle multiple toAddresses
+
+//		- check address when creating lead to limit duplicates
+		
+//				- double check Lead name duplication
+		
+//		- fix boolean yes/no/empty problem
+
+
 1.1
 ============================
 

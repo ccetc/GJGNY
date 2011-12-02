@@ -154,6 +154,11 @@ class LeadAdmin extends Admin
       ;
     }
    
+    public $fieldsToCheckForDuplicates = array (
+        array('FirstName', 'LastName'),
+        'Address'
+    );
+    
     public $formFieldPreHooks = array(
         // "other" fields
         'primaryPhoneType' => 'SonataAdminBundle:Hook:_otherFormFieldPre.html.twig',
