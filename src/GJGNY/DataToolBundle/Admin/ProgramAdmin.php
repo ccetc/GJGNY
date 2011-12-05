@@ -60,7 +60,14 @@ class ProgramAdmin extends Admin
     {
         $datagrid->add('name', null, array('label' => 'Name'));
         $datagrid->add('date', 'doctrine_orm_date_range', array('label' => 'Date'));
-        $datagrid->add('dataCounty', null, array('label' => 'County Data'));
+        $datagrid->add('dataCounty', 'doctrine_orm_choice', array(
+            'label' => 'County Data',
+            'field_type' => 'choice',
+            'field_options' => array(
+                'required' => false,
+                'choices' => array('Broome' => 'Broome', 'Tompkins' => 'Tompkins')
+            )
+        ));
         $this->initializeDefaultFilters();
     }
 

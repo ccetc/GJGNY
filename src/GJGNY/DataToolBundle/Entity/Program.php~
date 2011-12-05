@@ -36,11 +36,11 @@ class Program
     private $date;
     
     /**
-       * @var string $dataCounty
-       *
-       * @ORM\Column(name="dataCounty", type="string", length=255, nullable="true")
-       */
-      private $dataCounty;
+    * @var string $dataCounty
+    *
+    * @ORM\Column(name="dataCounty", type="string", length=255, nullable="true")
+    */
+    private $dataCounty;
 
 
     /** @ORM\OneToMany(targetEntity="Lead", mappedBy="Program") */
@@ -70,7 +70,9 @@ class Program
     
     public function __toString()
     {
-        return $this->name.' - '.date_format($this->date, 'F j, Y');
+        $string = $this->name;
+        
+        return $string;
     }
     /**
      * Get id

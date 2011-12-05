@@ -27,7 +27,7 @@ class LeadAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->with('Lead Information')
+            ->with('Contact Information')
                 ->add('FirstName', null, array('label' => 'First Name', 'required' => false))
                 ->add('middleInitial', null, array('label' => 'middle initial', 'required' => false))
                 ->add('LastName', null, array('label' => 'Last Name', 'required' => false))
@@ -469,7 +469,7 @@ class LeadAdmin extends Admin
     protected function configureShowField(ShowMapper $showMapper)
     {
         $showMapper
-            ->with('Lead Information')
+            ->with('Contact Information')
                 ->add('FirstName', null, array('label' => 'First Name'))
                 ->add('middleInitial', null, array('label' => 'middle initial'))
                 ->add('LastName', null, array('label' => 'Last Name'))

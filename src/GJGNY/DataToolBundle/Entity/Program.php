@@ -36,11 +36,11 @@ class Program
     private $date;
     
     /**
-       * @var string $dataCounty
-       *
-       * @ORM\Column(name="dataCounty", type="string", length=255, nullable="true")
-       */
-      private $dataCounty;
+    * @var string $dataCounty
+    *
+    * @ORM\Column(name="dataCounty", type="string", length=255, nullable="true")
+    */
+    private $dataCounty;
 
 
     /** @ORM\OneToMany(targetEntity="Lead", mappedBy="Program") */

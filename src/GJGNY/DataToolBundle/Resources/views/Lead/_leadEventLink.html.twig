@@ -1,33 +1,39 @@
-{% if object.LeadEvents is defined and object.LeadEvents|length > 0 %}
 <div class="sonata-ba-view zebra-striped">
     <h2>Lead Events</h2>
-    <table>
-        <tr class="sonata-ba-list-field-header">
-            <th>Date</th>
-            <th>Description</th>
-            <th>Event Type</th>
-            <th>Actions</th>
-        </tr>
-        {% for event in object.LeadEvents %}
-            <tr>
-                <td>{{ event.date|date("F j, Y") }}</td>
-                <td>{{ event.description }}</td>
-                <td>{{ event.eventType }}</td>
-                <td>
-                    <a href="{{ LeadEventAdmin.generateUrl('show', {'id': admin.id(event)}) }}" class="view_link" title="{% trans from 'SonataAdminBundle' %}action_view{% endtrans %}">
-                        <img src="{{ asset('bundles/sonataadmin/famfamfam/magnifier.png') }}" alt="{% trans from 'SonataAdminBundle' %}action_view{% endtrans %}" />
-                </td>
+    {% if object.LeadEvents is defined and object.LeadEvents|length > 0 %}
+        <table>
+            <tr class="sonata-ba-list-field-header">
+                <th>Date</th>
+                <th>Description</th>
+                <th>Event Type</th>
+                <th>Actions</th>
             </tr>
-        {% endfor %}
+            {% for event in object.LeadEvents %}
+                <tr>
+                    <td>{{ event.date|date("F j, Y") }}</td>
+                    <td>{{ event.description }}</td>
+                    <td>{{ event.eventType }}</td>
+                    <td>
+                        <a href="{{ LeadEventAdmin.generateUrl('show', {'id': admin.id(event)}) }}" class="view_link" title="{% trans from 'SonataAdminBundle' %}action_view{% endtrans %}">
+                            <img src="{{ asset('bundles/sonataadmin/famfamfam/magnifier.png') }}" alt="{% trans from 'SonataAdminBundle' %}action_view{% endtrans %}" />
+                    </td>
+                </tr>
+            {% endfor %}
 
-    </table>
+        </table>
+    {% else %}
+        <div class="alert-message block-message">
+            This Lead does not have any events yet.
+        </div>
+    {% endif %}
     <div style="width: 100%; margin: 5px 0 15px 0; text-align: right;">
-        <a class="btn" href="{{ LeadEventAdmin.generateUrl('list', {'filter[firstName][value]':object.firstName, 'filter[lastName][value]':object.lastName}) }}">
-            View {{ object }}'s Events
-        </a>
+        {% if object.LeadEvents is defined and object.LeadEvents|length > 0 %}
+            <a class="btn" href="{{ LeadEventAdmin.generateUrl('list', {'filter[firstName][value]':object.firstName, 'filter[lastName][value]':object.lastName}) }}">
+                View {{ object }}'s Events
+            </a>
+        {% endif %}
         <a class="btn primary" href="{{ LeadEventAdmin.generateUrl('create', {'formObject[fieldName]':'Lead', 'formObject[repositoryName]' : 'GJGNYDataToolBundle:Lead', 'formObject[id]':object.id}) }}">
             Create a new Lead Event for {{ object }}
         </a>
     </div>
 </div>
-{% endif %}

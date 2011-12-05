@@ -214,8 +214,9 @@ class Lead
   /** @ORM\OneToMany(targetEntity="LeadEvent", mappedBy="Lead", cascade={"persist", "remove"}) */
   protected $LeadEvents;
   
-  /** @ORM\ManyToOne(targetEntity="Program", inversedBy="Leads") 
-  *  @ORM\JoinColumn(name="Program_id", referencedColumnName="id", onDelete="SET NULL") */
+ /** @ORM\ManyToOne(targetEntity="Program", inversedBy="Leads") 
+  * @ORM\JoinColumn(name="Program_id", referencedColumnName="id", onDelete="SET NULL")
+  */
   protected $Program;
   
   /**
