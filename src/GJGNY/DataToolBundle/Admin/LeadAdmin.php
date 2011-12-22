@@ -548,7 +548,7 @@ class LeadAdmin extends Admin
             ->end()
             ->with('Other Information')
                 ->add('leadTypeUpgrade', null, array('label' => 'Energy Upgrade'))
-                ->add('leadTypeOutreach', null, array('label' => 'Outreache'))
+                ->add('leadTypeOutreach', null, array('label' => 'Outreach'))
                 ->add('leadTypeWorkforce', null, array('label' => 'Workforce'))
                 ->add('CommunityGroupsConnectedTo', null, array('label' => 'Community groups connected to'))
                 ->add('homeowner', null, array('label' => 'Homeowner'))
