@@ -54,7 +54,6 @@ class LeadAdmin extends Admin
                 ->add('SourceOfLead', 'choice', array('required' => false, 'label' => 'Source of Lead', 'choices' => Lead::getSourceOfLeadChoices()))
                 ->add('leadReferral', null, array('required' => false, 'label' => 'Referral / Nomination'))
                 ->add('DateOfLead', null, array('label' => 'Date of First Contact', 'required' => false, 'widget' => 'choice', 'format' => 'MM/dd/yyyy'))
-                ->add('leadType', 'choice', array('required' => false, 'label' => 'Type of Lead', 'choices' => Lead::getLeadTypeChoices()))
                 ->add('leadStatus', 'choice', array('required' => false, 'label' => 'Lead Status', 'choices' => Lead::getLeadStatusChoices()))
                 ->add('DateOfNextFollowup', null, array('label' => 'Date of next Follow-up', 'required' => false, 'widget' => 'choice', 'format' => 'MM/dd/yyyy'))
             ->end()
@@ -65,6 +64,9 @@ class LeadAdmin extends Admin
                 'DateOfNextFollowup' => 'This is the date your team will start receiving e-mail updates if your Lead\'s status is "awaiting follow up"'
             ))
             ->with('Other Information')
+                ->add('leadTypeUpgrade', null, array('label' => 'Energy Upgrade', 'required' => false))
+                ->add('leadTypeOutreach', null, array('label' => 'Outreach', 'required' => false))
+                ->add('leadTypeWorkforce', null, array('label' => 'Workforce', 'required' => false))
                 ->add('homeowner', null, array('label' => 'Homeowner', 'required' => false))
                 ->add('renter', null, array('label' => 'Renter', 'required' => false))
                 ->add('landlord', null, array('label' => 'Landlord', 'required' => false))
@@ -118,6 +120,11 @@ class LeadAdmin extends Admin
                 ->add('orgCounty', null, array('label' => 'County', 'required' => false))
                 ->add('website', null, array('required' => false))
             ->end()
+            ->with('Workforce Fields', array('collapsed' => true))
+                ->add('highestLevelOfEducation', 'choice', array('label' => 'Highest Level of Education', 'required' => false, 'choices' => Lead::getHighestLevelOfEducationChoices()))
+                ->add('certifications', null, array('label' => 'Certifications', 'required' => false))
+                ->add('trainingExperience', null, array('label' => 'Training Experience', 'required' => false))                
+            ->end()
             ->with('Broome Fields', array('collapsed' => true))
                 ->add('pledge', null, array('label' => 'Pledge', 'required' => false))
                 ->add('visitPeriod', null, array('label' => 'Visit Period', 'required' => false))
@@ -154,9 +161,9 @@ class LeadAdmin extends Admin
       ;
     }
    
-    public $fieldsToCheckForDuplicates = array (
+    public $fieldGroupsToCheckForDuplicates = array (
         array('FirstName', 'LastName'),
-        'Address'
+        array('Address')
     );
     
     public $formFieldPreHooks = array(
@@ -191,14 +198,15 @@ class LeadAdmin extends Admin
         'financeChoiceGJGNY' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'financeChoicePocket' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'financeChoicePersonal' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-
-        
-        
+        'leadTypeOutreach' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'leadTypeWorkforce' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+ 
         // field group labels
        'financeChoiceHomeEquity' => 'GJGNYDataToolBundle:Lead:_financeChoiceFormPreHook.html.twig',
        'newsletterChoiceEnergyTips' => 'GJGNYDataToolBundle:Lead:_newsletterChoiceFormPreHook.html.twig',
        'campaignChoiceTalkingToNeighbors' => 'GJGNYDataToolBundle:Lead:_campaignChoiceFormPreHook.html.twig',
-       'motivationChoiceComfort' => 'GJGNYDataToolBundle:Lead:_motivationChoiceFormPreHook.html.twig'
+       'motivationChoiceComfort' => 'GJGNYDataToolBundle:Lead:_motivationChoiceFormPreHook.html.twig',
+       'leadTypeUpgrade' => 'GJGNYDataToolBundle:Lead:_leadTypeUpgradeFormPreHook.html.twig'        
     );
     
     public $formFieldPostHooks = array(
@@ -236,6 +244,9 @@ class LeadAdmin extends Admin
         'financeChoiceGJGNY' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'financeChoicePocket' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'financeChoicePersonal' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'leadTypeUpgrade' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'leadTypeOutreach' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'leadTypeWorkforce' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
     );
     
     public $formPostHook = array(
@@ -276,6 +287,7 @@ class LeadAdmin extends Admin
         $datagrid->add('LastName', null, array('label' => 'Last name'));
         $datagrid->add('City');
         $datagrid->add('Zip');
+        $datagrid->add('county');
         $datagrid->add('SourceOfLead', 'doctrine_orm_choice', array(
             'label' => 'Source of Lead',
             'field_options' => array(
@@ -285,8 +297,9 @@ class LeadAdmin extends Admin
             'field_type' => 'choice'
         ));
         $datagrid->add('Program', null, array('label' => 'Program Source'));
-        $datagrid->add('leadType', 'doctrine_orm_choice', array(
+        $datagrid->add('leadType', 'doctrine_orm_callback', array(
             'label' => 'Type of Lead',
+            'callback' => array($this, 'handleCheckboxChoiceFilter'),
             'field_type' => 'choice',
             'field_options' => array(
                 'required' => false,
@@ -322,7 +335,7 @@ class LeadAdmin extends Admin
             )
         ));
         $datagrid->add('Campaign', 'doctrine_orm_callback', array(
-            'label' => 'Capaign interest',
+            'label' => 'Campaign interest',
             'callback' => array($this, 'handleCheckboxChoiceFilter'),
             'field_type' => 'choice',
             'field_options' => array(
@@ -430,24 +443,63 @@ class LeadAdmin extends Admin
             ->add('secondaryPhoneType', array('label' => 'secondary phone type'))
             ->add('personalEmail', array('label' => 'Personal E-mail'))
             ->add('workEmail', array('label' => 'Work E-mail'))
+            
             ->add('SourceOfLead', array('label' => 'Source of Lead'))
             ->add('Program', array('label' => 'Program Source','type' => 'model', 'field_name' => 'Program_id', 'repository' => 'GJGNYDataToolBundle:Program'))
             ->add('leadReferral', array('label' => 'Referral / Nomination'))
             ->add('DateOfLead', array('label' => 'Date of First Contact', 'type' => 'date'))
-//            ->add('leadType', array('label' => 'Type of Lead'))
-//            ->add('leadStatus', array('label' => 'Lead Status'))
-//            ->add('DateOfNextFollowup', array('label' => 'Date of next Follow-up', 'type' => 'date'))
-//            ->add('organization', array('label' => 'Employer / Organization'))
-//            ->add('orgTitle', array('label' => 'Org Title'))
-//            ->add('orgAddress', array('label' => 'Org Address'))
-//            ->add('orgCity', array('label' => 'Org City'))
-//            ->add('orgState', array('label' => 'Org State'))
-//            ->add('orgZip', array('label' => 'Org Zip'))
-//            ->add('orgCounty', array('label' => 'Org County'))
-//            ->add('website', array('label' => 'Org Website'))
-//            ->add('CommunityGroupsConnectedTo', array('label' => 'Community groups connected to'))
-//            ->add('barriers', array('label' => 'Barriers to making upgrades'))
-//            ->add('interestedInVisit', array('label' => 'Interested in scheduling a home visit', 'type' => 'boolean'))            
+            ->add('leadStatus', array('label' => 'Lead Status'))
+            ->add('DateOfNextFollowup', array('label' => 'Date of next Follow-up', 'type' => 'date'))
+            
+            ->add('organization', array('label' => 'Employer / Organization'))
+            ->add('orgTitle', array('label' => 'Org Title'))
+            ->add('orgAddress', array('label' => 'Org Address'))
+            ->add('orgCity', array('label' => 'Org City'))
+            ->add('orgState', array('label' => 'Org State'))
+            ->add('orgZip', array('label' => 'Org Zip'))
+            ->add('orgCounty', array('label' => 'Org County'))
+            ->add('website', array('label' => 'Org Website'))
+            
+            ->add('CommunityGroupsConnectedTo', array('label' => 'Community groups connected to'))
+            ->add('barriers', array('label' => 'Barriers to making upgrades'))
+            ->add('interestedInVisit', array('label' => 'Interested in scheduling a home visit', 'type' => 'boolean'))            
+            ->add('homeowner', array('label' => 'Homeowner'))
+            ->add('renter', array('label' => 'Renter'))
+            ->add('landlord', array('label' => 'Landlord'))
+            ->add('otherNotes', array('label' => 'Other Notes'))
+            ->add('leadTypeUpgrade', array('label' => 'Lead Type: Energy Upgrade', 'type' => 'boolean'))
+            ->add('leadTypeOutreach', array('label' => 'Lead Type: Outreach', 'type' => 'boolean'))
+            ->add('leadTypeWorkforce', array('label' => 'Lead Type: Workforce', 'type' => 'boolean'))
+
+            ->add('motivationChoiceComfort', array('label' => 'Motivation for upgrades: Comfort', 'type' => 'boolean'))
+            ->add('motivationChoiceMoney', array('label' => 'Motivation for upgrades: Money', 'type' => 'boolean'))
+            ->add('motivationChoiceIndoorAir', array('label' => 'Motivation for upgrades: Indoor air quality', 'type' => 'boolean'))
+            ->add('motivationChoiceEnvironment', array('label' => 'Motivation for upgrades: Environment', 'type' => 'boolean'))
+            ->add('motivationChoiceOther', array('label' => 'Motivation for upgrades: Other'))
+
+            ->add('campaignChoiceTalkingToNeighbors', array('label' => 'Campaign interest: Talking to neighbors', 'type' => 'boolean'))
+            ->add('campaignChoiceFormEnergyTeam', array('label' => 'Campaign interest: Forming an energy team', 'type' => 'boolean'))
+            ->add('campaignChoiceAppearInVideo', array('label' => 'Campaign interest: Appear in testimonial video', 'type' => 'boolean'))
+            ->add('campaignChoiceShareExperience', array('label' => 'Campaign interest: Share upgrade experience with others', 'type' => 'boolean'))
+
+            ->add('newsletterChoiceEnergyTips', array('label' => 'Newsletter interest: Energy saving tips', 'type' => 'boolean'))
+            ->add('newsletterChoiceSavings', array('label' => 'Newsletter interest: Energy saving programs and incentives', 'type' => 'boolean'))
+            ->add('newsletterChoiceEvents', array('label' => 'Newsletter interest: Upcoming workshops and events', 'type' => 'boolean'))
+
+                
+            ->add('step1', array('label' => '1. Low cost / no-cost actions and tune up energy users', 'type' => 'boolean'))
+            ->add('step1aActionsTaken', array('label' => '1a. List specific actions taken'))
+            ->add('step2', array('label' => '2. Energy Assessment', 'type' => 'boolean'))
+            ->add('step2aInterested', array('label' => '2a. Interested in getting assessment', 'type' => 'boolean'))
+            ->add('step2bSubmitted', array('label' => '2b. GJGNY application submitted', 'type' => 'boolean'))
+            ->add('step2cScheduled', array('label' => '2c. Assessment scheduled', 'type' => 'boolean'))
+            ->add('step2dCompleted', array('label' => '2d. Assessment completed and report received', 'type' => 'boolean'))
+            ->add('step3', array('label' => '3. Whole house upgrade', 'type' => 'boolean'))
+            ->add('step3aContractor', array('label' => '3a. Name of contractor'))
+            ->add('step3bWorkDone', array('label' => '3b. What was done (air sealing, insulating, upgrade heating system, etc.)'))
+            ->add('step3cHowFinanced', array('label' => '3c. How was it financed'))
+            ->add('step4', array('label' => '4. Upgrade Appliances', 'type' => 'boolean'))
+            ->add('step5', array('label' => '5. Renewable energy', 'type' => 'boolean'))
                 
 
         ;
@@ -491,21 +543,13 @@ class LeadAdmin extends Admin
                 ->add('Program', null, array('label' => 'Program Source'))
                 ->add('leadReferral', null, array('label' => 'Lead Referral'))
                 ->add('DateOfLead', null, array('label' => 'Date of Lead'))
-                ->add('leadType', null, array('label' => 'Type of Lead'))
                 ->add('leadStatus', null, array('label' => 'Lead Status'))
                 ->add('DateOfNextFollowup', null, array('label' => 'Date of next followup'))
             ->end()
-            ->with('Employer / Organization Information')
-                ->add('organization', null, array('label' => 'Organization'))
-                ->add('orgTitle', null, array('label' => 'Title'))
-                ->add('orgAddress', null, array('label' => 'Address'))
-                ->add('orgCity', null, array('label' => 'City'))
-                ->add('orgState', null, array('label' => 'State'))
-                ->add('orgZip', null, array('label' => 'Zip'))
-                ->add('orgCounty', null, array('label' => 'County'))
-                ->add('website', null, array('label' => 'Website'))
-            ->end()
             ->with('Other Information')
+                ->add('leadTypeUpgrade', null, array('label' => 'Energy Upgrade'))
+                ->add('leadTypeOutreach', null, array('label' => 'Outreache'))
+                ->add('leadTypeWorkforce', null, array('label' => 'Workforce'))
                 ->add('CommunityGroupsConnectedTo', null, array('label' => 'Community groups connected to'))
                 ->add('homeowner', null, array('label' => 'Homeowner'))
                 ->add('renter', null, array('label' => 'Renter'))
@@ -544,6 +588,21 @@ class LeadAdmin extends Admin
                 ->add('step3cHowFinanced', null, array('label' => '3c. How was it financed?'))
                 ->add('step4', null, array('label' => '4. Upgrade Appliances'))
                 ->add('step5', null, array('label' => '5. Renewable Energy'))
+            ->end()
+            ->with('Employer / Organization Information')
+                ->add('organization', null, array('label' => 'Organization'))
+                ->add('orgTitle', null, array('label' => 'Title'))
+                ->add('orgAddress', null, array('label' => 'Address'))
+                ->add('orgCity', null, array('label' => 'City'))
+                ->add('orgState', null, array('label' => 'State'))
+                ->add('orgZip', null, array('label' => 'Zip'))
+                ->add('orgCounty', null, array('label' => 'County'))
+                ->add('website', null, array('label' => 'Website'))
+            ->end()
+            ->with('Workforce Fields', array('collapsed' => true))
+                ->add('highestLevelOfEducation', null, array('label' => 'Highest Level of Education'))
+                ->add('certifications', null, array('label' => 'Certifications'))
+                ->add('trainingExperience', null, array('label' => 'Training Experience'))                
             ->end()
             ->with('Broome Fields')
                 ->add('pledge', null, array('label' => 'Pledge'))
@@ -589,6 +648,7 @@ class LeadAdmin extends Admin
         'campaignChoiceTalkingToNeighbors' => 'GJGNYDataToolBundle:Lead:_campaignChoiceShowPreHook.html.twig',
         'newsletterChoiceEnergyTips' => 'GJGNYDataToolBundle:Lead:_newsletterChoiceShowPreHook.html.twig',
         'financeChoiceHomeEquity' => 'GJGNYDataToolBundle:Lead:_financeChoiceShowPreHook.html.twig',
+        'leadTypeUpgrade' => 'GJGNYDataToolBundle:Lead:_leadTypeUpgradeShowPreHook.html.twig',
     );
     
     public function initializeShowHooks()
@@ -631,6 +691,9 @@ class LeadAdmin extends Admin
         'financeChoiceGJGNY' => 'indented',
         'financeChoicePocket' => 'indented',
         'financeChoicePersonal' => 'indented',
+        'leadTypeUpgrade' => 'indented',
+        'leadTypeOutreach' => 'indented',
+        'leadTypeWorkforce' => 'indented',
     );
     
     public function prePersist($Lead)

@@ -44,7 +44,9 @@ class LeadEvent
       'phone call' => 'phone call',
       'in person' => 'in person',
       'e-mail' => 'e-mail',
-      'lead acquisition' => 'lead acquisition'
+      'lead acquisition' => 'lead acquisition',
+      'training referral' => 'training referral',
+      'job referral' => 'job referral'
   );
   
   private static $callStatusChoices = array (
@@ -153,6 +155,44 @@ class LeadEvent
    * @ORM\Column(name="FollowUpItems", type="text", nullable="true")
    */
   private $FollowUpItems;
+  
+  // Referrals
+  /**
+   * @var text $institution
+   *
+   * @ORM\Column(name="institution", type="string", length=255, nullable="true")
+   */
+  private $institution;
+  /**
+   * @var text $program
+   *
+   * @ORM\Column(name="program", type="string", length=255, nullable="true")
+   */
+  private $program;
+  /**
+   * @var date $dateOfTrainingReferral
+   *
+   * @ORM\Column(name="dateOfTrainingReferral", type="date", nullable="true")
+   */
+  private $dateOfTrainingReferral;
+  /**
+   * @var date $dateOfCompletion
+   *
+   * @ORM\Column(name="dateOfCompletion", type="date", nullable="true")
+   */
+  private $dateOfCompletion;
+  /**
+   * @var text $business
+   *
+   * @ORM\Column(name="business", type="string", length=255, nullable="true")
+   */
+  private $business;
+  /**
+   * @var date $dateOfJobReferral
+   *
+   * @ORM\Column(name="dateOfJobReferral", type="date", nullable="true")
+   */
+  private $dateOfJobReferral;
   
   // LUT PHONE SURVEY FIELDS ===================================================
   // ===========================================================================
@@ -904,5 +944,125 @@ class LeadEvent
     public function getContactPerson()
     {
         return $this->contactPerson;
+    }
+
+    /**
+     * Set institution
+     *
+     * @param string $institution
+     */
+    public function setInstitution($institution)
+    {
+        $this->institution = $institution;
+    }
+
+    /**
+     * Get institution
+     *
+     * @return string 
+     */
+    public function getInstitution()
+    {
+        return $this->institution;
+    }
+
+    /**
+     * Set program
+     *
+     * @param string $program
+     */
+    public function setProgram($program)
+    {
+        $this->program = $program;
+    }
+
+    /**
+     * Get program
+     *
+     * @return string 
+     */
+    public function getProgram()
+    {
+        return $this->program;
+    }
+
+    /**
+     * Set dateOfTrainingReferral
+     *
+     * @param date $dateOfTrainingReferral
+     */
+    public function setDateOfTrainingReferral($dateOfTrainingReferral)
+    {
+        $this->dateOfTrainingReferral = $dateOfTrainingReferral;
+    }
+
+    /**
+     * Get dateOfTrainingReferral
+     *
+     * @return date 
+     */
+    public function getDateOfTrainingReferral()
+    {
+        return $this->dateOfTrainingReferral;
+    }
+
+    /**
+     * Set dateOfCompletion
+     *
+     * @param dateOfCompletion $dateOfCompletion
+     */
+    public function setDateOfCompletion(\dateOfCompletion $dateOfCompletion)
+    {
+        $this->dateOfCompletion = $dateOfCompletion;
+    }
+
+    /**
+     * Get dateOfCompletion
+     *
+     * @return dateOfCompletion 
+     */
+    public function getDateOfCompletion()
+    {
+        return $this->dateOfCompletion;
+    }
+
+    /**
+     * Set business
+     *
+     * @param string $business
+     */
+    public function setBusiness($business)
+    {
+        $this->business = $business;
+    }
+
+    /**
+     * Get business
+     *
+     * @return string 
+     */
+    public function getBusiness()
+    {
+        return $this->business;
+    }
+
+    /**
+     * Set dateOfJobReferral
+     *
+     * @param date $dateOfJobReferral
+     */
+    public function setDateOfJobReferral($dateOfJobReferral)
+    {
+        $this->dateOfJobReferral = $dateOfJobReferral;
+    }
+
+    /**
+     * Get dateOfJobReferral
+     *
+     * @return date 
+     */
+    public function getDateOfJobReferral()
+    {
+        return $this->dateOfJobReferral;
     }
 }

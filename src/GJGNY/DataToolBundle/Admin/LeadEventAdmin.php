@@ -38,27 +38,36 @@ class LeadEventAdmin extends Admin
                 ->add('contactPerson', null, array('label' => 'Contact Person', 'required' => false))
                 ->add('date', null, array('label' => 'Date of event', 'required' => false, 'time_widget' => 'choice', 'date_widget' => 'choice', 'date_format' => 'MM/dd/yyyy'))
                 ->add('description', null, array('label' => 'Description', 'required' => false))
-                ->add('notes', null, array('label' => 'Notes', 'required' => false))
-            ->end()
-            ->setHelps(array(
-                'Lead' => 'Click the list icon above to view a list of Leads.  Click the name of the Lead you want.'
-            ))
-            ->with('Phone Call Data')
-                ->add('callStatus', 'choice', array(
-                    'label' => 'Call status',
-                    'required' => false,
-                    'choices' => LeadEvent::getCallStatusChoices()
-                ))
                 ->add('WhatWasDiscussed', null, array('label' => 'What was discussed?', 'required' => false))
                 ->add('actionsTaken', null, array(
                     'label' => 'Actions taken',
                     'required' => false,
                 ))
                 ->add('FollowUpItems', null, array('label' => 'Items to follow-up on in future', 'required' => false))
-                ->add('callNotes', null, array('label' => 'Notes', 'required' => false))
-//                ->add('canWeCallBack', null, array('label' => 'Can we call back?', 'required' => false))
+                ->add('notes', null, array('label' => 'Notes', 'required' => false))
             ->end()
-            ->with('Lighten Up Tompkins Phone Survey Data', array('collapsed' => true))
+            ->setHelps(array(
+                'Lead' => 'Click the list icon above to view a list of Leads.  Click the name of the Lead you want.'
+            ))
+            ->with('Phone Call')
+                ->add('callStatus', 'choice', array(
+                    'label' => 'Call status',
+                    'required' => false,
+                    'choices' => LeadEvent::getCallStatusChoices()
+                ))
+                ->add('callNotes', null, array('label' => 'Notes', 'required' => false))
+            ->end()
+            ->with('Training Referral')
+                ->add('institution', null, array('label' => 'Institution', 'required' => false))
+                ->add('program', null, array('label' => 'Program', 'required' => false))
+                ->add('dateOfTrainingReferral', null, array('label' => 'Date of referral', 'required' => false, 'widget' => 'choice', 'format' => 'MM/dd/yyyy'))
+                ->add('dateOfCompletion', null, array('label' => 'Date of completion', 'required' => false, 'widget' => 'choice', 'format' => 'MM/dd/yyyy'))
+            ->end()
+            ->with('Job Referral')
+                ->add('business', null, array('label' => 'Business', 'required' => false))
+                ->add('dateOfJobReferral', null, array('label' => 'Date of referral', 'required' => false, 'widget' => 'choice', 'format' => 'MM/dd/yyyy'))
+            ->end()
+/*            ->with('Lighten Up Tompkins Phone Survey Data', array('collapsed' => true))
                 ->add('lutBulb', null, array('label' => 'Did you screw in your light bulb?', 'required' => false))
                 ->add('lutBulbReplace', null, array('label' => 'Did you replace an incandescent?', 'required' => false))
                 ->add('lutLookAtMaterials', null, array('label' => 'Did you get a chance to look at the education materials in the bag?', 'required' => false))
@@ -73,7 +82,8 @@ class LeadEventAdmin extends Admin
                 ->add('lutQuestions', null, array('label' => 'What questions do you have?', 'required' => false))
                 ->add('lutCouponMailed', null, array('label' => 'Coupon mailed?', 'required' => false))
                 ->add('lutCouponType', null, array('label' => 'if so, what type?', 'required' => false))
-             ->end()
+             ->end()å
+ */
         ;
     }
    
@@ -262,6 +272,9 @@ class LeadEventAdmin extends Admin
                 ->add('date', null, array('label' => 'Date of Event'))
                 ->add('contactPerson', null, array('label' => 'Contact Person'))
                 ->add('description', null, array('label' => 'Description'))
+                ->add('WhatWasDiscussed', null, array('label' => 'What was discussed?'))
+                ->add('actionsTaken', null, array('label' => 'Actions Taken'))
+                ->add('FollowUpItems', null, array('label' => 'Follow-Up Items'))
                 ->add('notes', null, array('label' => 'Notes'))
                 ->add('enteredBy', null, array('label' => 'Entered By'))
                 ->add('datetimeEntered', null, array('label' => 'Date Entered'))
@@ -270,13 +283,20 @@ class LeadEventAdmin extends Admin
             ->end()
             ->with('Phone Call Data')
                 ->add('callStatus', null, array('label' => 'Call Status'))
-                ->add('WhatWasDiscussed', null, array('label' => 'What was discussed?'))
-                ->add('actionsTaken', null, array('label' => 'Actions Taken'))
-                ->add('FollowUpItems', null, array('label' => 'Follow-Up Items'))
                 ->add('callNotes', null, array('label' => 'Call Notes'))
 //                ->add('canWeCallBack', null, array('label' => 'Can we call back?'))
             ->end()
-            ->with('Lighten Up Tompkins Phone Survey Data')
+                ->with('Training Referral')
+                ->add('institution', null, array('label' => 'Institution'))
+                ->add('program', null, array('label' => 'Program'))
+                ->add('dateOfTrainingReferral', null, array('label' => 'Date of referral'))
+                ->add('dateOfCompletion', null, array('label' => 'Date of completion'))
+            ->end()
+            ->with('Job Referral')
+                ->add('business', null, array('label' => 'Business', 'required' => false))
+                ->add('dateOfJobReferral', null, array('label' => 'Date of referral'))
+            ->end()
+/*            ->with('Lighten Up Tompkins Phone Survey Data')
                 ->add('lutBulb', null, array('label' => 'Did you screw in your light bulb?'))
                 ->add('lutBulbReplace', null, array('label' => 'Did you replace an incandescent?'))
                 ->add('lutLookAtMaterials', null, array('label' => 'Did you get a chance to look at the education materials in the bag?'))
@@ -292,6 +312,7 @@ class LeadEventAdmin extends Admin
                 ->add('lutCouponMailed', null, array('label' => 'Coupon mailed?'))
                 ->add('lutCouponType', null, array('label' => 'if so, what type?'))
             ->end()
+ */
         ;
         
         $this->initializeShowHooks();

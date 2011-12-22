@@ -133,30 +133,44 @@ class Lead
       'GJGNY Loan' => 'GJGNY Loan'
   );
   
-  protected static $leadTypeChoices = array (
-      'energy upgrade' => 'energy upgrade',
-      'outreach' => 'outreach',
-  );
-  
   protected static $leadStatusChoices = array (
       'need to call' => 'need to call',
       'awaiting follow up' => 'awaiting follow up',
       'not interested' => 'not interested',
-      'already done' => 'already done',
+      'had previous assessment' => 'had previous assessment',
       'had previous upgrade' => 'had previous upgrade',
       'process complete, got upgrade' => 'process complete, got upgrade',
   );
   
-  public static function getLeadStatusChoices()
+  protected static $leadTypeChoices = array (
+      'leadTypeUpgrade' => 'Energy Upgrade',
+      'leadTypeOutreach' => 'Outreach',
+      'leadTypeWorkforce' => 'Workforce'
+  );
+  
+  protected static $highestLevelOfEducationChoices = array (
+      'High School' => 'High School',
+      'Associates' => 'Associates',
+      'Bachelors' => 'Bachelors',
+      'Masters' => 'Masters',
+      'Ph.D.' => 'Ph.D.'
+  );
+  
+  public static function getHighestLevelOfEducationChoices()
   {
-      return self::$leadStatusChoices;
+      return self::$highestLevelOfEducationChoices;
   }
   
   public static function getLeadTypeChoices()
   {
       return self::$leadTypeChoices;
   }
-
+  
+  public static function getLeadStatusChoices()
+  {
+      return self::$leadStatusChoices;
+  }
+  
   public static function getStateChoices()
   {
     return self::$stateChoices;
@@ -349,7 +363,24 @@ class Lead
    * @ORM\Column(name="leadType", type="string", length=255, nullable="true")
    */
   private $leadType;
-  
+  /**
+   * @var smallint $leadTypeOutreach
+   *
+   * @ORM\Column(name="leadTypeOutreach", type="boolean")
+   */
+  private $leadTypeOutreach;
+  /**
+   * @var smallint $leadTypeUpgrade
+   *
+   * @ORM\Column(name="leadTypeUpgrade", type="boolean")
+   */
+  private $leadTypeUpgrade;
+  /**
+   * @var smallint $leadTypeWorkforce
+   *
+   * @ORM\Column(name="leadTypeWorkforce", type="boolean")
+   */
+  private $leadTypeWorkforce;
   /**
    * @var string $leadReferral
    *
@@ -593,7 +624,7 @@ class Lead
    * @ORM\Column(name="otherNotes", type="text", nullable="true")
    */
   private $otherNotes;
-    /**
+  /**
    * @var string $website
    *
    * @ORM\Column(name="website", type="string", length=255, nullable="true")
@@ -617,6 +648,28 @@ class Lead
    * @ORM\Column(name="landlord", type="boolean")
    */
   private $landlord;
+  // WORKFORCE =================================================================
+  // =========================================================================
+  /**
+   * @var string $highestLevelOfEducation
+   *
+   * @ORM\Column(name="highestLevelOfEducation", type="string", length=255, nullable="true")
+   */
+  private $highestLevelOfEducation;
+  /**
+   * @var string $certifications
+   *
+   * @ORM\Column(name="certifications", type="string", length=255, nullable="true")
+   */
+  private $certifications;
+  /**
+   * @var string $trainingExperience
+   *
+   * @ORM\Column(name="trainingExperience", type="string", length=255, nullable="true")
+   */
+  private $trainingExperience;
+  
+  
 // GJGNY APPLICATION DATA ======================================================
 // =============================================================================
   /**
@@ -1016,7 +1069,6 @@ class Lead
     $this->DateOfLead = new \DateTime();
 
     $this->State = 'NY';
-    $this->leadType = 'energy upgrade';
   }
 
   /**
@@ -2728,5 +2780,125 @@ class Lead
     public function getProgram()
     {
         return $this->Program;
+    }
+
+    /**
+     * Set leadTypeOutreach
+     *
+     * @param boolean $leadTypeOutreach
+     */
+    public function setLeadTypeOutreach($leadTypeOutreach)
+    {
+        $this->leadTypeOutreach = $leadTypeOutreach;
+    }
+
+    /**
+     * Get leadTypeOutreach
+     *
+     * @return boolean 
+     */
+    public function getLeadTypeOutreach()
+    {
+        return $this->leadTypeOutreach;
+    }
+
+    /**
+     * Set leadTypeUpgrade
+     *
+     * @param boolean $leadTypeUpgrade
+     */
+    public function setLeadTypeUpgrade($leadTypeUpgrade)
+    {
+        $this->leadTypeUpgrade = $leadTypeUpgrade;
+    }
+
+    /**
+     * Get leadTypeUpgrade
+     *
+     * @return boolean 
+     */
+    public function getLeadTypeUpgrade()
+    {
+        return $this->leadTypeUpgrade;
+    }
+
+    /**
+     * Set leadTypeWorkforce
+     *
+     * @param boolean $leadTypeWorkforce
+     */
+    public function setLeadTypeWorkforce($leadTypeWorkforce)
+    {
+        $this->leadTypeWorkforce = $leadTypeWorkforce;
+    }
+
+    /**
+     * Get leadTypeWorkforce
+     *
+     * @return boolean 
+     */
+    public function getLeadTypeWorkforce()
+    {
+        return $this->leadTypeWorkforce;
+    }
+
+    /**
+     * Set highestLevelOfEducation
+     *
+     * @param string $highestLevelOfEducation
+     */
+    public function setHighestLevelOfEducation($highestLevelOfEducation)
+    {
+        $this->highestLevelOfEducation = $highestLevelOfEducation;
+    }
+
+    /**
+     * Get highestLevelOfEducation
+     *
+     * @return string 
+     */
+    public function getHighestLevelOfEducation()
+    {
+        return $this->highestLevelOfEducation;
+    }
+
+    /**
+     * Set certifications
+     *
+     * @param string $certifications
+     */
+    public function setCertifications($certifications)
+    {
+        $this->certifications = $certifications;
+    }
+
+    /**
+     * Get certifications
+     *
+     * @return string 
+     */
+    public function getCertifications()
+    {
+        return $this->certifications;
+    }
+
+    /**
+     * Set trainingExperience
+     *
+     * @param string $trainingExperience
+     */
+    public function setTrainingExperience($trainingExperience)
+    {
+        $this->trainingExperience = $trainingExperience;
+    }
+
+    /**
+     * Get trainingExperience
+     *
+     * @return string 
+     */
+    public function getTrainingExperience()
+    {
+        return $this->trainingExperience;
     }
 }
