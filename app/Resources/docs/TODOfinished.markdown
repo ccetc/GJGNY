@@ -1,6 +1,6 @@
 # GJGNY - TODOfinished
 
-# 1.2.1	Small Changes from trainings
+## 1.2.1	Small Changes from trainings
 0. update sonata
  - check empty countyData filter
 1.	quick field changes
@@ -31,7 +31,7 @@
  - fix create user
 	
 		
-# 1.2
+## 1.2
 0.	features lost from new Admin
  - Lead Events
  - Other fields
@@ -74,7 +74,7 @@
      - double check Lead name duplication
  - fix boolean yes/no/empty problem
 
-# 1.1
+## 1.1
 1.	git init
 2.	github
 3.	add bundles
@@ -98,7 +98,7 @@
  - appkernel
  - autoload
 
-#1.0
+## 1.0
 0.	Speed up view
 00.	Cross Browser Testing
 1.	Leads
