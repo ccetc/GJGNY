@@ -1,6 +1,9 @@
 # GJGNY - README
 The [GJGNY Data Tool](http://gjgny.ccext.net) is a Symfony project with no front end.  It is simply an interface to four database tables that energy outreach teams in Tompkins and Broome use to track information about home energy upgrade Leads.
 
+## User Documentation
+There is a HowTo document for users on google docs: <https://docs.google.com/document/d/1vF_RKP2v3gn9tHgKdNK724ksB1szY8ZVeO8Cx6Z_qiQ/edit>
+
 ## Cron Jobs
 ### E-mail digests
 Once a week, the ``Digest`` Command is run.  This command sends a e-mail digest to the set of administrators defined in the config file outlining the number of Leads that need to be called.
