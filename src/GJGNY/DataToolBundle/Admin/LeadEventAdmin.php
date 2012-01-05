@@ -226,7 +226,7 @@ class LeadEventAdmin extends Admin
     protected function configureSpreadsheetFields(SpreadsheetMapper $spreadsheetMapper)
     {
         $spreadsheetMapper
-            ->add('Lead', array('type' => 'model', 'field_name' => 'Lead_id', 'repository' => 'GJGNYDataToolBundle:Lead'))
+            ->add('Lead', array('type' => 'relation', 'relation_field_name' => 'Lead_id', 'relation_repository' => 'GJGNYDataToolBundle:Lead'))
             ->add('eventType', array('label' => 'Event Type'))
             ->add('eventTypeOther', array('label' => 'Other Event Type'))
             ->add('contactPerson', array('label' => 'Contact Person'))

@@ -445,7 +445,7 @@ class LeadAdmin extends Admin
             ->add('workEmail', array('label' => 'Work E-mail'))
             
             ->add('SourceOfLead', array('label' => 'Source of Lead'))
-            ->add('Program', array('label' => 'Program Source','type' => 'model', 'field_name' => 'Program_id', 'repository' => 'GJGNYDataToolBundle:Program'))
+            ->add('Program', array('label' => 'Program Source','type' => 'relation', 'relation_field_name' => 'Program_id', 'relation_repository' => 'GJGNYDataToolBundle:Program'))
             ->add('leadReferral', array('label' => 'Referral / Nomination'))
             ->add('DateOfLead', array('label' => 'Date of First Contact', 'type' => 'date'))
             ->add('leadStatus', array('label' => 'Lead Status'))
@@ -509,7 +509,7 @@ class LeadAdmin extends Admin
     {
         $summaryMapper
             ->addYField('SourceOfLead', array('label' => 'Source of Lead'))
-            ->addYField('Program', array('label' => 'Program Source','type' => 'model', 'field_name' => 'Program_id', 'repository' => 'GJGNYDataToolBundle:Program'))
+            ->addYField('Program', array('label' => 'Program Source','type' => 'relation', 'relation_field_name' => 'Program_id', 'relation_repository' => 'GJGNYDataToolBundle:Program'))
             ->addYField('DateOfLead', array('label' => 'Date of First Contact', 'type' => 'date'))
             ->addXField('City')
             ->addXField('Zip')

@@ -1,4 +1,7 @@
 # GJGNY - TODO
+
+## 1.2.1
+1.	shorten view page
 		
 ## 1.3		
 1.	Excel importing	
