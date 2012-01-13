@@ -2,17 +2,15 @@
 
 ## 1.2.1
 1. upgrade SonataAdmin, FOSUser
-- switch to SonataUserBundle
-- upgrade jQuery?
+2. switch to SonataUserBundle
+3. upgrade jQuery?
 
-## 1.2.2
-1.	shorten view page
-		
 ## 1.3		
 1.	Excel importing	
  - downloadable template		
      - not all fields		
 	- basic info + event			
+2.	shorten view page
 10.	Cleanup	Code
  -  counties choices (broome/Tompkins) in admin classes and elsewhere!
      - config emails
