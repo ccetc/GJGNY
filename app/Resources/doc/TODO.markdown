@@ -1,6 +1,11 @@
 # GJGNY - TODO
 
 ## 1.2.1
+1. upgrade SonataAdmin, FOSUser
+- switch to SonataUserBundle
+- upgrade jQuery?
+
+## 1.2.2
 1.	shorten view page
 		
 ## 1.3		
