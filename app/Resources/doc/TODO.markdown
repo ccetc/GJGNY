@@ -1,9 +1,13 @@
 # GJGNY - TODO
 
 ## 1.2.1
-1. upgrade SonataAdmin, FOSUser
-2. switch to SonataUserBundle
-3. upgrade jQuery?
+- upgrade SonataJQuery
+- upgrade SonataAdmin
+	- new jQuery versions
+	- uses CCETC Bootstrap
+	- check that menu permission changes work okay without acl
+- upgrade FOSUser	
+- switch to SonataUserBundle
 
 ## 1.3		
 1.	Excel importing	
