@@ -16,8 +16,3 @@ monolog:
             type:  stream
             path:  %kernel.logs_dir%/%kernel.environment%.log
             level: debug
-services:
-  gjgny:
-    class: GJGNY\DataToolBundle\Resources\classes\Config
-    arguments: [cache/xls, haggertypat@gmail.com, {Broome: 'flint@igc.org', Tompkins : 'scl36@cornell.edu'}]   
-    

@@ -4,20 +4,17 @@ namespace GJGNY\DataToolBundle\Resources\classes;
 
 class Config
 {
-    public $xlsDirectory;
-    public $supportEmail;
     public $admins = array();
     public $notificationEmails = array();
 
-    public function __construct($xlsDirectory, $supportEmail, $admins, $notificationEmails = array())
+    public function __construct($admins, $notificationEmails = array())
     {
-        $this->xlsDirectory = $xlsDirectory;
-        $this->supportEmail = $supportEmail;
-
         foreach($admins as $county => $email) {
             $this->admins[$county] = $email;
         }
 
+        print_r($notificationEmails);
+        
         foreach($notificationEmails as $county => $emails) {
             $this->notificationEmails[$county] = array();
             
