@@ -91,6 +91,9 @@ class Lead
       'Neighbor / Friends' => 'Neighbor / Friends',
       'Newspaper Article' => 'Newspaper Article',
       'Phone' => 'Phone',
+      'Event' => 'Event',
+      'Meeting' => 'Meeting',
+      'Program' => 'Program',
       'Presentation' => 'Presentation',
       'Tabling' => 'Tabling',
       'Website' => 'Website',
@@ -248,6 +251,12 @@ class Lead
    * @ORM\GeneratedValue(strategy="AUTO")
    */
   private $id;
+  /**
+   * @var smallint $ELPcomplete
+   *
+   * @ORM\Column(name="ELPcomplete", type="boolean")
+   */
+  private $ELPcomplete;
   /**
    * @var string $FirstName
    *

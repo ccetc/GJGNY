@@ -1011,7 +1011,7 @@ class LeadEvent
      *
      * @param dateOfCompletion $dateOfCompletion
      */
-    public function setDateOfCompletion(\dateOfCompletion $dateOfCompletion)
+    public function setDateOfCompletion($dateOfCompletion)
     {
         $this->dateOfCompletion = $dateOfCompletion;
     }

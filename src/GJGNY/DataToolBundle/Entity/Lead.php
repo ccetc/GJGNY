@@ -252,6 +252,12 @@ class Lead
    */
   private $id;
   /**
+   * @var smallint $ELPcomplete
+   *
+   * @ORM\Column(name="ELPcomplete", type="boolean")
+   */
+  private $ELPcomplete;
+  /**
    * @var string $FirstName
    *
    * @ORM\Column(name="FirstName", type="string", length=255, nullable="true")
@@ -2903,5 +2909,25 @@ class Lead
     public function getTrainingExperience()
     {
         return $this->trainingExperience;
+    }
+
+    /**
+     * Set ELPcomplete
+     *
+     * @param boolean $eLPcomplete
+     */
+    public function setELPcomplete($eLPcomplete)
+    {
+        $this->ELPcomplete = $eLPcomplete;
+    }
+
+    /**
+     * Get ELPcomplete
+     *
+     * @return boolean 
+     */
+    public function getELPcomplete()
+    {
+        return $this->ELPcomplete;
     }
 }
