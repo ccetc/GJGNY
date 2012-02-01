@@ -421,7 +421,8 @@ class LeadAdmin extends Admin
         'step2aInterested' => true,
         'step2bSubmitted' => true,
         'step2dCompleted' => true,
-        'step3' => true
+        'step3' => true,
+        'ELPcomplete' => true
     );
 
     protected function configureSpreadsheetFields(SpreadsheetMapper $spreadsheetMapper)
