@@ -252,11 +252,11 @@ class Lead
    */
   private $id;
   /**
-   * @var smallint $ELPcomplete
+   * @var smallint $ELPincomplete
    *
-   * @ORM\Column(name="ELPcomplete", type="boolean")
+   * @ORM\Column(name="ELPincomplete", type="boolean")
    */
-  private $ELPcomplete;
+  private $ELPincomplete;
   /**
    * @var string $FirstName
    *
@@ -2911,23 +2911,4 @@ class Lead
         return $this->trainingExperience;
     }
 
-    /**
-     * Set ELPcomplete
-     *
-     * @param boolean $eLPcomplete
-     */
-    public function setELPcomplete($eLPcomplete)
-    {
-        $this->ELPcomplete = $eLPcomplete;
-    }
-
-    /**
-     * Get ELPcomplete
-     *
-     * @return boolean 
-     */
-    public function getELPcomplete()
-    {
-        return $this->ELPcomplete;
-    }
 }

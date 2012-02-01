@@ -382,7 +382,7 @@ class LeadAdmin extends Admin
         $datagrid->add('DateOfLead', 'doctrine_orm_date_range', array('label' => 'Date of First Contact'));
         $datagrid->add('DateOfNextFollowup', 'doctrine_orm_date_range', array('label' => 'Date of Next Follow-up'));
         $datagrid->add('datetimeEntered', 'doctrine_orm_date_range', array('label' => 'Date Entered'));
-        $datagrid->add('ELPcomplete', null);
+        $datagrid->add('ELPincomplete', null);
         
         $this->initializeDefaultFilters();
     }
@@ -422,7 +422,7 @@ class LeadAdmin extends Admin
         'step2bSubmitted' => true,
         'step2dCompleted' => true,
         'step3' => true,
-        'ELPcomplete' => true
+        'ELPincomplete' => true
     );
 
     protected function configureSpreadsheetFields(SpreadsheetMapper $spreadsheetMapper)
