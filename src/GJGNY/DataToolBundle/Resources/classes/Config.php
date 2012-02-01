@@ -12,8 +12,6 @@ class Config
         foreach($admins as $county => $email) {
             $this->admins[$county] = $email;
         }
-
-        print_r($notificationEmails);
         
         foreach($notificationEmails as $county => $emails) {
             $this->notificationEmails[$county] = array();

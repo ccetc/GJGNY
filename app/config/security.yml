@@ -2,6 +2,12 @@ security:
     providers:
         fos_userbundle:
             id: fos_user.user_manager
+            
+    encoders:
+        "FOS\UserBundle\Model\UserInterface":
+            algorithm: sha512
+            encode_as_base64: false
+            iterations: 1
 
     firewalls:
         # Disabling the security for the web debug toolbar, the profiler and Assetic.
