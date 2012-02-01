@@ -382,6 +382,7 @@ class LeadAdmin extends Admin
         $datagrid->add('DateOfLead', 'doctrine_orm_date_range', array('label' => 'Date of First Contact'));
         $datagrid->add('DateOfNextFollowup', 'doctrine_orm_date_range', array('label' => 'Date of Next Follow-up'));
         $datagrid->add('datetimeEntered', 'doctrine_orm_date_range', array('label' => 'Date Entered'));
+        $datagrid->add('ELPcomplete', null);
         
         $this->initializeDefaultFilters();
     }

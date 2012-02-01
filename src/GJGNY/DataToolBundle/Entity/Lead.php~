@@ -2910,4 +2910,24 @@ class Lead
     {
         return $this->trainingExperience;
     }
+
+    /**
+     * Set ELPcomplete
+     *
+     * @param boolean $eLPcomplete
+     */
+    public function setELPcomplete($eLPcomplete)
+    {
+        $this->ELPcomplete = $eLPcomplete;
+    }
+
+    /**
+     * Get ELPcomplete
+     *
+     * @return boolean 
+     */
+    public function getELPcomplete()
+    {
+        return $this->ELPcomplete;
+    }
 }
