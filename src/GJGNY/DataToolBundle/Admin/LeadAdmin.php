@@ -352,15 +352,10 @@ class LeadAdmin extends Admin
                 'choices' => Lead::getNewsletterChoices()
             )
         ));
-        $datagrid->add('PathStep', 'doctrine_orm_callback', array(
-            'label' => 'Energy Path Step',
-            'callback' => array($this, 'handleCheckboxChoiceFilter'),
-            'field_type' => 'choice',
-            'field_options' => array(
-                'required' => false,
-                'choices' => Lead::getStepChoices()
-            )
-        ));
+        $datagrid->add('step2aInterested', null, array('label' => 'Step 2a. Interested in Assessment'));
+        $datagrid->add('step2bSubmitted', null, array('label' => 'Step 2b. Application Submitted'));
+        $datagrid->add('step2dCompleted', null, array('label' => 'Step 2a. Assessment Complete'));
+        $datagrid->add('step3', null, array('label' => 'Step 3. Upgrade'));
         $datagrid->add('october2011Raffle', 'doctrine_orm_callback', array(
             'label' => '10/11 Raffle',
             'callback' => function($queryBuilder, $alias, $field, $values) {
@@ -386,6 +381,7 @@ class LeadAdmin extends Admin
         // leave the dates for last since they are tall
         $datagrid->add('DateOfLead', 'doctrine_orm_date_range', array('label' => 'Date of First Contact'));
         $datagrid->add('DateOfNextFollowup', 'doctrine_orm_date_range', array('label' => 'Date of Next Follow-up'));
+        $datagrid->add('datetimeEntered', 'doctrine_orm_date_range', array('label' => 'Date Entered'));
         
         $this->initializeDefaultFilters();
     }
@@ -414,15 +410,17 @@ class LeadAdmin extends Admin
         'Newsletter' => true,
         'Campaign' => true,
         'PathStep' => true,
-        'step3aContractor' => true,
-        'step3bWorkDone' => true,
-        'step3cHowFinanced' => true,
         'october2011Raffle' => true,
         'DateOfLead' => true,
         'DateOfNextFollowup' => true,
         'homeowner' => true,
         'renter' => true,
         'landlord' => true,
+        'datetimeEntered' => true,
+        'step2aInterested' => true,
+        'step2bSubmitted' => true,
+        'step2dCompleted' => true,
+        'step3' => true
     );
 
     protected function configureSpreadsheetFields(SpreadsheetMapper $spreadsheetMapper)
