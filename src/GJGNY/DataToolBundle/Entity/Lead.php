@@ -1076,6 +1076,7 @@ class Lead
   {
     $this->LeadEvents = new \Doctrine\Common\Collections\ArrayCollection();
     $this->DateOfLead = new \DateTime();
+    $this->ELPincomplete = 0;
 
     $this->State = 'NY';
   }
