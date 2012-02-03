@@ -25,3 +25,4 @@
  -	trim values?
  -	follow up in 2 weeks button
  -	date picker?
+ -      add just lastname and email to duplication check

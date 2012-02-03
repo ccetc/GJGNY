@@ -383,6 +383,34 @@ class LeadAdmin extends Admin
         $datagrid->add('DateOfNextFollowup', 'doctrine_orm_date_range', array('label' => 'Date of Next Follow-up'));
         $datagrid->add('datetimeEntered', 'doctrine_orm_date_range', array('label' => 'Date Entered'));
         $datagrid->add('ELPincomplete', null);
+        $datagrid->add('step2Or3', 'doctrine_orm_callback', array(
+            'label' => 'Step 2 or 3',
+            'callback' => function($queryBuilder, $alias, $field, $values) {
+                if(!$values['value'])
+                {
+                    return;
+                }
+                $queryBuilder->andWhere(
+                        $alias.'.step2 = :value OR '.
+                        $alias.'.step3 = :value OR '.
+                        $alias.'.step2aInterested = :value OR '.
+                        $alias.'.step2bSubmitted = :value OR '.
+                        $alias.'.step2cScheduled = :value OR '.
+                        $alias.'.step2dCompleted = :value');
+                
+                if($values['value'] == 'yes') {
+                    $queryBuilder->setParameter('value','1');
+                } else {
+                    $queryBuilder->setParameter('value','0');                    
+                }
+
+            },
+            'field_type' => 'choice',
+            'field_options' => array(
+                'required' => false,
+                'choices' => array('yes' => 'yes', 'no' => 'no')
+            )
+        ));
         
         $this->initializeDefaultFilters();
     }
@@ -422,7 +450,8 @@ class LeadAdmin extends Admin
         'step2bSubmitted' => true,
         'step2dCompleted' => true,
         'step3' => true,
-        'ELPincomplete' => true
+        'ELPincomplete' => true,
+        'step2Or3' => true
     );
 
     protected function configureSpreadsheetFields(SpreadsheetMapper $spreadsheetMapper)
