@@ -102,7 +102,8 @@ class LeadEventAdmin extends Admin
     
     // List ======================================================================
     // ===========================================================================
-    public $listPreHook = 'GJGNYDataToolBundle:LeadEvent:_listPreHook.html.twig';
+    public $listPreHook = array('template' => 'GJGNYDataToolBundle:LeadEvent:_listPreHook.html.twig');
+    
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper

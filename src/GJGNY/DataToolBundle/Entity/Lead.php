@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Lead
   {
-  /** @ORM\ManyToOne(targetEntity="User", inversedBy="LeadsEntered")
+  /** @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="LeadsEntered")
    *  @ORM\JoinColumn(name="enteredBy_id", referencedColumnName="id", onDelete="SET NULL") 
    */
   protected $enteredBy;
@@ -23,7 +23,7 @@ class Lead
    */
   private $datetimeEntered;
   
-  /** @ORM\ManyToOne(targetEntity="User", inversedBy="LeadsUpdated")
+  /** @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="LeadsUpdated")
    *  @ORM\JoinColumn(name="lastUpdatedBy_id", referencedColumnName="id", onDelete="SET NULL") 
    */
   protected $lastUpdatedBy;

@@ -46,7 +46,7 @@ class Program
     /** @ORM\OneToMany(targetEntity="Lead", mappedBy="Program") */
     protected $Leads;
 
-    /** @ORM\ManyToOne(targetEntity="User", inversedBy="ProgramsEntered")
+    /** @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="ProgramsEntered")
     *  @ORM\JoinColumn(name="enteredBy_id", referencedColumnName="id", onDelete="SET NULL") 
     */
     protected $enteredBy;
@@ -57,7 +57,7 @@ class Program
     */
     private $datetimeEntered;
 
-    /** @ORM\ManyToOne(targetEntity="User", inversedBy="ProgramsUpdated")
+    /** @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="ProgramsUpdated")
     *  @ORM\JoinColumn(name="lastUpdatedBy_id", referencedColumnName="id", onDelete="SET NULL") 
     */
     protected $lastUpdatedBy;

@@ -19,13 +19,15 @@ class AppKernel extends Kernel
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             new GJGNY\DataToolBundle\GJGNYDataToolBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
-            new Sonata\jQueryBundle\SonatajQueryBundle(),
-            new Sonata\AdminBundle\SonataAdminBundle(),
-            new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
-            new CCETC\ErrorReportBundle\CCETCErrorReportBundle(),
-            new CCETC\UserAdminBundle\CCETCUserAdminBundle(),
-//            new CCETC\BootstrapBundle\CCETCBootstrapBundle(),            
             new FOS\UserBundle\FOSUserBundle(),            
+            new Sonata\jQueryBundle\SonatajQueryBundle(),
+            new Sonata\UserBundle\SonataUserBundle('FOSUserBundle'),
+            new Sonata\AdminBundle\SonataAdminBundle(),
+            new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
+            new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
+            new Application\Sonata\UserBundle\ApplicationSonataUserBundle(),
+            new CCETC\ErrorReportBundle\CCETCErrorReportBundle(),
+            new CCETC\BootstrapBundle\CCETCBootstrapBundle(),            
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

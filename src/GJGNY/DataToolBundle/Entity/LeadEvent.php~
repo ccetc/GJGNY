@@ -15,7 +15,7 @@ class LeadEvent
   /** @ORM\ManyToOne(targetEntity="Lead", inversedBy="LeadEvents") */
   protected $Lead;
   
-  /** @ORM\ManyToOne(targetEntity="User", inversedBy="LeadEventsEntered")
+  /** @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="LeadEventsEntered")
    *  @ORM\JoinColumn(name="enteredBy_id", referencedColumnName="id", onDelete="SET NULL") 
    */
   protected $enteredBy;
@@ -26,7 +26,7 @@ class LeadEvent
    */
   private $datetimeEntered;
   
-  /** @ORM\ManyToOne(targetEntity="User", inversedBy="LeadEventsUpdated")
+  /** @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="LeadEventsUpdated")
    *  @ORM\JoinColumn(name="lastUpdatedBy_id", referencedColumnName="id", onDelete="SET NULL") 
    */
   protected $lastUpdatedBy;

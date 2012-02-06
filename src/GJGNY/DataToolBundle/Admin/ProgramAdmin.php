@@ -36,7 +36,7 @@ class ProgramAdmin extends Admin
    
     // List ======================================================================
     // ===========================================================================
-    public $listPreHook = 'GJGNYDataToolBundle:Program:_listPreHook.html.twig';
+    public $listPreHook = array('template' => 'GJGNYDataToolBundle:Program:_listPreHook.html.twig');
 
     protected function configureListFields(ListMapper $listMapper)
     {

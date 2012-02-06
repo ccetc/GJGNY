@@ -19,3 +19,12 @@
 [submodule "vendor/bundles/Sonata/jQueryBundle"]
 	path = vendor/bundles/Sonata/jQueryBundle
 	url = git://github.com/sonata-project/SonatajQueryBundle.git
+[submodule "vendor/bundles/Sonata/UserBundle"]
+	path = vendor/bundles/Sonata/UserBundle
+	url = git@github.com:CCETC/SonataUserBundle
+[submodule "vendor/bundles/CCETC/BootstrapBundle"]
+	path = vendor/bundles/CCETC/BootstrapBundle
+	url = git@github.com:CCETC/CCETCBootstrapBundle
+[submodule "vendor/bundles/Sonata/EasyExtendsBundle"]
+	path = vendor/bundles/Sonata/EasyExtendsBundle
+	url = git@github.com:sonata-project/SonataEasyExtendsBundle.git

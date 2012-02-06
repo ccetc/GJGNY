@@ -31,13 +31,7 @@ services:
       tags:
         - { name: sonata.admin, manager_type: orm, group: Programs, label: Programs }
       arguments: [null, GJGNY\DataToolBundle\Entity\Program, GJGNYDataToolBundle:ProgramAdmin]
-      
-    ccetc.useradmin.admin.user:
-      class: CCETC\UserAdminBundle\Admin\UserAdmin
-      tags:
-        - { name: sonata.admin, manager_type: orm, group: Users, label: Users }
-      arguments: [null, GJGNY\DataToolBundle\Entity\User, CCETCUserAdminBundle:UserAdmin]      
-      
+       
     gjgny:
       class: GJGNY\DataToolBundle\Resources\classes\Config
       arguments: [{Broome: flint@igc.org, Tompkins : scl36@cornell.edu}, {Broome: [moniquereeser@gmail.com, flint@igc.org, murdanick@gmail.com], Tompkins: [scl36@cornell.edu, ml637@cornell.edu ] }]   
@@ -46,15 +40,11 @@ services:
       class: CCETC\ErrorReportBundle\Resources\config\Config
       arguments: [haggertypat@gmail.com]   
 
-    adminSettings:
-      class: Sonata\AdminBundle\Resources\config\Settings
-      arguments: [GJGNY Data Tool, haggertypat@gmail.com]
+sonata_admin:
+   title: GJGNY Data Tool
+   expanded_menu: true
 
-    userSettings:
-      class: FOS\UserBundle\Resources\config\Settings
-      arguments: [GJGNY Data Tool, haggertypat@gmail.com, SonataAdminBundle::standard_layout.html.twig, true, sonata_flash_success]
-
-
+  
 # Twig Configuration
 twig:
     debug:            %kernel.debug%
@@ -87,7 +77,13 @@ doctrine:
 
     orm:
         auto_generate_proxy_classes: %kernel.debug%
-        auto_mapping: true
+        entity_managers:
+            default:
+                mappings:
+                    ApplicationSonataUserBundle: ~
+                    SonataUserBundle: ~
+                    GJGNYDataToolBundle: ~
+                    FOSUserBundle: ~
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -108,7 +104,7 @@ jms_security_extra:
 fos_user:
   db_driver: orm
   firewall_name: main
-  user_class: GJGNY\DataToolBundle\Entity\User
+  user_class: Application\Sonata\UserBundle\Entity\User
   from_email:
     address: noreply@ccetompkins.org
     sender_name:    GJGNY Data Tool
@@ -116,3 +112,12 @@ fos_user:
     approval:
       enabled:    true
       template:   FOSUserBundle:Registration:email.txt.twig
+  settings:
+    application_title: GJGNY Data Tool
+    admin_email: haggertypat@gmail.com
+    base_layout: SonataAdminBundle::standard_layout.html.twig
+    use_page_header: true
+    flash_name: sonata_flash_success
+    
+parameters:
+   security.acl.permission.map.class: Sonata\AdminBundle\Security\Acl\Permission\AdminPermissionMap    
