@@ -213,9 +213,9 @@ class Program
     /**
      * Set enteredBy
      *
-     * @param GJGNY\DataToolBundle\Entity\User $enteredBy
+     * @param \Application\Sonata\UserBundle\Entity\User $enteredBy
      */
-    public function setEnteredBy(\GJGNY\DataToolBundle\Entity\User $enteredBy)
+    public function setEnteredBy(\Application\Sonata\UserBundle\Entity\User $enteredBy)
     {
         $this->enteredBy = $enteredBy;
     }
@@ -223,7 +223,7 @@ class Program
     /**
      * Get enteredBy
      *
-     * @return GJGNY\DataToolBundle\Entity\User 
+     * @return \Application\Sonata\UserBundle\Entity\User 
      */
     public function getEnteredBy()
     {
@@ -233,9 +233,9 @@ class Program
     /**
      * Set lastUpdatedBy
      *
-     * @param GJGNY\DataToolBundle\Entity\User $lastUpdatedBy
+     * @param Application\Sonata\UserBundle\Entity\User $lastUpdatedBy
      */
-    public function setLastUpdatedBy(\GJGNY\DataToolBundle\Entity\User $lastUpdatedBy)
+    public function setLastUpdatedBy(\Application\Sonata\UserBundle\Entity\User $lastUpdatedBy)
     {
         $this->lastUpdatedBy = $lastUpdatedBy;
     }
@@ -243,7 +243,7 @@ class Program
     /**
      * Get lastUpdatedBy
      *
-     * @return GJGNY\DataToolBundle\Entity\User 
+     * @return Application\Sonata\UserBundle\Entity\User 
      */
     public function getLastUpdatedBy()
     {

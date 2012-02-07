@@ -20,7 +20,7 @@ class LeadAdmin extends Admin
     protected $classnameLabel = 'Leads';
     protected $entityLabel = 'Lead';
     protected $entityLabelPlural = 'Leads';
-    protected $entityIconPath = 'images/icons/Lead.png';
+    protected $entityIconPath = 'bundles/sonataadmin/famfamfam/group.png';
 
     // Form ======================================================================
     // ===========================================================================

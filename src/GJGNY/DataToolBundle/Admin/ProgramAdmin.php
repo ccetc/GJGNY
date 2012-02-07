@@ -22,7 +22,7 @@ class ProgramAdmin extends Admin
     protected $classnameLabel = 'Programs';
     protected $entityLabel = 'Program';
     protected $entityLabelPlural = 'Programs';
-    protected $entityIconPath = 'images/icons/Program.png';
+    protected $entityIconPath = 'bundles/sonataadmin/famfamfam/date.png';
 
     // Form ======================================================================
     // ===========================================================================

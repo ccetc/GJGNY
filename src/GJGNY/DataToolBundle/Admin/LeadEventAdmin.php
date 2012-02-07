@@ -19,7 +19,7 @@ class LeadEventAdmin extends Admin
     protected $classnameLabel = 'Lead Events';
     protected $entityLabel = "Lead Event";
     protected $entityLabelPlural = "Lead Events";
-    protected $entityIconPath = 'images/icons/LeadEvent.png';
+    protected $entityIconPath = 'bundles/sonataadmin/famfamfam/phone.png';
     
     
     // Form ======================================================================
