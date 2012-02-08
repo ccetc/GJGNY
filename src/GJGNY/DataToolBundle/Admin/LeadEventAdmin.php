@@ -67,23 +67,6 @@ class LeadEventAdmin extends Admin
                 ->add('business', null, array('label' => 'Business', 'required' => false))
                 ->add('dateOfJobReferral', null, array('label' => 'Date of referral', 'required' => false, 'widget' => 'choice', 'format' => 'MM/dd/yyyy'))
             ->end()
-/*            ->with('Lighten Up Tompkins Phone Survey Data', array('collapsed' => true))
-                ->add('lutBulb', null, array('label' => 'Did you screw in your light bulb?', 'required' => false))
-                ->add('lutBulbReplace', null, array('label' => 'Did you replace an incandescent?', 'required' => false))
-                ->add('lutLookAtMaterials', null, array('label' => 'Did you get a chance to look at the education materials in the bag?', 'required' => false))
-                ->add('lutMaterialsUseful', null, array('label' => 'Where the educational materials useful?', 'required' => false))
-                ->add('lutStepsTaken', null, array('label' => 'What every savings steps have you taken in your home as a result of Lighten Up Tompkins?', 'required' => false))
-                ->add('lutStepsTakenGeneral', null, array('label' => 'What energy savings steps have you taken in your home in general?', 'required' => false))
-                ->add('lutRentOrOwn', 'choice', array('label' => 'Do you rent or own?', 'required' => false, 'choices' => array('rent' => 'rent', 'own' => 'own')), array('type' => 'choice'))
-                ->add('lutBarriers', null, array('label' => 'What are your barriers to making home energy upgrades?', 'required' => false))
-                ->add('lutAssessment', null, array('label' => 'Have you had an energy assessment by an energy efficieny contractor?', 'required' => false))
-                ->add('lutSupport', null, array('label' => 'What support do you need in taking additional energy saving steps?', 'required' => false))
-                ->add('lutNewsletter', null, array('label' => 'Would you be interested in receiving a monthly e-mail newsletter?', 'required' => false))
-                ->add('lutQuestions', null, array('label' => 'What questions do you have?', 'required' => false))
-                ->add('lutCouponMailed', null, array('label' => 'Coupon mailed?', 'required' => false))
-                ->add('lutCouponType', null, array('label' => 'if so, what type?', 'required' => false))
-             ->end()å
- */
         ;
     }
    
@@ -297,23 +280,6 @@ class LeadEventAdmin extends Admin
                 ->add('business', null, array('label' => 'Business', 'required' => false))
                 ->add('dateOfJobReferral', null, array('label' => 'Date of referral'))
             ->end()
-/*            ->with('Lighten Up Tompkins Phone Survey Data')
-                ->add('lutBulb', null, array('label' => 'Did you screw in your light bulb?'))
-                ->add('lutBulbReplace', null, array('label' => 'Did you replace an incandescent?'))
-                ->add('lutLookAtMaterials', null, array('label' => 'Did you get a chance to look at the education materials in the bag?'))
-                ->add('lutMaterialsUseful', null, array('label' => 'Where the educational materials useful?'))
-                ->add('lutStepsTaken', null, array('label' => 'What every savings steps have you taken in your home as a result of Lighten Up Tompkins?'))
-                ->add('lutStepsTakenGeneral', null, array('label' => 'What energy savings steps have you taken in your home in general?'))
-                ->add('lutRentOrOwn', null, array('label' => 'Do you rent or own?'))
-                ->add('lutBarriers', null, array('label' => 'What are your barriers to making home energy upgrades?'))
-                ->add('lutAssessment', null, array('label' => 'Have you had an energy assessment by an energy efficieny contractor?'))
-                ->add('lutSupport', null, array('label' => 'What support do you need in taking additional energy saving steps?'))
-                ->add('lutNewsletter', null, array('label' => 'Would you be interested in receiving a monthly e-mail newsletter?'))
-                ->add('lutQuestions', null, array('label' => 'What questions do you have?'))
-                ->add('lutCouponMailed', null, array('label' => 'Coupon mailed?'))
-                ->add('lutCouponType', null, array('label' => 'if so, what type?'))
-            ->end()
- */
         ;
         
         $this->initializeShowHooks();

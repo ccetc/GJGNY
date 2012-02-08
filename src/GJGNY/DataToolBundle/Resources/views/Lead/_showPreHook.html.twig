@@ -29,11 +29,11 @@
     <div style="width: 100%; margin: 5px 0 15px 0; text-align: right;">
         {% if object.LeadEvents is defined and object.LeadEvents|length > 0 %}
             <a class="btn" href="{{ LeadEventAdmin.generateUrl('list', {'filter[firstName][value]':object.firstName, 'filter[lastName][value]':object.lastName}) }}">
-                View {{ object }}'s Events
+                View Lead's Events
             </a>
         {% endif %}
         <a class="btn primary" href="{{ LeadEventAdmin.generateUrl('create', {'formObject[fieldName]':'Lead', 'formObject[repositoryName]' : 'GJGNYDataToolBundle:Lead', 'formObject[id]':object.id}) }}">
-            Create a new Lead Event for {{ object }}
+            New Event for Lead
         </a>
     </div>
 </div>

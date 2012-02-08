@@ -4,7 +4,7 @@ homeDefault:
   defaults: { _controller: SonataAdminBundle:Core:dashboard }
 
 home:
-  pattern:  /home
+  pattern:  /admin/dashboard
   defaults: { _controller: SonataAdminBundle:Core:dashboard }
   
 adminHelp:
