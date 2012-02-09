@@ -26,22 +26,24 @@
     - <del>set up permissions
 
 ## 1.3		
-1.	shorten view page
+1. <del>shorten view page
 2. Portals
- - transfer to here
- - auto lead and notification
- - make portals editable
- 	- events
- 	- contact info
- 	- logos?
- - keep a table of portals
+ - Handle signups
+ 	- create leads
+ 	- email notifications
+ - <del>make portals editable
+ 	- <del>events
+ 	- <del>contact info
+ 	- <del>logos
+ - <del>keep a table of portals
  - redirect SouthernTier from Upgrade Upstate
 3. Update Fields
 	- <del>Lead
+		- set new fields for old leads
 	- Lead Event
 4. Filter on Events
 10. misc
-	- hide broome/tompkins fields
+	- <del>hide broome/tompkins fields
 	- program source alpha
 
 ## Future
@@ -56,6 +58,7 @@
      - config emails
 	 - admin classes (choices)
  -  make admin and county entities/interfaces
+ -  configurable notifications
 12.	Misc	
  -	follow up in 2 weeks button
  -	date picker?

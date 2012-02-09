@@ -518,14 +518,14 @@ class LeadAdmin extends Admin
             ->end()
             ->with('Outreach')
                 ->add('CommunityGroupsConnectedTo', null, array('label' => 'Community groups connected to'))
-                ->add('campaignChoiceTalkingToNeighbors', null, array('label' => 'talking to neighbors'))
-                ->add('campaignChoiceFormEnergyTeam', null, array('label' => 'forming an energy team'))
-                ->add('campaignChoiceAppearInVideo', null, array('label' => 'appearing in testimonial video'))
-                ->add('campaignChoiceShareExperience', null, array('label' => 'sharing experience with others'))
-                ->add('campaignChoiceVolunteer', null, array('label' => 'becoming a volunteer'))
-                ->add('campaignChoiceSteward', null, array('label' => 'becoming an energy steward'))
-                ->add('campaignChoiceEvent', null, array('label' => 'presentating at an event'))
-                ->add('campaignChoiceOther', null, array('label' => 'other'))
+                ->add('campaignChoiceTalkingToNeighbors', null, array('label' => 'Campaign Interest: talking to neighbors'))
+                ->add('campaignChoiceFormEnergyTeam', null, array('label' => 'Campaign Interest: forming an energy team'))
+                ->add('campaignChoiceAppearInVideo', null, array('label' => 'Campaign Interest: appearing in testimonial video'))
+                ->add('campaignChoiceShareExperience', null, array('label' => 'Campaign Interest: sharing experience with others'))
+                ->add('campaignChoiceVolunteer', null, array('label' => 'Campaign Interest: becoming a volunteer'))
+                ->add('campaignChoiceSteward', null, array('label' => 'Campaign Interest: becoming an energy steward'))
+                ->add('campaignChoiceEvent', null, array('label' => 'Campaign Interest: presentating at an event'))
+                ->add('campaignChoiceOther', null, array('label' => 'Campaign Interest: other'))
                 ->add('otherNotes', null, array('label' => 'Other Notes'))                
             ->end()
             ->with('Employer / Organization Information')
@@ -538,7 +538,7 @@ class LeadAdmin extends Admin
                 ->add('orgCounty', null, array('label' => 'County'))
                 ->add('website', null, array('label' => 'Website'))
             ->end()
-            ->with('Workforce Fields', array('collapsed' => true))
+            ->with('Workforce Fields')
                 ->add('highestLevelOfEducation', null, array('label' => 'Highest Level of Education'))
                 ->add('certifications', null, array('label' => 'Certifications'))
                 ->add('trainingExperience', null, array('label' => 'Training Experience'))                
@@ -574,16 +574,18 @@ class LeadAdmin extends Admin
         $this->initializeShowHooks();
     }
         
+    public $hideEmptyShowFields = true;
+    public $hideableShowFieldBlacklist = array (
+        'step2aInterested',
+        'step2bSubmitted',
+        'step2dCompleted',
+        'step3'
+    );
+
     public $showPreHook = array(
         'template' => 'GJGNYDataToolBundle:Lead:_showPreHook.html.twig',
     );
         
-    public $showFieldPreHooks = array (
-        // extra labels for choice groups
-        'campaignChoiceTalkingToNeighbors' => 'GJGNYDataToolBundle:Lead:_campaignChoiceShowPreHook.html.twig',
-        'leadTypeUpgrade' => 'GJGNYDataToolBundle:Lead:_leadTypeUpgradeShowPreHook.html.twig',
-    );
-    
     public function initializeShowHooks()
     {
         $this->showPreHook['parameters'] = array(
@@ -602,20 +604,6 @@ class LeadAdmin extends Admin
         'step3cHowFinanced' => 'indented',
         'scopeOfWorkSubmitted' => 'indented',
         'reportReceived' => 'indented',
-        
-        'campaignChoiceTalkingToNeighbors' => 'indented',
-        'campaignChoiceFormEnergyTeam' => 'indented',
-        'campaignChoiceAppearInVideo' => 'indented',
-        'campaignChoiceShareExperience' => 'indented',
-        'campaignChoiceVolunteer' => 'indented',
-        'campaignChoiceSteward' => 'indented',
-        'campaignChoiceEvent' => 'indented',
-        'campaignChoiceOther' => 'indented',
-        
-        
-        'leadTypeUpgrade' => 'indented',
-        'leadTypeOutreach' => 'indented',
-        'leadTypeWorkforce' => 'indented',
     );
     
     public function prePersist($Lead)

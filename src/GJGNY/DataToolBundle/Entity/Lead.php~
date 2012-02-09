@@ -2146,4 +2146,84 @@ class Lead
     {
         return $this->leadCategory;
     }
+
+    /**
+     * Set campaignChoiceVolunteer
+     *
+     * @param boolean $campaignChoiceVolunteer
+     */
+    public function setCampaignChoiceVolunteer($campaignChoiceVolunteer)
+    {
+        $this->campaignChoiceVolunteer = $campaignChoiceVolunteer;
+    }
+
+    /**
+     * Get campaignChoiceVolunteer
+     *
+     * @return boolean 
+     */
+    public function getCampaignChoiceVolunteer()
+    {
+        return $this->campaignChoiceVolunteer;
+    }
+
+    /**
+     * Set campaignChoiceSteward
+     *
+     * @param boolean $campaignChoiceSteward
+     */
+    public function setCampaignChoiceSteward($campaignChoiceSteward)
+    {
+        $this->campaignChoiceSteward = $campaignChoiceSteward;
+    }
+
+    /**
+     * Get campaignChoiceSteward
+     *
+     * @return boolean 
+     */
+    public function getCampaignChoiceSteward()
+    {
+        return $this->campaignChoiceSteward;
+    }
+
+    /**
+     * Set campaignChoiceEvent
+     *
+     * @param boolean $campaignChoiceEvent
+     */
+    public function setCampaignChoiceEvent($campaignChoiceEvent)
+    {
+        $this->campaignChoiceEvent = $campaignChoiceEvent;
+    }
+
+    /**
+     * Get campaignChoiceEvent
+     *
+     * @return boolean 
+     */
+    public function getCampaignChoiceEvent()
+    {
+        return $this->campaignChoiceEvent;
+    }
+
+    /**
+     * Set campaignChoiceOther
+     *
+     * @param string $campaignChoiceOther
+     */
+    public function setCampaignChoiceOther($campaignChoiceOther)
+    {
+        $this->campaignChoiceOther = $campaignChoiceOther;
+    }
+
+    /**
+     * Get campaignChoiceOther
+     *
+     * @return string 
+     */
+    public function getCampaignChoiceOther()
+    {
+        return $this->campaignChoiceOther;
+    }
 }

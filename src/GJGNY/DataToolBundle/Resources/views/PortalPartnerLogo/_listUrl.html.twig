@@ -1,0 +1,9 @@
+{% extends 'SonataAdminBundle:CRUD:base_list_field.html.twig' %}
+
+{% block field%}
+    <div>
+        {% if object.url %}
+            <a href="{{ object.url }}" target="_blank">{{ object.url }}</a>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,7 +1,10 @@
-# home pages ===================================================================
 homeDefault:
   pattern:  /
   defaults: { _controller: SonataAdminBundle:Core:dashboard }
+
+portal:
+  pattern: /portal/{url}
+  defaults: { _controller: GJGNYDataToolBundle:Portal:portal }
 
 home:
   pattern:  /admin/dashboard

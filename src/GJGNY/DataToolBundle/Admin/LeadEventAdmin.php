@@ -246,6 +246,7 @@ class LeadEventAdmin extends Admin
             'LeadAdmin' =>  $this->configurationPool->getContainer()->get('gjgny.datatool.admin.lead')
         );
     }
+    public $hideEmptyShowFields = true;
 
     protected function configureShowField(ShowMapper $showMapper)
     {
@@ -260,10 +261,6 @@ class LeadEventAdmin extends Admin
                 ->add('actionsTaken', null, array('label' => 'Actions Taken'))
                 ->add('FollowUpItems', null, array('label' => 'Follow-Up Items'))
                 ->add('notes', null, array('label' => 'Notes'))
-                ->add('enteredBy', null, array('label' => 'Entered By'))
-                ->add('datetimeEntered', null, array('label' => 'Date Entered'))
-                ->add('lastUpdatedBy', null, array('label' => 'Last Updated By'))
-                ->add('datetimeLastUpdated', null, array('label' => 'Date Last Updated'))
             ->end()
             ->with('Phone Call Data')
                 ->add('callStatus', null, array('label' => 'Call Status'))
@@ -279,6 +276,12 @@ class LeadEventAdmin extends Admin
             ->with('Job Referral')
                 ->add('business', null, array('label' => 'Business', 'required' => false))
                 ->add('dateOfJobReferral', null, array('label' => 'Date of referral'))
+            ->end()
+            ->with('Entry Information')
+                ->add('enteredBy', null, array('label' => 'Entered By'))
+                ->add('datetimeEntered', null, array('label' => 'Date Entered'))
+                ->add('lastUpdatedBy', null, array('label' => 'Last Updated By'))
+                ->add('datetimeLastUpdated', null, array('label' => 'Date Last Updated'))
             ->end()
         ;
         

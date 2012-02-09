@@ -40,6 +40,18 @@ services:
         - { name: sonata.admin, manager_type: orm, group: Programs, label: Programs }
       arguments: [null, GJGNY\DataToolBundle\Entity\Program, GJGNYDataToolBundle:ProgramAdmin]
 
+    gjgny.datatool.admin.portal:
+      class: GJGNY\DataToolBundle\Admin\PortalAdmin
+      tags:
+        - { name: sonata.admin, manager_type: orm, group: Portals, label: Portals }
+      arguments: [null, GJGNY\DataToolBundle\Entity\Portal, GJGNYDataToolBundle:PortalAdmin]
+    gjgny.datatool.admin.portalpartnerlogo:
+      class: GJGNY\DataToolBundle\Admin\PortalPartnerLogoAdmin
+      tags:
+        - { name: sonata.admin, manager_type: orm, group: Portals, label: Partner Logos }
+      arguments: [null, GJGNY\DataToolBundle\Entity\PortalPartnerLogo, GJGNYDataToolBundle:PortalPartnerLogoAdmin]
+
+
 parameters:
    security.acl.permission.map.class: Sonata\AdminBundle\Security\Acl\Permission\AdminPermissionMap   
    

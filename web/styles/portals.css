@@ -1,0 +1,54 @@
+/* Layout --------------------- */
+html, body {
+    background-color: #eee;
+}
+
+.container {
+    width: 820px;
+}                  
+                  
+.container > .content {
+    background-color: #fff;
+    padding: 20px;
+    margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+    -webkit-border-radius: 0 0 6px 6px;
+       -moz-border-radius: 0 0 6px 6px;
+            border-radius: 0 0 6px 6px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+       -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+            box-shadow: 0 1px 2px rgba(0,0,0,.15);
+}
+
+/* Specifics --------------------- */
+div.gjgny-logo-container {
+    width: 320px;
+    text-align: center;
+}
+
+img#main-logo {
+    max-width: 400px;
+}
+
+span#portal-title {
+    color: #69AD1C;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+div#heading-container {
+    margin: 25px 0;
+    text-align: center;
+}
+
+div#btn-container {
+    margin: 20px 0;
+}
+
+div#portal-steps {
+    font-size: 16px;
+}
+
+div#partner-logo-container img {
+    height: 66px;
+    padding: 5px;
+}
