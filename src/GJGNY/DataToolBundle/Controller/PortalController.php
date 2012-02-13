@@ -74,7 +74,8 @@ class PortalController extends Controller
                     $lead->setTown($data['town']);
                     $lead->setCounty($userCounty->getName());
                     $lead->setDatetimeEntered(new \DateTime());
-                    $lead->setLeadStatus('need to call');
+                    $lead->setLeadStatus('active lead');
+                    $lead->setNeedToCall(true);
                     $lead->setProgram($portalMatch->getNotificationProgram());
                     $lead->setDataCounty($portalMatch->getCountyOwnedBy());
 
