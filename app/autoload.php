@@ -18,7 +18,7 @@ $loader->registerNamespaces(array(
     'Application'   => __DIR__,
     'CCETC' => __DIR__.'/../vendor/bundles',  
     'Knp\Bundle' => __DIR__.'/../vendor/bundles',
-    'Knp\Menu'   => __DIR__.'/../vendor/knp-menu/src',
+    'Knp\Menu'   => __DIR__.'/../vendor/KnpMnu/src',
     'FOS'          => __DIR__.'/../vendor/bundles',
     'Sonata'          => __DIR__.'/../vendor/bundles',
 ));
