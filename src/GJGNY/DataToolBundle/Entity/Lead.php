@@ -85,6 +85,7 @@ class Lead
     protected static $leadStatusChoices = array(
         'active lead' => 'active lead',
         'process complete' => 'process complete',
+        'had previous upgrade' => 'had previous upgrade',
         'not interested' => 'not interested',
         'referred out of program' => 'referred out of program'
     );

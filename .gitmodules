@@ -15,7 +15,7 @@
 	url = https://github.com/knplabs/KnpMenuBundle.git
 [submodule "vendor/KnpMenu"]
 	path = vendor/KnpMenu
-	url = https://github.com/knplabs/KnpMenu.git
+	url = https://github.com/KnpLabs/KnpMenu.git
 [submodule "vendor/bundles/Sonata/jQueryBundle"]
 	path = vendor/bundles/Sonata/jQueryBundle
 	url = git://github.com/sonata-project/SonatajQueryBundle.git
