@@ -20,12 +20,14 @@ class LeadAdmin extends Admin
     protected $classnameLabel = 'Leads';
     protected $entityLabel = 'Lead';
     protected $entityLabelPlural = 'Leads';
-    protected $entityIconPath = 'images/icons/Lead.png';
+    protected $entityIconPath = 'bundles/sonataadmin/famfamfam/group.png';
 
     // Form ======================================================================
     // ===========================================================================
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
+
         $formMapper
             ->with('Contact Information')
                 ->add('FirstName', null, array('label' => 'First Name', 'required' => false))
@@ -52,59 +54,50 @@ class LeadAdmin extends Admin
             ->with('Lead History')
                 ->add('Program', 'sonata_type_model', array('label' => 'Program Source', 'required' => false), array('edit' => 'standard'))
                 ->add('SourceOfLead', 'choice', array('required' => false, 'label' => 'Source of Lead', 'choices' => Lead::getSourceOfLeadChoices()))
-                ->add('leadReferral', null, array('required' => false, 'label' => 'Referral / Nomination'))
-                ->add('DateOfLead', null, array('label' => 'Date of First Contact', 'required' => false, 'widget' => 'choice', 'format' => 'MM/dd/yyyy'))
+                ->add('DateOfLead', 'date', array('label' => 'Date of First Contact', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
+                ->add('needToCall', null, array('label' => 'Need to Call'))
                 ->add('leadStatus', 'choice', array('required' => false, 'label' => 'Lead Status', 'choices' => Lead::getLeadStatusChoices()))
-                ->add('DateOfNextFollowup', null, array('label' => 'Date of next Follow-up', 'required' => false, 'widget' => 'choice', 'format' => 'MM/dd/yyyy'))
+                ->add('DateOfNextFollowup', null, array('label' => 'Date of next Follow-up', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
+                ->add('enteredBy', 'sonata_type_model', array('label' => 'Entered By', 'required' => false), array('edit' => 'standard'))
             ->end()
             ->setHelps(array(
-                'Program' => 'An Lead Event will automatically be created for the selected program',
-                'SourceOfLead' => 'If e-mail or phone a Lead Event will automatically be created.',
-                'leadStatus' => 'Your team will receive e-mail updates about Leads with the status "need to call".',
-                'DateOfNextFollowup' => 'This is the date your team will start receiving e-mail updates if your Lead\'s status is "awaiting follow up"'
+                'DateOfNextFollowup' => 'Lead will be marked "need to call" on this date'
             ))
-            ->with('Other Information')
+            ->with('Lead Type')
                 ->add('leadTypeUpgrade', null, array('label' => 'Energy Upgrade', 'required' => false))
                 ->add('leadTypeOutreach', null, array('label' => 'Outreach', 'required' => false))
                 ->add('leadTypeWorkforce', null, array('label' => 'Workforce', 'required' => false))
+                ->add('leadCategory', 'choice', array('label' => "Category", 'required' => false, 'choices' => Lead::getLeadCategoryChoices()))
                 ->add('homeowner', null, array('label' => 'Homeowner', 'required' => false))
                 ->add('renter', null, array('label' => 'Renter', 'required' => false))
                 ->add('landlord', null, array('label' => 'Landlord', 'required' => false))
-                ->add('interestedInVisit', null, array('label' => 'Interested in scheduling a home visit', 'required' => false))
+            ->end()
+            ->with('Energy Upgrade Status')    
+                ->add('step2aInterested', null, array('label' => 'Interested in Home Energy assessment', 'required' => false))
+                ->add('step2bSubmitted', null, array('label' => 'GJGNY application submitted', 'required' => false))
+                ->add('step2dCompleted', null, array('label' => 'Assessment Complete', 'required' => false))
+                    ->add('dateOfAssessment', null, array('label' => 'Date', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
+                ->add('reportReceived', null, array('label' => 'Report Received', 'required' => false))
+                ->add('scopeOfWorkSubmitted', null, array('label' => 'Scope of Work Submitted', 'required' => false))
+                ->add('step3', null, array('label' => 'Upgrade Complete', 'required' => false))
+                    ->add('dateOfUpgrade', null, array('label' => 'Date', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
+                    ->add('step3aContractor', null, array('label' => 'Name of contractor', 'required' => false))
+                    ->add('step3bWorkDone', null, array('label' => 'What was done (air sealing, insulating, upgrade heating system, etc.)', 'required' => false))
+                    ->add('step3cHowFinanced', 'choice', array('required' => false, 'label' => 'How was it financed', 'choices' => Lead::getHowAssessmentFinancedChoices()))
+                    ->add('upgradeStatusNotes', null, array('label' => 'Notes', 'required' => false))
+            ->end()
+            ->with('Outreach')
                 ->add('CommunityGroupsConnectedTo', null, array('label' => 'Community groups connected to', 'required' => false))
-                ->add('barriers', null, array('label' => 'Barriers to making upgrades', 'required' => false))
-
-                ->add('motivationChoiceComfort', null, array('label' => 'Comfort', 'required' => false))
-                ->add('motivationChoiceMoney', null, array('label' => 'Money', 'required' => false))
-                ->add('motivationChoiceIndoorAir', null, array('label' => 'Indoor air quality', 'required' => false))
-                ->add('motivationChoiceEnvironment', null, array('label' => 'Environment', 'required' => false))
-                ->add('motivationChoiceOther', null, array('label' => 'Other', 'required' => false))
-
-                ->add('campaignChoiceTalkingToNeighbors', null, array('label' => 'Talking to neighbors', 'required' => false))
-                ->add('campaignChoiceFormEnergyTeam', null, array('label' => 'Forming an energy team', 'required' => false))
-                ->add('campaignChoiceAppearInVideo', null, array('label' => 'Appear in testimonial video', 'required' => false))
-                ->add('campaignChoiceShareExperience', null, array('label' => 'Share upgrade experience with others', 'required' => false))
-
-                ->add('newsletterChoiceEnergyTips', null, array('label' => 'Energy saving tips', 'required' => false))
-                ->add('newsletterChoiceSavings', null, array('label' => 'Energy saving programs and incentives', 'required' => false))
-                ->add('newsletterChoiceEvents', null, array('label' => 'Upcoming workshops and events', 'required' => false))
+                ->add('campaignChoiceTalkingToNeighbors', null, array('label' => 'talking to neighbors', 'required' => false))
+                ->add('campaignChoiceFormEnergyTeam', null, array('label' => 'forming an energy team', 'required' => false))
+                ->add('campaignChoiceAppearInVideo', null, array('label' => 'appearing in testimonial video', 'required' => false))
+                ->add('campaignChoiceShareExperience', null, array('label' => 'sharing upgrade experience with others', 'required' => false))
+                ->add('campaignChoiceVolunteer', null, array('label' => 'becoming a volunteer', 'required' => false))
+                ->add('campaignChoiceSteward', null, array('label' => 'becoming a senion energy steward', 'required' => false))
+                ->add('campaignChoiceEvent', null, array('label' => 'presenting at an event', 'required' => false))
+                ->add('campaignChoiceOther', null, array('label' => 'other', 'required' => false))
                 ->add('otherNotes', null, array('label' => 'Other Notes', 'required' => false))
-            ->end()
-            ->with('Energy Path steps')    
-                ->add('step1', null, array('label' => '1. Low cost / no-cost actions and tune up energy users', 'required' => false))
-                ->add('step1aActionsTaken', null, array('label' => '1a. List specific actions taken', 'required' => false))
-                ->add('step2', null, array('label' => '2. Energy Assessment', 'required' => false))
-                ->add('step2aInterested', null, array('label' => '2a. Interested in getting assessment', 'required' => false))
-                ->add('step2bSubmitted', null, array('label' => '2b. GJGNY application submitted', 'required' => false))
-                ->add('step2cScheduled', null, array('label' => '2c. Assessment scheduled', 'required' => false))
-                ->add('step2dCompleted', null, array('label' => '2d. Assessment completed and report received', 'required' => false))
-                ->add('step3', null, array('label' => '3. Whole house upgrade', 'required' => false))
-                ->add('step3aContractor', null, array('label' => '3a. Name of contractor', 'required' => false))
-                ->add('step3bWorkDone', null, array('label' => '3b. What was done (air sealing, insulating, upgrade heating system, etc.)', 'required' => false))
-                ->add('step3cHowFinanced', 'choice', array('required' => false, 'label' => '3c. How was it financed', 'choices' => Lead::getHowAssessmentFinancedChoices()))
-                ->add('step4', null, array('label' => '4. Upgrade Appliances', 'required' => false))
-                ->add('step5', null, array('label' => '5. Renewable energy', 'required' => false))
-            ->end()
+            ->end()                
             ->with('Employer / Organization Information', array('collapsed' => true))
                 ->add('organization', null, array('label' => 'Employer / Organization', 'required' => false))
                 ->add('orgTitle', null, array('label' => 'Title', 'required' => false))
@@ -124,41 +117,26 @@ class LeadAdmin extends Admin
                 ->add('highestLevelOfEducation', 'choice', array('label' => 'Highest Level of Education', 'required' => false, 'choices' => Lead::getHighestLevelOfEducationChoices()))
                 ->add('certifications', null, array('label' => 'Certifications', 'required' => false))
                 ->add('trainingExperience', null, array('label' => 'Training Experience', 'required' => false))                
-            ->end()
-            ->with('Broome Fields', array('collapsed' => true))
-                ->add('pledge', null, array('label' => 'Pledge', 'required' => false))
-                ->add('visitPeriod', null, array('label' => 'Visit Period', 'required' => false))
-                ->add('BECCTeam', null, array('label' => 'BECC Team', 'required' => false))
-                ->add('rank', null, array('label' => 'Rank', 'required' => false))
-            ->end()
-            ->with('Tompkins Fields', array('collapsed' => true))
-                ->add('october2011Raffle', null, array('label' => 'October 2011 Raffle', 'required' => false))
-            ->end()
-            ->with('GJGNY Application Fields', array('collapsed' => true))
-                ->add('hasCentralAC', null, array('label' => 'Central AC?', 'required' => false))
-
-                ->add('incomeRange', 'choice', array('required' => false, 'label' => 'Household Income Range', 'choices' => Lead::getIncomeRangeChoices()))
-                ->add('buildingType', 'choice', array('label' => 'Building Type', 'choices' => Lead::getBuildingTypeChoices(), 'required' => false))
-                ->add('sqFootage', null, array('label' => 'Above grade conditioned square footage', 'required' => false))
-
-                ->add('financeChoiceHomeEquity', null, array('label' => 'Home Equity loan', 'required' => false))
-                ->add('financeChoiceGJGNY', null, array('label' => 'GJGNY load', 'required' => false))
-                ->add('financeChoicePocket', null, array('label' => 'Out-of-pocker', 'required' => false))
-                ->add('financeChoicePersonal', null, array('label' => 'Personal loan', 'required' => false))
-
-                ->add('GJGNYReference', 'choice', array('required' => false, 'label' => 'How did Lead hear about GJGNY program?', 'choices' => Lead::getGJGNYReferenceChoices()))
-                ->add('GJGNYReferenceOther', null, array('label' => 'Other', 'required' => false))
-
-                ->add('electricUtility', null, array('label' => 'Electric Utility', 'required' => false))
-                ->add('electricUtilityAcct', null, array('label' => 'Electric Utility Acct #', 'required' => false))
-                ->add('gasUtility', null, array('label' => 'Gas Utility', 'required' => false))
-                ->add('gasUtilityAcct', null, array('label' => 'Gas Utility Acct #', 'required' => false))
-                ->add('otherFuelSupplier', null, array('label' => 'Other Fuel Supplier', 'required' => false))
-                ->add('otherFuelSupplierType', 'choice', array('label' => 'Other Fuel Supplier Type', 'choices' => Lead::getOtherFuelSupplierTypeChoices(), 'required' => false))
-                ->add('otherFuelSupplierTypeOther', null, array('label' => 'Other type', 'required' => false))
-                ->add('otherFuelSupplierAcct', null, array('label' => 'Other Fuel Supplier Acct #', 'required' => false))
-            ->end()
-      ;
+            ->end();
+        
+        if($user->getCounty() == "Broome") {
+            $formMapper
+                ->with('Other Fields', array('collapsed' => true))
+                    ->add('pledge', null, array('label' => 'Pledge', 'required' => false))
+                    ->add('postPledge', null, array('label' => 'Post-upgrade Pledge', 'required' => false))
+                    ->add('interestedInVisit', null, array('label' => 'Interested in scheduling a home visit', 'required' => false))
+                    ->add('visitPeriod', null, array('label' => 'Visit Period', 'required' => false))
+                    ->add('BECCTeam', null, array('label' => 'BECC Team', 'required' => false))
+                    ->add('rank', null, array('label' => 'Rank', 'required' => false))
+                    ->add('leadReferral', null, array('required' => false, 'label' => 'Referral / Nomination'))
+                ->end();
+        } else if($user->getCounty() == "Tompkins") {
+            $formMapper
+                ->with('Other Fields', array('collapsed' => true))
+                    ->add('october2011Raffle', null, array('label' => 'October 2011 Raffle', 'required' => false))
+                ->end();
+        }
+      
     }
    
     public $fieldGroupsToCheckForDuplicates = array (
@@ -170,80 +148,63 @@ class LeadAdmin extends Admin
         // "other" fields
         'primaryPhoneType' => 'SonataAdminBundle:Hook:_otherFormFieldPre.html.twig',
         'motivationChoiceOther' => 'SonataAdminBundle:Hook:_otherFormFieldPre.html.twig',
-        'GJGNYReferenceOther' => 'SonataAdminBundle:Hook:_otherFormFieldPre.html.twig',
-        'otherFuelSupplierTypeOther' => 'SonataAdminBundle:Hook:_otherFormFieldPre.html.twig',
         'secondaryPhoneType' => 'SonataAdminBundle:Hook:_otherFormFieldPre.html.twig',
-        
+        'campaignChoiceOther' => 'SonataAdminBundle:Hook:_otherFormFieldPre.html.twig',
+
         // indented fields
-        'step1aActionsTaken' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-        'step2aInterested' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-        'step2bSubmitted' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-        'step2cScheduled' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-        'step2dCompleted' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'dateOfAssessment' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'dateOfUpgrade' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'reportReceived' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'scopeOfWorkSubmitted' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'step3aContractor' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'step3bWorkDone' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'step3cHowFinanced' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'renter' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'landlord' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         
         // indent choice options
         // NOTE: the indent divs for the first choices are included in the field group label hooks below
-        'motivationChoiceMoney' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-        'motivationChoiceIndoorAir' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-        'motivationChoiceEnvironment' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-        'motivationChoiceOther' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'campaignChoiceFormEnergyTeam' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'campaignChoiceAppearInVideo' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'campaignChoiceShareExperience' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-        'newsletterChoiceSavings' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-        'newsletterChoiceEvents' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-        'financeChoiceGJGNY' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-        'financeChoicePocket' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-        'financeChoicePersonal' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'campaignChoiceVolunteer' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'campaignChoiceSteward' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'campaignChoiceEvent' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'leadTypeOutreach' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'leadTypeWorkforce' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
  
         // field group labels
-       'financeChoiceHomeEquity' => 'GJGNYDataToolBundle:Lead:_financeChoiceFormPreHook.html.twig',
-       'newsletterChoiceEnergyTips' => 'GJGNYDataToolBundle:Lead:_newsletterChoiceFormPreHook.html.twig',
        'campaignChoiceTalkingToNeighbors' => 'GJGNYDataToolBundle:Lead:_campaignChoiceFormPreHook.html.twig',
-       'motivationChoiceComfort' => 'GJGNYDataToolBundle:Lead:_motivationChoiceFormPreHook.html.twig',
+       'homeowner' => 'GJGNYDataToolBundle:Lead:_homeownerFormPreHook.html.twig',
        'leadTypeUpgrade' => 'GJGNYDataToolBundle:Lead:_leadTypeUpgradeFormPreHook.html.twig'        
     );
     
     public $formFieldPostHooks = array(
         // "other" fields
         'primaryPhoneType' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'motivationChoiceOther' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'GJGNYReferenceOther' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'otherFuelSupplierTypeOther' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'secondaryPhoneType' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'campaignChoiceOther' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         
         // indented fields
-        'step1aActionsTaken' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'step2aInterested' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'step2bSubmitted' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'step2cScheduled' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'step2dCompleted' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'dateOfAssessment' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'dateOfUpgrade' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'reportReceived' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'scopeOfWorkSubmitted' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'step3aContractor' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'step3bWorkDone' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'step3cHowFinanced' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'homeowner' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'renter' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'landlord' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         
          // choice options
-        'motivationChoiceComfort' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'motivationChoiceMoney' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'motivationChoiceIndoorAir' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'motivationChoiceEnvironment' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'motivationChoiceOther' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'campaignChoiceTalkingToNeighbors' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'campaignChoiceFormEnergyTeam' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'campaignChoiceAppearInVideo' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'campaignChoiceShareExperience' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'newsletterChoiceEnergyTips' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'newsletterChoiceSavings' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'newsletterChoiceEvents' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'financeChoiceHomeEquity' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'financeChoiceGJGNY' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'financeChoicePocket' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'financeChoicePersonal' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'campaignChoiceVolunteer' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'campaignChoiceSteward' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'campaignChoiceEvent' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'leadTypeUpgrade' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'leadTypeOutreach' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'leadTypeWorkforce' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
@@ -256,7 +217,7 @@ class LeadAdmin extends Admin
     
     // List ======================================================================
     // ===========================================================================
-    public $listPreHook = 'GJGNYDataToolBundle:Lead:_listPreHook.html.twig';
+    public $listPreHook = array('template' => 'GJGNYDataToolBundle:Lead:_listPreHook.html.twig');
 
     protected function configureListFields(ListMapper $listMapper)
     {
@@ -296,17 +257,28 @@ class LeadAdmin extends Admin
             ),
             'field_type' => 'choice'
         ));
-        $datagrid->add('Program', null, array('label' => 'Program Source'));
-        $datagrid->add('leadType', 'doctrine_orm_callback', array(
-            'label' => 'Type of Lead',
-            'callback' => array($this, 'handleCheckboxChoiceFilter'),
+        $datagrid->add('Program', 'doctrine_orm_callback', array(
+            'label' => 'Program Source',
+            'callback' => function($queryBuilder, $alias, $field, $values) {
+                if(!$values['value'])
+                {
+                    return;
+                }
+                if(!$values['value'] || $values['value'] == "")
+                {
+                    return;
+                }
+                $queryBuilder->leftjoin($alias.'.Program', 'p');
+                $queryBuilder->andWhere('p.name = :programSource');
+                $queryBuilder->setParameter('programSource',$values['value']);
+                
+            },
             'field_type' => 'choice',
             'field_options' => array(
                 'required' => false,
-                'choices' => Lead::getLeadTypeChoices()
+                'choices' => $this->getProgramSourceChoices()
             )
-        ));
-        $datagrid->add('leadStatus', 'doctrine_orm_choice', array(
+        ));        $datagrid->add('leadStatus', 'doctrine_orm_choice', array(
             'label' => 'Lead Status',
             'field_type' => 'choice',
             'field_options' => array(
@@ -314,8 +286,9 @@ class LeadAdmin extends Admin
                 'choices' => Lead::getLeadStatusChoices()
             )
         ));
+        $datagrid->add('needToCall', null, array('label' => 'Need to Call'));
         $datagrid->add('dataCounty', 'doctrine_orm_choice', array(
-            'label' => 'County Data',
+            'label' => 'Outreach County',
             'field_type' => 'choice',
             'field_options' => array(
                 'required' => false,
@@ -325,15 +298,6 @@ class LeadAdmin extends Admin
         $datagrid->add('personalEmail', null, array('label' => 'Personal E-mail'));
         $datagrid->add('workEmail', null, array('label' => 'Work E-mail'));
         $datagrid->add('organization', null, array('label' => 'Work / Organization'));
-        $datagrid->add('Motivation', 'doctrine_orm_callback', array(
-            'label' => 'Motivation for upgrade',
-            'callback' => array($this, 'handleCheckboxChoiceFilter'),
-            'field_type' => 'choice',
-            'field_options' => array(
-                'required' => false,
-                'choices' => Lead::getMotivationChoices()
-            )
-        ));
         $datagrid->add('Campaign', 'doctrine_orm_callback', array(
             'label' => 'Campaign interest',
             'callback' => array($this, 'handleCheckboxChoiceFilter'),
@@ -343,19 +307,14 @@ class LeadAdmin extends Admin
                 'choices' => Lead::getCampaignChoices()
             )
         ));
-        $datagrid->add('Newsletter', 'doctrine_orm_callback', array(
-            'label' => 'Newsletter interest',
-            'callback' => array($this, 'handleCheckboxChoiceFilter'),
-            'field_type' => 'choice',
-            'field_options' => array(
-                'required' => false,
-                'choices' => Lead::getNewsletterChoices()
-            )
-        ));
-        $datagrid->add('step2aInterested', null, array('label' => 'Step 2a. Interested in Assessment'));
-        $datagrid->add('step2bSubmitted', null, array('label' => 'Step 2b. Application Submitted'));
-        $datagrid->add('step2dCompleted', null, array('label' => 'Step 2a. Assessment Complete'));
-        $datagrid->add('step3', null, array('label' => 'Step 3. Upgrade'));
+        $datagrid->add('step2aInterested', null, array('label' => 'Interested in Assessment'));
+        $datagrid->add('step2bSubmitted', null, array('label' => 'GJGNY Application Submitted'));
+        $datagrid->add('reportReceived', null, array('label' => 'Report Received'));
+        $datagrid->add('step2dCompleted', null, array('label' => 'Assessment Complete'));
+        $datagrid->add('dateOfAssessment', 'doctrine_orm_date_range', array('label' => 'Date of Assessment'));
+        $datagrid->add('step3', null, array('label' => 'Upgrade Complete'));
+        $datagrid->add('dateOfUpgrade', 'doctrine_orm_date_range', array('label' => 'Date of Upgrade'));
+        
         $datagrid->add('october2011Raffle', 'doctrine_orm_callback', array(
             'label' => '10/11 Raffle',
             'callback' => function($queryBuilder, $alias, $field, $values) {
@@ -374,43 +333,48 @@ class LeadAdmin extends Admin
                 'choices' => array('true' => 'true')
             )
         ));
+        $datagrid->add('leadEventTitle', 'doctrine_orm_callback', array(
+            'label' => 'Has Event with Title',
+            'callback' => function($queryBuilder, $alias, $field, $values) {
+                if(!$values['value'] || $values['value'] == "")
+                {
+                    return;
+                }
+                $queryBuilder->leftjoin($alias.'.LeadEvents', 'le');
+                $queryBuilder->andWhere('le.description = :eventTitle');
+                $queryBuilder->setParameter('eventTitle',$values['value']);
+            },
+            'field_type' => 'choice',                    
+            'field_options' => array(
+                'required' => false,
+                'choices' => $this->configurationPool->getContainer()->get('gjgny.datatool.admin.leadevent')->getDescriptionChoices()
+            )
+        ));
+        $datagrid->add('leadType', 'doctrine_orm_callback', array(
+            'label' => 'Type of Lead',
+            'callback' => array($this, 'handleCheckboxChoiceFilter'),
+            'field_type' => 'choice',
+            'field_options' => array(
+                'required' => false,
+                'choices' => Lead::getLeadTypeChoices()
+            )
+        ));            
+        $datagrid->add('leadCategory', 'doctrine_orm_choice', array(
+            'label' => 'Lead Category',
+            'field_type' => 'choice',
+            'field_options' => array(
+                'required' => false,
+                'choices' => Lead::getLeadCategoryChoices()
+            )
+        ));            
         $datagrid->add('homeowner', null, array('label' => 'Homeowner'));
         $datagrid->add('renter', null, array('label' => 'Renter'));
         $datagrid->add('landlord', null, array('label' => 'Landlord'));
-
+        
         // leave the dates for last since they are tall
         $datagrid->add('DateOfLead', 'doctrine_orm_date_range', array('label' => 'Date of First Contact'));
         $datagrid->add('DateOfNextFollowup', 'doctrine_orm_date_range', array('label' => 'Date of Next Follow-up'));
         $datagrid->add('datetimeEntered', 'doctrine_orm_date_range', array('label' => 'Date Entered'));
-        $datagrid->add('ELPincomplete', null);
-        $datagrid->add('step2Or3', 'doctrine_orm_callback', array(
-            'label' => 'Step 2 or 3',
-            'callback' => function($queryBuilder, $alias, $field, $values) {
-                if(!$values['value'])
-                {
-                    return;
-                }
-                $queryBuilder->andWhere(
-                        $alias.'.step2 = :value OR '.
-                        $alias.'.step3 = :value OR '.
-                        $alias.'.step2aInterested = :value OR '.
-                        $alias.'.step2bSubmitted = :value OR '.
-                        $alias.'.step2cScheduled = :value OR '.
-                        $alias.'.step2dCompleted = :value');
-                
-                if($values['value'] == 'yes') {
-                    $queryBuilder->setParameter('value','1');
-                } else {
-                    $queryBuilder->setParameter('value','0');                    
-                }
-
-            },
-            'field_type' => 'choice',
-            'field_options' => array(
-                'required' => false,
-                'choices' => array('yes' => 'yes', 'no' => 'no')
-            )
-        ));
         
         $this->initializeDefaultFilters();
     }
@@ -435,23 +399,27 @@ class LeadAdmin extends Admin
         'workEmail' => true,
         'organization' => true,
         'leadType' => true,
-        'Motivation' => true,
-        'Newsletter' => true,
         'Campaign' => true,
         'PathStep' => true,
         'october2011Raffle' => true,
         'DateOfLead' => true,
         'DateOfNextFollowup' => true,
+        'leadCategory',
         'homeowner' => true,
         'renter' => true,
         'landlord' => true,
+        'commercial' => true,
+        'multifamily' => true,
         'datetimeEntered' => true,
         'step2aInterested' => true,
         'step2bSubmitted' => true,
+        'reportReceived' => true,
         'step2dCompleted' => true,
         'step3' => true,
-        'ELPincomplete' => true,
-        'step2Or3' => true
+        'dateOfUpgrade' => true,
+        'dateOfAssessment' => true,
+        'leadCategory' => true,
+        'leadEventTitle' => true
     );
 
     protected function configureSpreadsheetFields(SpreadsheetMapper $spreadsheetMapper)
@@ -478,8 +446,18 @@ class LeadAdmin extends Admin
             ->add('leadReferral', array('label' => 'Referral / Nomination'))
             ->add('DateOfLead', array('label' => 'Date of First Contact', 'type' => 'date'))
             ->add('leadStatus', array('label' => 'Lead Status'))
+            ->add('needToCall', null, array('label' => 'Need to Call', 'type' => 'boolean'))                
             ->add('DateOfNextFollowup', array('label' => 'Date of next Follow-up', 'type' => 'date'))
             
+            ->add('leadTypeUpgrade', array('label' => 'Lead Type: Energy Upgrade', 'type' => 'boolean'))
+            ->add('leadTypeOutreach', array('label' => 'Lead Type: Outreach', 'type' => 'boolean'))
+            ->add('leadTypeWorkforce', array('label' => 'Lead Type: Workforce', 'type' => 'boolean'))
+            ->add('leadCategory', array('label' => 'Lead Category'))
+            ->add('homeowner', array('label' => 'Homeowner', 'type' => 'boolean'))
+            ->add('renter', array('label' => 'Renter', 'type' => 'boolean'))
+            ->add('landlord', array('label' => 'Landlord', 'type' => 'boolean'))
+            ->add('otherNotes', array('label' => 'Other Notes'))                
+                
             ->add('organization', array('label' => 'Employer / Organization'))
             ->add('orgTitle', array('label' => 'Org Title'))
             ->add('orgAddress', array('label' => 'Org Address'))
@@ -490,45 +468,26 @@ class LeadAdmin extends Admin
             ->add('website', array('label' => 'Org Website'))
             
             ->add('CommunityGroupsConnectedTo', array('label' => 'Community groups connected to'))
-            ->add('barriers', array('label' => 'Barriers to making upgrades'))
             ->add('interestedInVisit', array('label' => 'Interested in scheduling a home visit', 'type' => 'boolean'))            
-            ->add('homeowner', array('label' => 'Homeowner'))
-            ->add('renter', array('label' => 'Renter'))
-            ->add('landlord', array('label' => 'Landlord'))
-            ->add('otherNotes', array('label' => 'Other Notes'))
-            ->add('leadTypeUpgrade', array('label' => 'Lead Type: Energy Upgrade', 'type' => 'boolean'))
-            ->add('leadTypeOutreach', array('label' => 'Lead Type: Outreach', 'type' => 'boolean'))
-            ->add('leadTypeWorkforce', array('label' => 'Lead Type: Workforce', 'type' => 'boolean'))
-
-            ->add('motivationChoiceComfort', array('label' => 'Motivation for upgrades: Comfort', 'type' => 'boolean'))
-            ->add('motivationChoiceMoney', array('label' => 'Motivation for upgrades: Money', 'type' => 'boolean'))
-            ->add('motivationChoiceIndoorAir', array('label' => 'Motivation for upgrades: Indoor air quality', 'type' => 'boolean'))
-            ->add('motivationChoiceEnvironment', array('label' => 'Motivation for upgrades: Environment', 'type' => 'boolean'))
-            ->add('motivationChoiceOther', array('label' => 'Motivation for upgrades: Other'))
-
-            ->add('campaignChoiceTalkingToNeighbors', array('label' => 'Campaign interest: Talking to neighbors', 'type' => 'boolean'))
-            ->add('campaignChoiceFormEnergyTeam', array('label' => 'Campaign interest: Forming an energy team', 'type' => 'boolean'))
-            ->add('campaignChoiceAppearInVideo', array('label' => 'Campaign interest: Appear in testimonial video', 'type' => 'boolean'))
-            ->add('campaignChoiceShareExperience', array('label' => 'Campaign interest: Share upgrade experience with others', 'type' => 'boolean'))
-
-            ->add('newsletterChoiceEnergyTips', array('label' => 'Newsletter interest: Energy saving tips', 'type' => 'boolean'))
-            ->add('newsletterChoiceSavings', array('label' => 'Newsletter interest: Energy saving programs and incentives', 'type' => 'boolean'))
-            ->add('newsletterChoiceEvents', array('label' => 'Newsletter interest: Upcoming workshops and events', 'type' => 'boolean'))
-
-                
-            ->add('step1', array('label' => '1. Low cost / no-cost actions and tune up energy users', 'type' => 'boolean'))
-            ->add('step1aActionsTaken', array('label' => '1a. List specific actions taken'))
-            ->add('step2', array('label' => '2. Energy Assessment', 'type' => 'boolean'))
-            ->add('step2aInterested', array('label' => '2a. Interested in getting assessment', 'type' => 'boolean'))
-            ->add('step2bSubmitted', array('label' => '2b. GJGNY application submitted', 'type' => 'boolean'))
-            ->add('step2cScheduled', array('label' => '2c. Assessment scheduled', 'type' => 'boolean'))
-            ->add('step2dCompleted', array('label' => '2d. Assessment completed and report received', 'type' => 'boolean'))
-            ->add('step3', array('label' => '3. Whole house upgrade', 'type' => 'boolean'))
-            ->add('step3aContractor', array('label' => '3a. Name of contractor'))
-            ->add('step3bWorkDone', array('label' => '3b. What was done (air sealing, insulating, upgrade heating system, etc.)'))
-            ->add('step3cHowFinanced', array('label' => '3c. How was it financed'))
-            ->add('step4', array('label' => '4. Upgrade Appliances', 'type' => 'boolean'))
-            ->add('step5', array('label' => '5. Renewable energy', 'type' => 'boolean'))
+            ->add('campaignChoiceTalkingToNeighbors', array('label' => 'Campaign interest: talking to neighbors', 'type' => 'boolean'))
+            ->add('campaignChoiceFormEnergyTeam', array('label' => 'Campaign interest: forming an energy team', 'type' => 'boolean'))
+            ->add('campaignChoiceAppearInVideo', array('label' => 'Campaign interest: appearing in testimonial video', 'type' => 'boolean'))
+            ->add('campaignChoiceShareExperience', array('label' => 'Campaign interest: sharing upgrade experience with others', 'type' => 'boolean'))
+            ->add('campaignChoiceVolunteer', array('label' => 'Campaign interest: becoming a volunteer', 'type' => 'boolean'))
+            ->add('campaignChoiceSteward', array('label' => 'Campaign interest: becoming an energy steward', 'type' => 'boolean'))
+            ->add('campaignChoiceEvent', array('label' => 'Campaign interest: presenting at event', 'type' => 'boolean'))
+            ->add('campaignChoiceOther', array('label' => 'Campaign interest other'))
+    
+            ->add('step2aInterested', array('label' => 'Interested in assessment', 'type' => 'boolean'))
+            ->add('step2bSubmitted', array('label' => 'GJGNY application submitted', 'type' => 'boolean'))
+            ->add('step2dCompleted', array('label' => 'Assessment completed', 'type' => 'boolean'))
+            ->add('dateOfAssessment', array('label' => 'Date of Assessment', 'type' => 'date'))
+            ->add('scopeOfWorkSubmitted', array('label' => 'Scope of Work Submitted'))
+            ->add('step3', array('label' => 'Upgrade Complete', 'type' => 'boolean'))
+            ->add('dateOfUpgrade', array('label' => 'Date of Upgrade', 'type' => 'date'))
+            ->add('step3aContractor', array('label' => 'Name of contractor'))
+            ->add('step3bWorkDone', array('label' => 'What was done?'))
+            ->add('step3cHowFinanced', array('label' => 'How was it financed'))
                 
 
         ;
@@ -549,6 +508,8 @@ class LeadAdmin extends Admin
     // ===========================================================================
     protected function configureShowField(ShowMapper $showMapper)
     {
+        $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
+
         $showMapper
             ->with('Contact Information')
                 ->add('FirstName', null, array('label' => 'First Name'))
@@ -570,53 +531,45 @@ class LeadAdmin extends Admin
             ->with('Lead History')
                 ->add('SourceOfLead', null, array('label' => 'Source of Lead'))
                 ->add('Program', null, array('label' => 'Program Source'))
-                ->add('leadReferral', null, array('label' => 'Lead Referral'))
                 ->add('DateOfLead', null, array('label' => 'Date of Lead'))
+                ->add('needToCall', null, array('label' => 'Need to Call'))
                 ->add('leadStatus', null, array('label' => 'Lead Status'))
                 ->add('DateOfNextFollowup', null, array('label' => 'Date of next followup'))
             ->end()
-            ->with('Other Information')
+            ->with('Lead Type')
                 ->add('leadTypeUpgrade', null, array('label' => 'Energy Upgrade'))
                 ->add('leadTypeOutreach', null, array('label' => 'Outreach'))
                 ->add('leadTypeWorkforce', null, array('label' => 'Workforce'))
-                ->add('CommunityGroupsConnectedTo', null, array('label' => 'Community groups connected to'))
+                ->add('leadCategory', null, array('label' => 'Lead Category'))
                 ->add('homeowner', null, array('label' => 'Homeowner'))
                 ->add('renter', null, array('label' => 'Renter'))
                 ->add('landlord', null, array('label' => 'Landlord'))
-                ->add('barriers', null, array('label' => 'Barriers to making upgrades'))
-                ->add('interestedInVisit', null, array('label' => 'Interested in scheduling a home visit'))
-                ->add('motivationChoiceComfort', null, array('label' => 'comfort'))
-                ->add('motivationChoiceMoney', null, array('label' => 'money'))
-                ->add('motivationChoiceIndoorAir', null, array('label' => 'indoor air quality'))
-                ->add('motivationChoiceEnvironment', null, array('label' => 'environment'))
-                ->add('motivationChoiceOther', null, array('label' => 'other'))
-                ->add('campaignChoiceTalkingToNeighbors', null, array('label' => 'Talking to neighbors'))
-                ->add('campaignChoiceFormEnergyTeam', null, array('label' => 'Forming an energy team'))
-                ->add('campaignChoiceAppearInVideo', null, array('label' => 'Appearing in testimonial video'))
-                ->add('campaignChoiceShareExperience', null, array('label' => 'Sharing experience with others'))
-                ->add('newsletterChoiceEnergyTips', null, array('label' => 'Energy saving tips'))
-                ->add('newsletterChoiceSavings', null, array('label' => 'Energy saving programs and incentives'))
-                ->add('newsletterChoiceEvents', null, array('label' => 'Upcoming workshops and events'))
-                ->add('otherNotes', null, array('label' => 'Other Notes'))
-                ->add('enteredBy', null, array('label' => 'Entered By'))
-                ->add('datetimeEntered', null, array('label' => 'Date Entered'))
-                ->add('lastUpdatedBy', null, array('label' => 'Last Updated By'))
-                ->add('datetimeLastUpdated', null, array('label' => 'Date Last Updated'))
             ->end()
-            ->with('Enery Path Steps')
-                ->add('step1', null, array('label' => '1. Low Cost / No Cost'))
-                ->add('step1aActionsTaken', null, array('label' => '1a. actions taken'))
-                ->add('step2', null, array('label' => '2. Energy Assessment'))
-                ->add('step2aInterested', null, array('label' => '2a. interested in getting assessment'))
-                ->add('step2bSubmitted', null, array('label' => '2b. GJGNY application submitted'))
-                ->add('step2cScheduled', null, array('label' => '2c. Assessment scheduled'))
-                ->add('step2dCompleted', null, array('label' => '2d. Assessmeny completed and report received'))
-                ->add('step3', null, array('label' => '3. Whole house upgrade'))
-                ->add('step3aContractor', null, array('label' => '3a. Name of contractor'))
-                ->add('step3bWorkDone', null, array('label' => '3b. What was done?'))
-                ->add('step3cHowFinanced', null, array('label' => '3c. How was it financed?'))
-                ->add('step4', null, array('label' => '4. Upgrade Appliances'))
-                ->add('step5', null, array('label' => '5. Renewable Energy'))
+            ->with('Enery Upgrade Status')
+                ->add('step2aInterested', null, array('label' => 'Interested in Home Energy Assessment'))
+                ->add('step2bSubmitted', null, array('label' => 'GJGNY Application Submitted'))
+                ->add('step2dCompleted', null, array('label' => 'Assessment Complete'))
+                ->add('dateOfAssessment', null, array('label' => 'Date'))
+                ->add('reportReceived', null, array('label' => 'Report Received'))
+                ->add('scopeOfWorkSubmitted', null, array('label' => 'Scope of Work Submitted'))
+                ->add('step3', null, array('label' => 'Upgrade Complete'))
+                ->add('dateOfUpgrade', null, array('label' => 'Date'))
+                ->add('step3aContractor', null, array('label' => 'Name of contractor'))
+                ->add('step3bWorkDone', null, array('label' => 'What was done?'))
+                ->add('step3cHowFinanced', null, array('label' => 'How was it financed?'))
+                ->add('upgradeStatusNotes', null, array('label' => 'Notes'))
+            ->end()
+            ->with('Outreach')
+                ->add('CommunityGroupsConnectedTo', null, array('label' => 'Community groups connected to'))
+                ->add('campaignChoiceTalkingToNeighbors', null, array('label' => 'Campaign Interest: talking to neighbors'))
+                ->add('campaignChoiceFormEnergyTeam', null, array('label' => 'Campaign Interest: forming an energy team'))
+                ->add('campaignChoiceAppearInVideo', null, array('label' => 'Campaign Interest: appearing in testimonial video'))
+                ->add('campaignChoiceShareExperience', null, array('label' => 'Campaign Interest: sharing experience with others'))
+                ->add('campaignChoiceVolunteer', null, array('label' => 'Campaign Interest: becoming a volunteer'))
+                ->add('campaignChoiceSteward', null, array('label' => 'Campaign Interest: becoming an energy steward'))
+                ->add('campaignChoiceEvent', null, array('label' => 'Campaign Interest: presentating at an event'))
+                ->add('campaignChoiceOther', null, array('label' => 'Campaign Interest: other'))
+                ->add('otherNotes', null, array('label' => 'Other Notes'))                
             ->end()
             ->with('Employer / Organization Information')
                 ->add('organization', null, array('label' => 'Organization'))
@@ -628,58 +581,54 @@ class LeadAdmin extends Admin
                 ->add('orgCounty', null, array('label' => 'County'))
                 ->add('website', null, array('label' => 'Website'))
             ->end()
-            ->with('Workforce Fields', array('collapsed' => true))
+            ->with('Workforce Fields')
                 ->add('highestLevelOfEducation', null, array('label' => 'Highest Level of Education'))
                 ->add('certifications', null, array('label' => 'Certifications'))
                 ->add('trainingExperience', null, array('label' => 'Training Experience'))                
+            ->end();
+        
+        if($user->getCounty() == "Broome") {
+            $showMapper
+                ->with('Other Fields')
+                    ->add('pledge', null, array('label' => 'Pledge'))
+                    ->add('postPledge', null, array('label' => 'Post Upgrade Pledge'))
+                    ->add('interestedInVisit', null, array('label' => 'Interested in scheduling a home visit'))
+                    ->add('visitPeriod', null, array('label' => 'Visit Period'))
+                    ->add('BECCTeam', null, array('label' => 'BECC Team'))
+                    ->add('rank', null, array('label' => 'Rank'))
+                    ->add('leadReferral', null, array('label' => 'Lead Referral'))
+                ->end();
+        } else if($user->getCounty() == "Tompkins") {
+            $showMapper
+                ->with('Other Fields')
+                    ->add('october2011Raffle', null, array('label' => 'October 2011 Raffle'))                
+                ->end();
+        }
+        
+        $showMapper
+            ->with('Entry Information')
+                ->add('enteredBy', null, array('label' => 'Entered By'))
+                ->add('datetimeEntered', null, array('label' => 'Date Entered'))
+                ->add('lastUpdatedBy', null, array('label' => 'Last Updated By'))
+                ->add('datetimeLastUpdated', null, array('label' => 'Date Last Updated'))
             ->end()
-            ->with('Broome Fields')
-                ->add('pledge', null, array('label' => 'Pledge'))
-                ->add('visitPeriod', null, array('label' => 'Visit Period'))
-                ->add('BECCTeam', null, array('label' => 'BECC Team'))
-                ->add('rank', null, array('label' => 'Rank'))
-            ->end()                
-            ->with('Tompkins Fields')
-                ->add('october2011Raffle', null, array('label' => 'October 2011 Raffle'))                
-            ->end()
-            ->with('GJGNY Application Fields')
-                ->add('hasCentralAC', null, array('label' => 'Has Central AC'))
-                ->add('incomeRange', null, array('label' => 'Income Range'))
-                ->add('buildingType', null, array('label' => 'Building Type'))
-                ->add('sqFootage', null, array('label' => 'Above Grade Conditioned Square Footage'))
-                ->add('financeChoiceHomeEquity', null, array('label' => 'Home equity loan'))
-                ->add('financeChoiceGJGNY', null, array('label' => 'GJGNY loan'))
-                ->add('financeChoicePocket', null, array('label' => 'Out-of-pocket'))
-                ->add('financeChoicePersonal', null, array('label' => 'Personal loan'))
-                ->add('GJGNYReference', null, array('label' => 'How did you hear about the GJGNY program?'))
-                ->add('GJGNYReferenceOther', null, array('label' => 'other'))
-                ->add('electricUtility', null, array('label' => 'Electric Utility'))
-                ->add('electricUtilityAcct', null, array('label' => 'account #'))
-                ->add('gasUtility', null, array('label' => 'Gas Utility'))
-                ->add('gasUtilityAcct', null, array('label' => 'account #'))
-                ->add('otherFuelSupplier', null, array('label' => 'Other Fuel Supplier'))
-                ->add('otherFuelSupplierType', null, array('label' => 'type'))
-                ->add('otherFuelSupplierTypeOther', null, array('label' => 'other type'))
-                ->add('otherFuelSupplierAcct', null, array('label' => 'accounty #'))
-            ->end()   
         ;
         
         $this->initializeShowHooks();
     }
         
+    public $hideEmptyShowFields = true;
+    public $hideableShowFieldBlacklist = array (
+        'step2aInterested',
+        'step2bSubmitted',
+        'step2dCompleted',
+        'step3'
+    );
+
     public $showPreHook = array(
-        'template' => 'GJGNYDataToolBundle:Lead:_leadEventLink.html.twig',
+        'template' => 'GJGNYDataToolBundle:Lead:_showPreHook.html.twig',
     );
         
-    public $showFieldPreHooks = array (
-        // extra labels for choice groups
-        'motivationChoiceComfort' => 'GJGNYDataToolBundle:Lead:_motivationChoiceShowPreHook.html.twig',
-        'campaignChoiceTalkingToNeighbors' => 'GJGNYDataToolBundle:Lead:_campaignChoiceShowPreHook.html.twig',
-        'newsletterChoiceEnergyTips' => 'GJGNYDataToolBundle:Lead:_newsletterChoiceShowPreHook.html.twig',
-        'financeChoiceHomeEquity' => 'GJGNYDataToolBundle:Lead:_financeChoiceShowPreHook.html.twig',
-        'leadTypeUpgrade' => 'GJGNYDataToolBundle:Lead:_leadTypeUpgradeShowPreHook.html.twig',
-    );
-    
     public function initializeShowHooks()
     {
         $this->showPreHook['parameters'] = array(
@@ -690,39 +639,14 @@ class LeadAdmin extends Admin
     public $showFieldClasses = array (
         'primaryPhoneType' => 'indented',
         'secondaryPhoneType' => 'indented',
-        'GJGNYReferenceOther' => 'indented',
-        'step1aActionsTaken' => 'indented',
-        'step2aInterested' => 'indented',
-        'step2bSubmitted' => 'indented',
-        'step2cScheduled' => 'indented',
-        'step2dCompleted' => 'indented',
+        
+        'dateOfAssessment' => 'indented',
+        'dateOfUpgrade' => 'indented',
         'step3aContractor' => 'indented',
         'step3bWorkDone' => 'indented',
         'step3cHowFinanced' => 'indented',
-        'electricUtilityAcct' => 'indented',
-        'gasUtilityAcct' => 'indented',
-        'otherFuelSupplierType' => 'indented',
-        'otherFuelSupplierTypeOther' => 'indented',
-        'otherFuelSupplierAcct' => 'indented',
-        'motivationChoiceComfort' => 'indented',
-        'motivationChoiceMoney' => 'indented',
-        'motivationChoiceIndoorAir' => 'indented',
-        'motivationChoiceEnvironment' => 'indented',
-        'motivationChoiceOther' => 'indented',
-        'campaignChoiceTalkingToNeighbors' => 'indented',
-        'campaignChoiceFormEnergyTeam' => 'indented',
-        'campaignChoiceAppearInVideo' => 'indented',
-        'campaignChoiceShareExperience' => 'indented',
-        'newsletterChoiceEnergyTips' => 'indented',
-        'newsletterChoiceSavings' => 'indented',
-        'newsletterChoiceEvents' => 'indented',
-        'financeChoiceHomeEquity' => 'indented',
-        'financeChoiceGJGNY' => 'indented',
-        'financeChoicePocket' => 'indented',
-        'financeChoicePersonal' => 'indented',
-        'leadTypeUpgrade' => 'indented',
-        'leadTypeOutreach' => 'indented',
-        'leadTypeWorkforce' => 'indented',
+        'scopeOfWorkSubmitted' => 'indented',
+        'reportReceived' => 'indented',
     );
     
     public function prePersist($Lead)
@@ -730,48 +654,13 @@ class LeadAdmin extends Admin
         $Lead->setDatetimeEntered(new \DateTime());
         $Lead->setDatetimeLastUpdated(new \DateTime());
         $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
-        $Lead->setEnteredBy($user);
+        if(!$Lead->getEnteredBy()) $Lead->setEnteredBy($user);
         $Lead->setLastUpdatedBy($user);
         $Lead->setDataCounty($user->getCounty());
 
         parent::prePersist($Lead);
     }
     
-    public function postPersist($Lead)
-    {
-        // automatically create lead acquisitions for some Leads
-        if($Lead->getProgram() || $Lead->getSourceOfLead() == "Phone" || $Lead->getSourceOfLead() == "E-mail") {
-            $LeadEvent = new \GJGNY\DataToolBundle\Entity\LeadEvent();
-            $LeadEvent->setLead($Lead);
-            
-            $LeadEvent->setDatetimeEntered(new \DateTime());
-            $LeadEvent->setDatetimeLastUpdated(new \DateTime());
-            $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
-            $LeadEvent->setEnteredBy($user);
-            $LeadEvent->setLastUpdatedBy($user);
-            
-            if($Lead->getProgram()) {
-                $LeadEvent->setDescription($Lead->getProgram()->getName());
-            } else if($Lead->getSourceOfLead() == "Phone") {
-                $LeadEvent->setDescription("phone call received");
-            } else if($Lead->getSourceOfLead() == "E-mail") {
-                $LeadEvent->setDescription("e-mail received");
-            }
-            
-            
-            $LeadEvent->setDate($Lead->getDateOfLead());
-            $LeadEvent->setEventType("lead acquisition");
-            
-            
-            $em = $this->getConfigurationPool()->getContainer()->get('doctrine')->getEntityManager();
-            $em->persist($LeadEvent);
-            $em->flush();
-          
-        }
-		
-        parent::postPersist($Lead);
-    }
-
     public function preUpdate($Lead)
     {
         $Lead->setDatetimeLastUpdated(new \DateTime());
@@ -779,6 +668,28 @@ class LeadAdmin extends Admin
         $Lead->setLastUpdatedBy($user);
 
         parent::preUpdate($Lead);
+    }
+    
+    public function getProgramSourceChoices()
+    {
+        $programSourceChoices = array();
+        $em = $this->configurationPool->getContainer()->get('doctrine')->getEntityManager();
+        $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
+
+        $programQuery = $em->createQuery(
+            'SELECT p.name, p.id FROM GJGNYDataToolBundle:Program p WHERE p.dataCounty=:county ORDER BY p.name ASC'
+        )->setParameter('county', $user->getCounty());
+        
+        $programs = $programQuery->getResult();
+                
+        foreach($programs as $p)
+        {
+            if(isset($p['name']) && trim($p['name']) != "") {
+                $programSourceChoices[$p['name']] = $p['name'];                
+            }
+        }
+       
+        return $programSourceChoices;
     }
 
 }

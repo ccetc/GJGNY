@@ -22,10 +22,9 @@ class DigestCommand extends ContainerAwareCommand
         $leadRepository = $this->getContainer()->get('doctrine')->getRepository('GJGNYDataToolBundle:Lead');
         
         $emailAddresses = $this->getContainer()->get('gjgny')->notificationEmails;
-        print_r($emailAddresses);
         $tool = new \GJGNY\DataToolBundle\Resources\classes\EmailDigest();
         
-       // $counts = $tool->getLeadsToCallAndSendEmails($leadRepository, $emailAddresses, $this->getContainer()->get('mailer'), $this->getContainer()->getParameter('fos_user.registration.confirmation.from_email'));
+        $counts = $tool->getLeadsToCallAndSendEmails($leadRepository, $emailAddresses, $this->getContainer()->get('mailer'), $this->getContainer()->getParameter('fos_user.registration.confirmation.from_email'));
 
         $output->writeln($counts['Broome'].' Leads for Broome');
         $output->writeln($counts['Tompkins'].' Leads for Tompkins');

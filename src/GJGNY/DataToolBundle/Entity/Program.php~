@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="GJGNY\DataToolBundle\Entity\ProgramRepository")
- */
+*/
 class Program
 {
     /**
@@ -46,7 +46,7 @@ class Program
     /** @ORM\OneToMany(targetEntity="Lead", mappedBy="Program") */
     protected $Leads;
 
-    /** @ORM\ManyToOne(targetEntity="User", inversedBy="ProgramsEntered")
+    /** @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="ProgramsEntered")
     *  @ORM\JoinColumn(name="enteredBy_id", referencedColumnName="id", onDelete="SET NULL") 
     */
     protected $enteredBy;
@@ -57,7 +57,7 @@ class Program
     */
     private $datetimeEntered;
 
-    /** @ORM\ManyToOne(targetEntity="User", inversedBy="ProgramsUpdated")
+    /** @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="ProgramsUpdated")
     *  @ORM\JoinColumn(name="lastUpdatedBy_id", referencedColumnName="id", onDelete="SET NULL") 
     */
     protected $lastUpdatedBy;
@@ -67,6 +67,9 @@ class Program
     * @ORM\Column(name="datetimeLastUpdated", type="datetime", nullable="true")
     */
     private $datetimeLastUpdated;
+    
+    /** @ORM\OneToMany(targetEntity="PortalSettings", mappedBy="notificationProgram", cascade={"persist", "remove"}) */
+    protected $portalPrograms;
     
     public function __toString()
     {
@@ -213,9 +216,9 @@ class Program
     /**
      * Set enteredBy
      *
-     * @param GJGNY\DataToolBundle\Entity\User $enteredBy
+     * @param \Application\Sonata\UserBundle\Entity\User $enteredBy
      */
-    public function setEnteredBy(\GJGNY\DataToolBundle\Entity\User $enteredBy)
+    public function setEnteredBy(\Application\Sonata\UserBundle\Entity\User $enteredBy)
     {
         $this->enteredBy = $enteredBy;
     }
@@ -223,7 +226,7 @@ class Program
     /**
      * Get enteredBy
      *
-     * @return GJGNY\DataToolBundle\Entity\User 
+     * @return \Application\Sonata\UserBundle\Entity\User 
      */
     public function getEnteredBy()
     {
@@ -233,9 +236,9 @@ class Program
     /**
      * Set lastUpdatedBy
      *
-     * @param GJGNY\DataToolBundle\Entity\User $lastUpdatedBy
+     * @param Application\Sonata\UserBundle\Entity\User $lastUpdatedBy
      */
-    public function setLastUpdatedBy(\GJGNY\DataToolBundle\Entity\User $lastUpdatedBy)
+    public function setLastUpdatedBy(\Application\Sonata\UserBundle\Entity\User $lastUpdatedBy)
     {
         $this->lastUpdatedBy = $lastUpdatedBy;
     }
@@ -243,10 +246,30 @@ class Program
     /**
      * Get lastUpdatedBy
      *
-     * @return GJGNY\DataToolBundle\Entity\User 
+     * @return Application\Sonata\UserBundle\Entity\User 
      */
     public function getLastUpdatedBy()
     {
         return $this->lastUpdatedBy;
+    }
+
+    /**
+     * Add portalPrograms
+     *
+     * @param GJGNY\DataToolBundle\Entity\PortalSettings $portalPrograms
+     */
+    public function addPortalSettings(\GJGNY\DataToolBundle\Entity\PortalSettings $portalPrograms)
+    {
+        $this->portalPrograms[] = $portalPrograms;
+    }
+
+    /**
+     * Get portalPrograms
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getPortalPrograms()
+    {
+        return $this->portalPrograms;
     }
 }

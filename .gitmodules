@@ -7,9 +7,6 @@
 [submodule "vendor/bundles/CCETC/ErrorReportBundle"]
 	path = vendor/bundles/CCETC/ErrorReportBundle
 	url = git://github.com/CCETC/CCETCErrorReportBundle.git
-[submodule "vendor/bundles/CCETC/UserAdminBundle"]
-	path = vendor/bundles/CCETC/UserAdminBundle
-	url = git://github.com/CCETC/CCETCUserAdminBundle.git
 [submodule "vendor/bundles/FOS/UserBundle"]
 	path = vendor/bundles/FOS/UserBundle
 	url = git://github.com/CCETC/FOSUserBundle.git
@@ -22,3 +19,12 @@
 [submodule "vendor/bundles/Sonata/jQueryBundle"]
 	path = vendor/bundles/Sonata/jQueryBundle
 	url = git://github.com/sonata-project/SonatajQueryBundle.git
+[submodule "vendor/bundles/Sonata/UserBundle"]
+	path = vendor/bundles/Sonata/UserBundle
+	url = git@github.com:CCETC/SonataUserBundle
+[submodule "vendor/bundles/CCETC/BootstrapBundle"]
+	path = vendor/bundles/CCETC/BootstrapBundle
+	url = git@github.com:CCETC/CCETCBootstrapBundle
+[submodule "vendor/bundles/Sonata/EasyExtendsBundle"]
+	path = vendor/bundles/Sonata/EasyExtendsBundle
+	url = git@github.com:sonata-project/SonataEasyExtendsBundle.git

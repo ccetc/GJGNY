@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Application\Sonata\UserBundle\Entity\User" table="fos_user_user">
+
+        <id name="id" column="id" type="integer">
+            <generator strategy="AUTO" />
+        </id>
+        <field name="firstName"    type="string"   column="firstName" />
+        <field name="lastName"    type="string"   column="lastName" />
+        <field name="organization"    type="string"   column="organization" />
+        <field name="county"    type="string"   column="county" />
+
+        <one-to-many field="LeadEventsEntered" target-entity="GJGNY\DataToolBundle\Entity\LeadEvent" mapped-by="enteredBy" />
+        <one-to-many field="LeadEventsUpdated" target-entity="GJGNY\DataToolBundle\Entity\LeadEvent" mapped-by="lastUpdatedBy" />
+        <one-to-many field="LeadsEntered" target-entity="GJGNY\DataToolBundle\Entity\Lead" mapped-by="enteredBy" />
+        <one-to-many field="LeadsUpdated" target-entity="GJGNY\DataToolBundle\Entity\Lead" mapped-by="lastUpdatedBy" />
+        <one-to-many field="ProgramsEntered" target-entity="GJGNY\DataToolBundle\Entity\Program" mapped-by="enteredBy" />
+        <one-to-many field="ProgramsUpdated" target-entity="GJGNY\DataToolBundle\Entity\Program" mapped-by="lastUpdatedBy" />
+
+        <many-to-many field="notificationPortals" target-entity="GJGNY\DataToolBundle\Entity\PortalSettings" mapped-by="notificationUsers" />
+
+    </entity>
+
+</doctrine-mapping>

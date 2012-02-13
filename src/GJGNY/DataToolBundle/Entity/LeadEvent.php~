@@ -15,7 +15,7 @@ class LeadEvent
   /** @ORM\ManyToOne(targetEntity="Lead", inversedBy="LeadEvents") */
   protected $Lead;
   
-  /** @ORM\ManyToOne(targetEntity="User", inversedBy="LeadEventsEntered")
+  /** @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="LeadEventsEntered")
    *  @ORM\JoinColumn(name="enteredBy_id", referencedColumnName="id", onDelete="SET NULL") 
    */
   protected $enteredBy;
@@ -26,7 +26,7 @@ class LeadEvent
    */
   private $datetimeEntered;
   
-  /** @ORM\ManyToOne(targetEntity="User", inversedBy="LeadEventsUpdated")
+  /** @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="LeadEventsUpdated")
    *  @ORM\JoinColumn(name="lastUpdatedBy_id", referencedColumnName="id", onDelete="SET NULL") 
    */
   protected $lastUpdatedBy;
@@ -93,7 +93,7 @@ class LeadEvent
   /**
    * @var date $date
    *
-   * @ORM\Column(name="date", type="datetime", nullable="true")
+   * @ORM\Column(name="date", type="date", nullable="true")
    */
   private $date;
   /**
@@ -102,6 +102,12 @@ class LeadEvent
    * @ORM\Column(name="description", type="string", length=255, nullable="true")
    */
   private $description;
+  /**
+   * @var string $descriptionOther
+   *
+   * @ORM\Column(name="descriptionOther", type="string", length=255, nullable="true")
+   */
+  private $descriptionOther;  
   /**
    * @var string $notes
    *
@@ -808,9 +814,9 @@ class LeadEvent
     /**
      * Set enteredBy
      *
-     * @param GJGNY\DataToolBundle\Entity\User $enteredBy
+     * @param \Application\Sonata\UserBundle\Entity\User $enteredBy
      */
-    public function setEnteredBy(\GJGNY\DataToolBundle\Entity\User $enteredBy)
+    public function setEnteredBy(\Application\Sonata\UserBundle\Entity\User $enteredBy)
     {
         $this->enteredBy = $enteredBy;
     }
@@ -818,7 +824,7 @@ class LeadEvent
     /**
      * Get enteredBy
      *
-     * @return GJGNY\DataToolBundle\Entity\User 
+     * @return \Application\Sonata\UserBundle\Entity\User 
      */
     public function getEnteredBy()
     {
@@ -868,9 +874,9 @@ class LeadEvent
     /**
      * Set lastUpdatedBy
      *
-     * @param GJGNY\DataToolBundle\Entity\User $lastUpdatedBy
+     * @param \Application\Sonata\UserBundle\Entity\User $lastUpdatedBy
      */
-    public function setLastUpdatedBy(\GJGNY\DataToolBundle\Entity\User $lastUpdatedBy)
+    public function setLastUpdatedBy(\Application\Sonata\UserBundle\Entity\User $lastUpdatedBy)
     {
         $this->lastUpdatedBy = $lastUpdatedBy;
     }
@@ -878,7 +884,7 @@ class LeadEvent
     /**
      * Get lastUpdatedBy
      *
-     * @return GJGNY\DataToolBundle\Entity\User 
+     * @return \Application\Sonata\UserBundle\Entity\User 
      */
     public function getLastUpdatedBy()
     {
@@ -1064,5 +1070,25 @@ class LeadEvent
     public function getDateOfJobReferral()
     {
         return $this->dateOfJobReferral;
+    }
+
+    /**
+     * Set descriptionOther
+     *
+     * @param string $descriptionOther
+     */
+    public function setDescriptionOther($descriptionOther)
+    {
+        $this->descriptionOther = $descriptionOther;
+    }
+
+    /**
+     * Get descriptionOther
+     *
+     * @return string 
+     */
+    public function getDescriptionOther()
+    {
+        return $this->descriptionOther;
     }
 }

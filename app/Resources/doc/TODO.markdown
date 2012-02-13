@@ -1,27 +1,34 @@
 # GJGNY - TODO
 
-## 1.2.1
-- upgrade SonataJQuery?
-- upgrade SonataAdmin
-	- new jQuery versions
-	- uses CCETC Bootstrap?
-	- check relation tools
-- upgrade FOSUser	
-- switch to SonataUserBundle
+## on rollout
+- update sonataadmin
+- update fosuser
+	- cleaned up dist files
+	- fixed adminpool in controller
+- update ccetc error report
+	- added adminpool to controller
+- update sonatauser
+	- added icons
+	
+- generate acl objects
+- set new fields for old leads
+	- Lead Events
+		- add whatWasDiscussed to notes
+		- add phoneCallNotes to notes
 
-## 1.3		
-1.	shorten view page
-2. Portals
- - transfer to here
- - auto lead and notification
- - make portals editable
- 	- events
- 	- contact info
- - keep a table of portals
- - redirect SouthernTier from Upgrade Upstate
-3. Update Fields
-4. Filter on Events
+- intl extension in php.ini extension=intl.so 
 
+- add GJGNY Southern Tier Portal program
+
+- upgrade upstate redirect
+
+- clean up titles
+
+- remove leadStatus values
+	'had previous assessment' => 'had previous assessment',
+    'had previous upgrade' => 'had previous upgrade',
+    g'process complete, got upgrade' => 'process complete, got upgrade',
+	
 ## Future
 1.	Excel importing	
  - downloadable template		
@@ -34,9 +41,12 @@
      - config emails
 	 - admin classes (choices)
  -  make admin and county entities/interfaces
+ -  configurable notifications
 12.	Misc	
- -	move Tompkins LUT data to Lead?
- -	trim values?
  -	follow up in 2 weeks button
- -	date picker?
- -      add just lastname and email to duplication check
+ -	date picker
+ 	- add for filters when filters are done
+ -  add just lastname and email to duplication check
+ -	autocomplete
+ -	trim values?
+ 	- some values exported from excel may have leading/trailer whitespace

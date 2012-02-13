@@ -15,7 +15,15 @@ framework:
         auto_start:     true
     translator: { fallback: en }
         
-services:
+services:   
+    gjgny:
+      class: GJGNY\DataToolBundle\Resources\classes\Config
+      arguments: [{Broome: flint@igc.org, Tompkins : scl36@cornell.edu}, {Broome: [moniquereeser@gmail.com, flint@igc.org, murdanick@gmail.com], Tompkins: [scl36@cornell.edu, ml637@cornell.edu ] }]   
+    
+    errorReports:
+      class: CCETC\ErrorReportBundle\Resources\config\Config
+      arguments: [haggertypat@gmail.com]  
+    
     gjgny.datatool.admin.lead:
       class: GJGNY\DataToolBundle\Admin\LeadAdmin
       tags:
@@ -31,31 +39,56 @@ services:
       tags:
         - { name: sonata.admin, manager_type: orm, group: Programs, label: Programs }
       arguments: [null, GJGNY\DataToolBundle\Entity\Program, GJGNYDataToolBundle:ProgramAdmin]
-      
-    ccetc.useradmin.admin.user:
-      class: CCETC\UserAdminBundle\Admin\UserAdmin
+
+    gjgny.datatool.admin.portal:
+      class: GJGNY\DataToolBundle\Admin\PortalAdmin
       tags:
-        - { name: sonata.admin, manager_type: orm, group: Users, label: Users }
-      arguments: [null, GJGNY\DataToolBundle\Entity\User, CCETCUserAdminBundle:UserAdmin]      
+        - { name: sonata.admin, manager_type: orm, group: Portals, label: Portals }
+      arguments: [null, GJGNY\DataToolBundle\Entity\Portal, GJGNYDataToolBundle:PortalAdmin]
+    gjgny.datatool.admin.portalpartnerlogo:
+      class: GJGNY\DataToolBundle\Admin\PortalPartnerLogoAdmin
+      tags:
+        - { name: sonata.admin, manager_type: orm, group: Portals, label: Partner Logos }
+      arguments: [null, GJGNY\DataToolBundle\Entity\PortalPartnerLogo, GJGNYDataToolBundle:PortalPartnerLogoAdmin]
+    gjgny.datatool.admin.portalsettings:
+      class: GJGNY\DataToolBundle\Admin\PortalSettingsAdmin
+      tags:
+        - { name: sonata.admin, manager_type: orm, group: Portals, label: Portal Settings }
+      arguments: [null, GJGNY\DataToolBundle\Entity\PortalSettings, GJGNYDataToolBundle:PortalSettingsAdmin]
+
+
+parameters:
+   security.acl.permission.map.class: Sonata\AdminBundle\Security\Acl\Permission\AdminPermissionMap   
+   
+sonata_admin:
+   security:
+      handler: sonata.admin.security.handler.acl
+      information:
+          GUEST:    [VIEW, LIST]
+          STAFF:    [EDIT, LIST, CREATE]
+          EDITOR:   [OPERATOR]
+          ADMIN:    [MASTER]
+   title: GJGNY Data Tool
+   expanded_menu: false
+   
+fos_user:
+  db_driver: orm
+  firewall_name: main
+  user_class: Application\Sonata\UserBundle\Entity\User
+  from_email:
+    address: noreply@ccetompkins.org
+    sender_name:    GJGNY Data Tool
+  registration:
+    approval:
+      enabled:    true
+      template:   FOSUserBundle:Registration:email.txt.twig
+  settings:
+    application_title: GJGNY Data Tool
+    admin_email: haggertypat@gmail.com
+    base_layout: SonataAdminBundle::standard_layout.html.twig
+    use_page_header: true
+    flash_name: sonata_flash_success
       
-    gjgny:
-      class: GJGNY\DataToolBundle\Resources\classes\Config
-      arguments: [{Broome: flint@igc.org, Tompkins : scl36@cornell.edu}, {Broome: [moniquereeser@gmail.com, flint@igc.org, murdanick@gmail.com], Tompkins: [scl36@cornell.edu, ml637@cornell.edu ] }]   
-    
-    errorReports:
-      class: CCETC\ErrorReportBundle\Resources\config\Config
-      arguments: [haggertypat@gmail.com]   
-
-    adminSettings:
-      class: Sonata\AdminBundle\Resources\config\Settings
-      arguments: [GJGNY Data Tool, haggertypat@gmail.com]
-
-    userSettings:
-      class: FOS\UserBundle\Resources\config\Settings
-      arguments: [GJGNY Data Tool, haggertypat@gmail.com, SonataAdminBundle::standard_layout.html.twig, true, sonata_flash_success]
-
-
-# Twig Configuration
 twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
@@ -64,7 +97,6 @@ twig:
       adminEmail: "haggertypat@gmail.com"
       expandedMenu: true
 
-# Assetic Configuration
 assetic:
     debug:          %kernel.debug%
     use_controller: false
@@ -75,7 +107,6 @@ assetic:
         # yui_css:
         #     jar: %kernel.root_dir%/java/yuicompressor-2.4.2.jar
 
-# Doctrine Configuration
 doctrine:
     dbal:
         driver:   %database_driver%
@@ -87,9 +118,15 @@ doctrine:
 
     orm:
         auto_generate_proxy_classes: %kernel.debug%
-        auto_mapping: true
+        entity_managers:
+            default:
+                mappings:
+                    ApplicationSonataUserBundle: ~
+                    SonataUserBundle: ~
+                    GJGNYDataToolBundle: ~
+                    FOSUserBundle: ~
+                    CCETCErrorReportBundle: ~
 
-# Swiftmailer Configuration
 swiftmailer:
     transport: %mailer_transport%
     host:      %mailer_host%
@@ -102,17 +139,4 @@ swiftmailer:
 
 jms_security_extra:
     secure_controllers:  true
-    secure_all_services: false
-
-# FOS user bundle
-fos_user:
-  db_driver: orm
-  firewall_name: main
-  user_class: GJGNY\DataToolBundle\Entity\User
-  from_email:
-    address: noreply@ccetompkins.org
-    sender_name:    GJGNY Data Tool
-  registration:
-    approval:
-      enabled:    true
-      template:   FOSUserBundle:Registration:email.txt.twig
+    secure_all_services: false 

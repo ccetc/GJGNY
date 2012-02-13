@@ -1,10 +1,17 @@
-# home pages ===================================================================
 homeDefault:
   pattern:  /
   defaults: { _controller: SonataAdminBundle:Core:dashboard }
 
+signup:
+  pattern: /portal/{url}/sign-up
+  defaults: { _controller: GJGNYDataToolBundle:Portal:portal, signup: true }
+
+portal:
+  pattern: /portal/{url}
+  defaults: { _controller: GJGNYDataToolBundle:Portal:portal }
+
 home:
-  pattern:  /home
+  pattern:  /admin/dashboard
   defaults: { _controller: SonataAdminBundle:Core:dashboard }
   
 adminHelp:
@@ -19,7 +26,9 @@ getProgramDate:
   pattern: /getProgramDate/{id}
   defaults: { _controller: GJGNYDataToolBundle:Program:getProgramDate, id: 0 }
   
-  
+sonata_user_impersonating:
+  pattern: /admin/dashboard
+  defaults: { _controller: SonataAdminBundle:Core:dashboard }
   
 # ADMIN =====================
 admin:

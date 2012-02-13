@@ -1,5 +1,48 @@
 # GJGNY - TODOfinished
-
+## 1.3		
+1. <del>shorten view page
+2. <del>Portals
+ - <del>Handle signups
+ 	- <del>create leads
+ 		- <del>add county choices
+	 		- <del>set county
+ 		- <del>set program
+ 		- <del>admin
+ 			- <del>cleanup
+ 	- <del>email notifications
+ 	- <del>implement
+ 		<del>tompkins chemung stueben schuyler
+ 		<del>broome tioga otego chenago
+ - <del>make portals editable
+ 	- <del>events
+ 	- <del>contact info
+ 	- <del>logos
+ - <del>keep a table of portals
+3. <del>Update Fields
+	- <del>Lead
+	- <del>Lead Event
+		- <del>title other
+		- <del>filter on Title
+10. misc
+	- <del>hide broome/tompkins fields
+	- <del>program source alpha
+	- <del>gdatepicker
+		- <del>use for date fields on forms, not filers
+		
+		
+## 1.2.2 	Update Sonata, Implement SonataUser
+- <del>upgrade SonataJQuery
+- <del>upgrade SonataAdmin
+	- <del>new jQuery versions
+	- <del>uses CCETC Bootstrap
+    - <del>check relation tools
+- <del>upgrade FOSUser	
+- <del>switch to SonataUserBundle
+- <del>update code
+    - <del>user/group icons
+    - <del>user class errors
+    - <del>set up permissions
+		
 ## 1.2.1	Small Changes from trainings
 0. update sonata
  - check empty countyData filter

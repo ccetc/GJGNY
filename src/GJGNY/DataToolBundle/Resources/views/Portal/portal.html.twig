@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('bundles/ccetcbootstrap/bootstrap/bootstrap.css') }}" type="text/css" media="all" >
+            <link rel="stylesheet" href="{{ asset('styles/portals.css') }}" type="text/css" media="all" >
+        {% endblock %}
+
+        <title>
+            {% block title %}
+                Green Jobs Green New York - {{ portal.title }}
+            {% endblock%}
+        </title>
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="content">
+
+                <div class="row">
+                    <div class="span7">
+                        <div class="gjgny-logo-container">
+                            <a href="{{ path('portal', {'url' : portal.url }) }}"><img src="{{ asset('images/Portals/gjgny.png') }}" /></a>
+                            <span id="portal-title">{{ portal.title }}</span>
+                        </div>
+                    </div>
+                    <div class="span7">
+                        {% if portal.mainLogoUrl %}<a href="{{ portal.mainLogoUrl }}" target="_blank">{% endif %}
+                            <img id="main-logo" src="{{ asset('images/Portals/' ~ portal.mainLogoFilename ) }}" />
+                        {% if portal.mainLogoUrl %}</a>{% endif %}
+                    </div>
+                </div>
+
+                <div class="row" id="heading-container">
+                    <div class="span14">
+                        <h3>Let us help you stop wasting energy dollars & be more comfortable in your home.</h3>
+                        <h2>Sign up today!</h2>
+                    </div>
+                </div>
+
+                {% if app.session.hasFlash('page-message') %}
+                    <div class="alert-message success">
+                        {{ app.session.flash('page-message') }}
+                    </div>
+                {% endif %}
+                
+                {% if not signup %}
+                    <div class="row">
+                        <div class="span8" id="portal-steps">
+                            <h3>1. Get an energy assessment</h3>
+                            <ul>
+                                <li>Apply for a reduced or no-cost assessment</li>
+                                <li>Select a Building Performance Institute (BPI) accredited contractor and schedule your assessment</li>
+                            </ul>
+
+                            <h3>2. Perform the energy upgrades</h3>
+                            <ul>
+                                <li>Choose your improvements</li>
+                                <li>Get rebates and low-interest financing for your upgrades</li>
+                                <li>Complete the energy improvements</li>
+                                <li>Enjoy energy savings, increased comfort, and a healthier home!</li>
+                            </ul>
+                        </div>
+
+                        <div class="span6">
+                            <a href="{{ asset('images/Portals/leaky-house-large.jpg') }}">
+                                <img style="width: 335px;" src="{{ asset('images/Portals/leaky-house-large.jpg') }}" />
+                            </a>
+                        </div>                    
+                    </div>
+
+
+                    <div class="row" id="btn-container">
+                        <div class="span5 offset9">
+                            <a href="{{ path('signup', {'url': portal.url}) }}" class="btn large">Sign Up</a> 
+                            <a href="http://www.upgradeupstate.org" class="btn primary large">Learn More &rarr;</a> 
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="span7">
+                            <h2>Contact Us</h2>
+                            {{ portal.contactUs|raw }}
+                        </div>
+                        <div class="span7">
+                            <h2>Events</h2>
+                            {{ portal.events|raw }}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="row">
+                        <div class="span8" id="portal-signup">
+                            <form class="form-stacked" action="{{ path('signup', {'url' : portal.url}) }}" method="post" {{ form_enctype(form) }}>
+                                {{ form_widget(form) }}
+
+                                <div class="actions">
+                                    <input class="btn large primary" value="Sign Up" type="submit" />
+                                    <a href="{{ path('portal', {'url': portal.url}) }}" class="btn large">cancel</a> 
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+          
+            {% if partnerLogos|length > 0 %}
+                <footer>
+                    <div class="row">
+                        <div class="span14" id="partner-logo-container">
+                            <h4>Project Partners</h4>
+                            {% for logo in partnerLogos %}
+                                {% if logo.url %}<a href="{{ logo.url }}" target="_blank">{% endif %}
+                                    <img src="{{ asset('images/Portals/' ~ logo.filename ) }}" />
+                                {% if logo.url %}</a>{% endif %}                        
+                            {% endfor %}
+                        </div>
+                    </div>
+                </footer>
+           {% endif %}
+                        
+             
+        </div>
+    </body>
+</html>
+

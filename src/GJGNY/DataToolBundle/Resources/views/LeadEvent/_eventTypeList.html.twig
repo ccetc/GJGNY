@@ -1,0 +1,12 @@
+{% extends 'SonataAdminBundle:CRUD:base_list_field.html.twig' %}
+
+{% block field%}
+    <div>
+        {% if object.eventType %}
+            {{ object.eventType }}
+        {% endif %}            
+        {% if object.eventTypeOther %}
+            {{ object.eventTypeOther }}
+        {% endif %}
+   </div>
+{% endblock %}
