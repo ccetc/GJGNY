@@ -1,33 +1,4 @@
 # GJGNY - TODO
-
-## on rollout
-- update sonataadmin
-- update fosuser
-	- cleaned up dist files
-	- fixed adminpool in controller
-- update ccetc error report
-	- added adminpool to controller
-- update sonatauser
-	- added icons
-	
-- generate acl objects
-- set new fields for old leads
-	- Lead Events
-		- add whatWasDiscussed to notes
-		- add phoneCallNotes to notes
-
-- intl extension in php.ini extension=intl.so 
-
-- add GJGNY Southern Tier Portal program
-
-- upgrade upstate redirect
-
-- clean up titles
-
-- remove leadStatus values
-	'had previous assessment' => 'had previous assessment',
-    'had previous upgrade' => 'had previous upgrade',
-    g'process complete, got upgrade' => 'process complete, got upgrade',
 	
 ## Future
 1.	Excel importing	
