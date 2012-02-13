@@ -2,6 +2,10 @@ homeDefault:
   pattern:  /
   defaults: { _controller: SonataAdminBundle:Core:dashboard }
 
+signup:
+  pattern: /portal/{url}/sign-up
+  defaults: { _controller: GJGNYDataToolBundle:Portal:portal, signup: true }
+
 portal:
   pattern: /portal/{url}
   defaults: { _controller: GJGNYDataToolBundle:Portal:portal }

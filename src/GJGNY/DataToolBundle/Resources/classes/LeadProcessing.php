@@ -10,7 +10,7 @@ class LeadProcessing {
 
         foreach($leadsToUpdate as $Lead)
         {
-            $Lead->setLeadStatus("need to call");
+            $Lead->setNeedToCall(true);
             $entityManager->persist($Lead);
         }
         $entityManager->flush();

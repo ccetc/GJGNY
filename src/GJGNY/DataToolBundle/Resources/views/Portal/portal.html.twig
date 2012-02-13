@@ -40,49 +40,70 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="span8" id="portal-steps">
-                        <h3>1. Get an energy assessment</h3>
-                        <ul>
-                            <li>Apply for a reduced or no-cost assessment</li>
-                            <li>Select a Building Performance Institute (BPI) accredited contractor and schedule your assessment</li>
-                        </ul>
+                {% if app.session.hasFlash('page-message') %}
+                    <div class="alert-message success">
+                        {{ app.session.flash('page-message') }}
+                    </div>
+                {% endif %}
+                
+                {% if not signup %}
+                    <div class="row">
+                        <div class="span8" id="portal-steps">
+                            <h3>1. Get an energy assessment</h3>
+                            <ul>
+                                <li>Apply for a reduced or no-cost assessment</li>
+                                <li>Select a Building Performance Institute (BPI) accredited contractor and schedule your assessment</li>
+                            </ul>
 
-                        <h3>2. Perform the energy upgrades</h3>
-                        <ul>
-                            <li>Choose your improvements</li>
-                            <li>Get rebates and low-interest financing for your upgrades</li>
-                            <li>Complete the energy improvements</li>
-                            <li>Enjoy energy savings, increased comfort, and a healthier home!</li>
-                        </ul>
+                            <h3>2. Perform the energy upgrades</h3>
+                            <ul>
+                                <li>Choose your improvements</li>
+                                <li>Get rebates and low-interest financing for your upgrades</li>
+                                <li>Complete the energy improvements</li>
+                                <li>Enjoy energy savings, increased comfort, and a healthier home!</li>
+                            </ul>
+                        </div>
+
+                        <div class="span6">
+                            <a href="{{ asset('images/Portals/leaky-house-large.jpg') }}">
+                                <img style="width: 335px;" src="{{ asset('images/Portals/leaky-house-large.jpg') }}" />
+                            </a>
+                        </div>                    
                     </div>
 
-                    <div class="span6">
-                        <a href="{{ asset('images/Portals/leaky-house-large.jpg') }}">
-                            <img style="width: 335px;" src="{{ asset('images/Portals/leaky-house-large.jpg') }}" />
-                        </a>
-                    </div>                    
-                </div>
+
+                    <div class="row" id="btn-container">
+                        <div class="span5 offset9">
+                            <a href="{{ path('signup', {'url': portal.url}) }}" class="btn large">Sign Up</a> 
+                            <a href="http://www.upgradeupstate.org" class="btn primary large">Learn More &rarr;</a> 
+                        </div>
+                    </div>
 
 
-                <div class="row" id="btn-container">
-                    <div class="span5 offset9">
-                        <a href="#" class="btn large">Sign Up</a> 
-                        <a href="http://www.upgradeupstate.org" class="btn primary large">Learn More &rarr;</a> 
+                    <div class="row">
+                        <div class="span7">
+                            <h2>Contact Us</h2>
+                            {{ portal.contactUs|raw }}
+                        </div>
+                        <div class="span7">
+                            <h2>Events</h2>
+                            {{ portal.events|raw }}
+                        </div>
                     </div>
-                </div>
+                {% else %}
+                    <div class="row">
+                        <div class="span8" id="portal-signup">
+                            <form class="form-stacked" action="{{ path('signup', {'url' : portal.url}) }}" method="post" {{ form_enctype(form) }}>
+                                {{ form_widget(form) }}
 
-                    
-                <div class="row">
-                    <div class="span7">
-                        <h2>Contact Us</h2>
-                        {{ portal.contactUs|raw }}
+                                <div class="actions">
+                                    <input class="btn large primary" value="Sign Up" type="submit" />
+                                    <a href="{{ path('portal', {'url': portal.url}) }}" class="btn large">cancel</a> 
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <div class="span7">
-                        <h2>Events</h2>
-                        {{ portal.events|raw }}
-                    </div>
-                </div>
+                {% endif %}
 
             </div>
           

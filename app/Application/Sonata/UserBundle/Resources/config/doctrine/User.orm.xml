@@ -21,6 +21,8 @@
         <one-to-many field="ProgramsEntered" target-entity="GJGNY\DataToolBundle\Entity\Program" mapped-by="enteredBy" />
         <one-to-many field="ProgramsUpdated" target-entity="GJGNY\DataToolBundle\Entity\Program" mapped-by="lastUpdatedBy" />
 
+        <many-to-many field="notificationPortals" target-entity="GJGNY\DataToolBundle\Entity\PortalSettings" mapped-by="notificationUsers" />
+
     </entity>
 
 </doctrine-mapping>

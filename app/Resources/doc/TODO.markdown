@@ -11,6 +11,23 @@
 	- added icons
 	
 - generate acl objects
+- set new fields for old leads
+	- Lead Events
+		- add whatWasDiscussed to notes
+		- add phoneCallNotes to notes
+
+- intl extension in php.ini extension=intl.so 
+
+- add GJGNY Southern Tier Portal program
+
+- upgrade upstate redirect
+
+- clean up titles
+
+- remove leadStatus values
+	'had previous assessment' => 'had previous assessment',
+    'had previous upgrade' => 'had previous upgrade',
+    g'process complete, got upgrade' => 'process complete, got upgrade',
 
 ## 1.2.1
 - <del>upgrade SonataJQuery
@@ -24,28 +41,7 @@
     - <del>user/group icons
     - <del>user class errors
     - <del>set up permissions
-
-## 1.3		
-1. <del>shorten view page
-2. Portals
- - Handle signups
- 	- create leads
- 	- email notifications
- - <del>make portals editable
- 	- <del>events
- 	- <del>contact info
- 	- <del>logos
- - <del>keep a table of portals
- - redirect SouthernTier from Upgrade Upstate
-3. Update Fields
-	- <del>Lead
-		- set new fields for old leads
-	- Lead Event
-4. Filter on Events
-10. misc
-	- <del>hide broome/tompkins fields
-	- program source alpha
-
+	
 ## Future
 1.	Excel importing	
  - downloadable template		
@@ -61,8 +57,9 @@
  -  configurable notifications
 12.	Misc	
  -	follow up in 2 weeks button
- -	date picker?
- -      add just lastname and email to duplication check
+ -	date picker
+ 	- add for filters when filters are done
+ -  add just lastname and email to duplication check
  -	autocomplete
  -	trim values?
  	- some values exported from excel may have leading/trailer whitespace

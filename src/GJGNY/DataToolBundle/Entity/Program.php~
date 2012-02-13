@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="GJGNY\DataToolBundle\Entity\ProgramRepository")
- */
+*/
 class Program
 {
     /**
@@ -67,6 +67,9 @@ class Program
     * @ORM\Column(name="datetimeLastUpdated", type="datetime", nullable="true")
     */
     private $datetimeLastUpdated;
+    
+    /** @ORM\OneToMany(targetEntity="PortalSettings", mappedBy="notificationProgram", cascade={"persist", "remove"}) */
+    protected $portalPrograms;
     
     public function __toString()
     {
@@ -248,5 +251,25 @@ class Program
     public function getLastUpdatedBy()
     {
         return $this->lastUpdatedBy;
+    }
+
+    /**
+     * Add portalPrograms
+     *
+     * @param GJGNY\DataToolBundle\Entity\PortalSettings $portalPrograms
+     */
+    public function addPortalSettings(\GJGNY\DataToolBundle\Entity\PortalSettings $portalPrograms)
+    {
+        $this->portalPrograms[] = $portalPrograms;
+    }
+
+    /**
+     * Get portalPrograms
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getPortalPrograms()
+    {
+        return $this->portalPrograms;
     }
 }

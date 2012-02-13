@@ -61,6 +61,12 @@ class User extends BaseUser
     protected $LeadsUpdated;
     protected $ProgramsUpdated;
     protected $ProgramsEntered;
+    protected $notificationPortals;
+    
+    public function __toString()
+    {
+        return $this->firstName.' '.$this->lastName;
+    }
     
     /**
      * Get firstName
@@ -264,5 +270,25 @@ class User extends BaseUser
     {
         return $this->ProgramsEntered;
     }
-   
+    
+    /**
+     * Add notificationPortals
+     *
+     * @param GJGNY\DataToolBundle\Entity\PortalSettings $notificationPortals
+     */
+    public function addPortalSettings(\GJGNY\DataToolBundle\Entity\PortalSettings $notificationPortals)
+    {
+        $this->notificationPortals[] = $notificationPortals;
+    }
+
+    /**
+     * Get notificationPortals
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getNotificationPortals()
+    {
+        return $this->notificationPortals;
+    }
+  
 }

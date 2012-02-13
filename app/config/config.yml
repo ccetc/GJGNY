@@ -50,6 +50,11 @@ services:
       tags:
         - { name: sonata.admin, manager_type: orm, group: Portals, label: Partner Logos }
       arguments: [null, GJGNY\DataToolBundle\Entity\PortalPartnerLogo, GJGNYDataToolBundle:PortalPartnerLogoAdmin]
+    gjgny.datatool.admin.portalsettings:
+      class: GJGNY\DataToolBundle\Admin\PortalSettingsAdmin
+      tags:
+        - { name: sonata.admin, manager_type: orm, group: Portals, label: Portal Settings }
+      arguments: [null, GJGNY\DataToolBundle\Entity\PortalSettings, GJGNYDataToolBundle:PortalSettingsAdmin]
 
 
 parameters:

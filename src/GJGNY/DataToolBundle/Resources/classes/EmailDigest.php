@@ -7,7 +7,7 @@ class EmailDigest
 
     public function getLeadsToCallAndSendEmails($leadRepository, $emailAddresses, $mailer, $fromAddress)
     {
-        $leadsToCall = $leadRepository->findBy(array("leadStatus" => "need to call"));
+        $leadsToCall = $leadRepository->findBy(array("needToCall" => true));
 
         $BroomeLeadCount = 0;
 

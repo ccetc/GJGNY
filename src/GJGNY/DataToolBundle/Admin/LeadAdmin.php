@@ -54,13 +54,14 @@ class LeadAdmin extends Admin
             ->with('Lead History')
                 ->add('Program', 'sonata_type_model', array('label' => 'Program Source', 'required' => false), array('edit' => 'standard'))
                 ->add('SourceOfLead', 'choice', array('required' => false, 'label' => 'Source of Lead', 'choices' => Lead::getSourceOfLeadChoices()))
-                ->add('DateOfLead', null, array('label' => 'Date of First Contact', 'required' => false, 'widget' => 'choice', 'format' => 'MM/dd/yyyy'))
+                ->add('DateOfLead', 'date', array('label' => 'Date of First Contact', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
+                ->add('needToCall', null, array('label' => 'Need to Call'))
                 ->add('leadStatus', 'choice', array('required' => false, 'label' => 'Lead Status', 'choices' => Lead::getLeadStatusChoices()))
-                ->add('DateOfNextFollowup', null, array('label' => 'Date of next Follow-up', 'required' => false, 'widget' => 'choice', 'format' => 'MM/dd/yyyy'))
+                ->add('DateOfNextFollowup', null, array('label' => 'Date of next Follow-up', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
+                ->add('enteredBy', 'sonata_type_model', array('label' => 'Entered By', 'required' => false), array('edit' => 'standard'))
             ->end()
             ->setHelps(array(
-                'leadStatus' => 'Your team will receive e-mail updates about Leads with the status "need to call".',
-                'DateOfNextFollowup' => 'This is the date your team will start receiving e-mail updates if your Lead\'s status is "awaiting follow up"'
+                'DateOfNextFollowup' => 'Lead will be marked "need to call" on this date'
             ))
             ->with('Lead Type')
                 ->add('leadTypeUpgrade', null, array('label' => 'Energy Upgrade', 'required' => false))
@@ -75,11 +76,11 @@ class LeadAdmin extends Admin
                 ->add('step2aInterested', null, array('label' => 'Interested in Home Energy assessment', 'required' => false))
                 ->add('step2bSubmitted', null, array('label' => 'GJGNY application submitted', 'required' => false))
                 ->add('step2dCompleted', null, array('label' => 'Assessment Complete', 'required' => false))
-                    ->add('dateOfAssessment', null, array('label' => 'Date', 'required' => false, 'widget' => 'choice', 'format' => 'MM/dd/yyyy'))
+                    ->add('dateOfAssessment', null, array('label' => 'Date', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
                 ->add('reportReceived', null, array('label' => 'Report Received', 'required' => false))
                 ->add('scopeOfWorkSubmitted', null, array('label' => 'Scope of Work Submitted', 'required' => false))
                 ->add('step3', null, array('label' => 'Upgrade Complete', 'required' => false))
-                    ->add('dateOfUpgrade', null, array('label' => 'Date', 'required' => false, 'widget' => 'choice', 'format' => 'MM/dd/yyyy'))
+                    ->add('dateOfUpgrade', null, array('label' => 'Date', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
                     ->add('step3aContractor', null, array('label' => 'Name of contractor', 'required' => false))
                     ->add('step3bWorkDone', null, array('label' => 'What was done (air sealing, insulating, upgrade heating system, etc.)', 'required' => false))
                     ->add('step3cHowFinanced', 'choice', array('required' => false, 'label' => 'How was it financed', 'choices' => Lead::getHowAssessmentFinancedChoices()))
@@ -256,8 +257,28 @@ class LeadAdmin extends Admin
             ),
             'field_type' => 'choice'
         ));
-        $datagrid->add('Program', null, array('label' => 'Program Source'));
-        $datagrid->add('leadStatus', 'doctrine_orm_choice', array(
+        $datagrid->add('Program', 'doctrine_orm_callback', array(
+            'label' => 'Program Source',
+            'callback' => function($queryBuilder, $alias, $field, $values) {
+                if(!$values['value'])
+                {
+                    return;
+                }
+                if(!$values['value'] || $values['value'] == "")
+                {
+                    return;
+                }
+                $queryBuilder->leftjoin($alias.'.Program', 'p');
+                $queryBuilder->andWhere('p.name = :programSource');
+                $queryBuilder->setParameter('programSource',$values['value']);
+                
+            },
+            'field_type' => 'choice',
+            'field_options' => array(
+                'required' => false,
+                'choices' => $this->getProgramSourceChoices()
+            )
+        ));        $datagrid->add('leadStatus', 'doctrine_orm_choice', array(
             'label' => 'Lead Status',
             'field_type' => 'choice',
             'field_options' => array(
@@ -265,8 +286,9 @@ class LeadAdmin extends Admin
                 'choices' => Lead::getLeadStatusChoices()
             )
         ));
+        $datagrid->add('needToCall', null, array('label' => 'Need to Call'));
         $datagrid->add('dataCounty', 'doctrine_orm_choice', array(
-            'label' => 'County Data',
+            'label' => 'Outreach County',
             'field_type' => 'choice',
             'field_options' => array(
                 'required' => false,
@@ -309,6 +331,23 @@ class LeadAdmin extends Admin
             'field_options' => array(
                 'required' => false,
                 'choices' => array('true' => 'true')
+            )
+        ));
+        $datagrid->add('leadEventTitle', 'doctrine_orm_callback', array(
+            'label' => 'Has Event with Title',
+            'callback' => function($queryBuilder, $alias, $field, $values) {
+                if(!$values['value'] || $values['value'] == "")
+                {
+                    return;
+                }
+                $queryBuilder->leftjoin($alias.'.LeadEvents', 'le');
+                $queryBuilder->andWhere('le.description = :eventTitle');
+                $queryBuilder->setParameter('eventTitle',$values['value']);
+            },
+            'field_type' => 'choice',                    
+            'field_options' => array(
+                'required' => false,
+                'choices' => $this->configurationPool->getContainer()->get('gjgny.datatool.admin.leadevent')->getDescriptionChoices()
             )
         ));
         $datagrid->add('leadType', 'doctrine_orm_callback', array(
@@ -378,7 +417,9 @@ class LeadAdmin extends Admin
         'step2dCompleted' => true,
         'step3' => true,
         'dateOfUpgrade' => true,
-        'dateOfAssessment' => true
+        'dateOfAssessment' => true,
+        'leadCategory' => true,
+        'leadEventTitle' => true
     );
 
     protected function configureSpreadsheetFields(SpreadsheetMapper $spreadsheetMapper)
@@ -405,6 +446,7 @@ class LeadAdmin extends Admin
             ->add('leadReferral', array('label' => 'Referral / Nomination'))
             ->add('DateOfLead', array('label' => 'Date of First Contact', 'type' => 'date'))
             ->add('leadStatus', array('label' => 'Lead Status'))
+            ->add('needToCall', null, array('label' => 'Need to Call', 'type' => 'boolean'))                
             ->add('DateOfNextFollowup', array('label' => 'Date of next Follow-up', 'type' => 'date'))
             
             ->add('leadTypeUpgrade', array('label' => 'Lead Type: Energy Upgrade', 'type' => 'boolean'))
@@ -490,6 +532,7 @@ class LeadAdmin extends Admin
                 ->add('SourceOfLead', null, array('label' => 'Source of Lead'))
                 ->add('Program', null, array('label' => 'Program Source'))
                 ->add('DateOfLead', null, array('label' => 'Date of Lead'))
+                ->add('needToCall', null, array('label' => 'Need to Call'))
                 ->add('leadStatus', null, array('label' => 'Lead Status'))
                 ->add('DateOfNextFollowup', null, array('label' => 'Date of next followup'))
             ->end()
@@ -611,48 +654,13 @@ class LeadAdmin extends Admin
         $Lead->setDatetimeEntered(new \DateTime());
         $Lead->setDatetimeLastUpdated(new \DateTime());
         $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
-        $Lead->setEnteredBy($user);
+        if(!$Lead->getEnteredBy()) $Lead->setEnteredBy($user);
         $Lead->setLastUpdatedBy($user);
         $Lead->setDataCounty($user->getCounty());
 
         parent::prePersist($Lead);
     }
     
-    public function postPersist($Lead)
-    {
-        // automatically create lead acquisitions for some Leads
-        if($Lead->getProgram() || $Lead->getSourceOfLead() == "Phone" || $Lead->getSourceOfLead() == "E-mail") {
-            $LeadEvent = new \GJGNY\DataToolBundle\Entity\LeadEvent();
-            $LeadEvent->setLead($Lead);
-            
-            $LeadEvent->setDatetimeEntered(new \DateTime());
-            $LeadEvent->setDatetimeLastUpdated(new \DateTime());
-            $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
-            $LeadEvent->setEnteredBy($user);
-            $LeadEvent->setLastUpdatedBy($user);
-            
-            if($Lead->getProgram()) {
-                $LeadEvent->setDescription($Lead->getProgram()->getName());
-            } else if($Lead->getSourceOfLead() == "Phone") {
-                $LeadEvent->setDescription("phone call received");
-            } else if($Lead->getSourceOfLead() == "E-mail") {
-                $LeadEvent->setDescription("e-mail received");
-            }
-            
-            
-            $LeadEvent->setDate($Lead->getDateOfLead());
-            $LeadEvent->setEventType("lead acquisition");
-            
-            
-            $em = $this->getConfigurationPool()->getContainer()->get('doctrine')->getEntityManager();
-            $em->persist($LeadEvent);
-            $em->flush();
-          
-        }
-		
-        parent::postPersist($Lead);
-    }
-
     public function preUpdate($Lead)
     {
         $Lead->setDatetimeLastUpdated(new \DateTime());
@@ -660,6 +668,28 @@ class LeadAdmin extends Admin
         $Lead->setLastUpdatedBy($user);
 
         parent::preUpdate($Lead);
+    }
+    
+    public function getProgramSourceChoices()
+    {
+        $programSourceChoices = array();
+        $em = $this->configurationPool->getContainer()->get('doctrine')->getEntityManager();
+        $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
+
+        $programQuery = $em->createQuery(
+            'SELECT p.name, p.id FROM GJGNYDataToolBundle:Program p WHERE p.dataCounty=:county ORDER BY p.name ASC'
+        )->setParameter('county', $user->getCounty());
+        
+        $programs = $programQuery->getResult();
+                
+        foreach($programs as $p)
+        {
+            if(isset($p['name']) && trim($p['name']) != "") {
+                $programSourceChoices[$p['name']] = $p['name'];                
+            }
+        }
+       
+        return $programSourceChoices;
     }
 
 }

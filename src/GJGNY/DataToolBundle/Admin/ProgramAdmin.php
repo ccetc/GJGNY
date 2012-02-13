@@ -18,7 +18,7 @@ use GJGNY\DataToolBundle\Admin\LeadEventAdmin as LeadEventAdmin;
 class ProgramAdmin extends Admin
 {
 
-    protected $maxPerPage = 10;
+    protected $maxPerPage = 20;
     protected $classnameLabel = 'Programs';
     protected $entityLabel = 'Program';
     protected $entityLabelPlural = 'Programs';
@@ -30,7 +30,7 @@ class ProgramAdmin extends Admin
     {
         $formMapper
                 ->add('name', null, array('label' => 'Name'))
-                ->add('date', null, array('label' => 'Date', 'widget' => 'choice', 'format' => 'MM/dd/yyyy'))
+                ->add('date', null, array('label' => 'Date', 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
       ;
     }
    
@@ -61,7 +61,7 @@ class ProgramAdmin extends Admin
         $datagrid->add('name', null, array('label' => 'Name'));
         $datagrid->add('date', 'doctrine_orm_date_range', array('label' => 'Date'));
         $datagrid->add('dataCounty', 'doctrine_orm_choice', array(
-            'label' => 'County Data',
+            'label' => 'Outreach County',
             'field_type' => 'choice',
             'field_options' => array(
                 'required' => false,

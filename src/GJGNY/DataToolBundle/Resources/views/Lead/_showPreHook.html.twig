@@ -4,7 +4,7 @@
         <table>
             <tr class="sonata-ba-list-field-header">
                 <th>Date</th>
-                <th>Description</th>
+                <th>Title</th>
                 <th>Event Type</th>
                 <th>Actions</th>
             </tr>
@@ -12,7 +12,7 @@
                 <tr>
                     <td>{{ event.date|date("F j, Y") }}</td>
                     <td>{{ event.description }}</td>
-                    <td>{{ event.eventType }}</td>
+                    <td>{{ event.eventType }} {{ event.eventTypeOther }}</td>
                     <td>
                         <a href="{{ LeadEventAdmin.generateUrl('show', {'id': admin.id(event)}) }}" class="view_link" title="{% trans from 'SonataAdminBundle' %}action_view{% endtrans %}">
                             <img src="{{ asset('bundles/sonataadmin/famfamfam/magnifier.png') }}" alt="{% trans from 'SonataAdminBundle' %}action_view{% endtrans %}" />

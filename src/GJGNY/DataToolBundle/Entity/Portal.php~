@@ -71,6 +71,9 @@ class Portal
     /** @ORM\OneToMany(targetEntity="PortalPartnerLogo", mappedBy="portal", cascade={"persist", "remove"}) */
     protected $partnerLogos;
 
+    /** @ORM\OneToMany(targetEntity="PortalSettings", mappedBy="portal", cascade={"persist", "remove"}) */
+    protected $portalSettings;
+
     
     public function __toString()
     {
@@ -285,5 +288,25 @@ class Portal
     public function getMainLogoFile()
     {
         return $this->mainLogoFile;
+    }
+
+    /**
+     * Add portalSettings
+     *
+     * @param GJGNY\DataToolBundle\Entity\PortalSettings $portalSettings
+     */
+    public function addPortalSettings(\GJGNY\DataToolBundle\Entity\PortalSettings $portalSettings)
+    {
+        $this->portalSettings[] = $portalSettings;
+    }
+
+    /**
+     * Get portalSettings
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getPortalSettings()
+    {
+        return $this->portalSettings;
     }
 }

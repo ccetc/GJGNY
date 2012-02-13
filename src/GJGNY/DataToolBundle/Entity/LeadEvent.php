@@ -93,7 +93,7 @@ class LeadEvent
   /**
    * @var date $date
    *
-   * @ORM\Column(name="date", type="datetime", nullable="true")
+   * @ORM\Column(name="date", type="date", nullable="true")
    */
   private $date;
   /**
@@ -102,6 +102,12 @@ class LeadEvent
    * @ORM\Column(name="description", type="string", length=255, nullable="true")
    */
   private $description;
+  /**
+   * @var string $descriptionOther
+   *
+   * @ORM\Column(name="descriptionOther", type="string", length=255, nullable="true")
+   */
+  private $descriptionOther;  
   /**
    * @var string $notes
    *
@@ -1064,5 +1070,25 @@ class LeadEvent
     public function getDateOfJobReferral()
     {
         return $this->dateOfJobReferral;
+    }
+
+    /**
+     * Set descriptionOther
+     *
+     * @param string $descriptionOther
+     */
+    public function setDescriptionOther($descriptionOther)
+    {
+        $this->descriptionOther = $descriptionOther;
+    }
+
+    /**
+     * Get descriptionOther
+     *
+     * @return string 
+     */
+    public function getDescriptionOther()
+    {
+        return $this->descriptionOther;
     }
 }

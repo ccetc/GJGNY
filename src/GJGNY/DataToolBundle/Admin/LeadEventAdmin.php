@@ -25,10 +25,16 @@ class LeadEventAdmin extends Admin
     // Form ======================================================================
     // ===========================================================================
     protected function configureFormFields(FormMapper $formMapper)
-    {
+    {                
         $formMapper
-            ->with('Basic Event Data')
+            ->with('Basic Information')
                 ->add('Lead', 'sonata_type_model', array(), array('edit' => 'list'))
+                ->add('description', 'choice', array(
+                    'label' => 'Title',
+                    'required' => false,
+                    'choices' => $this->getDescriptionChoices()
+                ))
+                ->add('descriptionOther', null, array('label' => 'Other', 'required' => false))                
                 ->add('eventType', 'choice', array(
                     'label' => 'Event Type',
                     'required' => false,
@@ -36,34 +42,31 @@ class LeadEventAdmin extends Admin
                 ))
                 ->add('eventTypeOther', null, array('label' => 'Other', 'required' => false))
                 ->add('contactPerson', null, array('label' => 'Contact Person', 'required' => false))
-                ->add('date', null, array('label' => 'Date of event', 'required' => false, 'time_widget' => 'choice', 'date_widget' => 'choice', 'date_format' => 'MM/dd/yyyy'))
-                ->add('description', null, array('label' => 'Description', 'required' => false))
-                ->add('WhatWasDiscussed', null, array('label' => 'What was discussed?', 'required' => false))
+                ->add('date', null, array('label' => 'Date of event', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
+                ->add('notes', null, array('label' => 'Notes', 'required' => false))
                 ->add('actionsTaken', null, array(
                     'label' => 'Actions taken',
                     'required' => false,
                 ))
-                ->add('FollowUpItems', null, array('label' => 'Items to follow-up on in future', 'required' => false))
-                ->add('notes', null, array('label' => 'Notes', 'required' => false))
+                ->add('FollowUpItems', null, array('label' => 'Items to follow-up on', 'required' => false))
             ->end()
             ->setHelps(array(
                 'Lead' => 'Click the list icon above to view a list of Leads.  Click the name of the Lead you want.'
             ))
-            ->with('Phone Call')
+            ->with('Phone Call', array('collapsed' => true))
                 ->add('callStatus', 'choice', array(
                     'label' => 'Call status',
                     'required' => false,
                     'choices' => LeadEvent::getCallStatusChoices()
                 ))
-                ->add('callNotes', null, array('label' => 'Notes', 'required' => false))
             ->end()
-            ->with('Training Referral')
+            ->with('Training Referral', array('collapsed' => true))
                 ->add('institution', null, array('label' => 'Institution', 'required' => false))
                 ->add('program', null, array('label' => 'Program', 'required' => false))
                 ->add('dateOfTrainingReferral', null, array('label' => 'Date of referral', 'required' => false, 'widget' => 'choice', 'format' => 'MM/dd/yyyy'))
                 ->add('dateOfCompletion', null, array('label' => 'Date of completion', 'required' => false, 'widget' => 'choice', 'format' => 'MM/dd/yyyy'))
             ->end()
-            ->with('Job Referral')
+            ->with('Job Referral', array('collapsed' => true))
                 ->add('business', null, array('label' => 'Business', 'required' => false))
                 ->add('dateOfJobReferral', null, array('label' => 'Date of referral', 'required' => false, 'widget' => 'choice', 'format' => 'MM/dd/yyyy'))
             ->end()
@@ -74,13 +77,15 @@ class LeadEventAdmin extends Admin
     public $formFieldPreHooks = array(
         // "other" fields
         'lutCouponType' => 'SonataAdminBundle:Hook:_otherFormFieldPre.html.twig',
-        'eventTypeOther' => 'SonataAdminBundle:Hook:_otherFormFieldPre.html.twig'
+        'eventTypeOther' => 'SonataAdminBundle:Hook:_otherFormFieldPre.html.twig',
+        'descriptionOther' => 'SonataAdminBundle:Hook:_otherFormFieldPre.html.twig'
     );
     
     public $formFieldPostHooks = array(
         // "other" fields
         'lutCouponType' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'eventTypeOther' => 'SonataAdminBundle:Hook:_closingDiv.html.twig'
+        'eventTypeOther' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'descriptionOther' => 'SonataAdminBundle:Hook:_closingDiv.html.twig'        
     );
     
     // List ======================================================================
@@ -91,9 +96,9 @@ class LeadEventAdmin extends Admin
     {
         $listMapper
             ->add('Lead')    
-            ->add('date', 'date', array('label' => 'Date of Event','template' => 'GJGNYDataToolBundle:LeadEvent:_date.html.twig'))
-            ->add('eventType', null, array('label' => 'Event Type', 'template' => 'GJGNYDataToolBundle:LeadEvent:_eventType.html.twig'))
-            ->add('description', null, array('label' => 'Description', 'template' => 'GJGNYDataToolBundle:LeadEvent:_description.html.twig'))
+            ->add('date', 'date', array('label' => 'Date','template' => 'GJGNYDataToolBundle:LeadEvent:_date.html.twig'))
+            ->add('eventType', null, array('label' => 'Type', 'template' => 'GJGNYDataToolBundle:LeadEvent:_eventTypeList.html.twig'))
+            ->add('description', null, array('label' => 'Title', 'template' => 'GJGNYDataToolBundle:LeadEvent:_description.html.twig'))
 
             // add custom action links
             ->add('_action', 'actions', array(
@@ -148,31 +153,34 @@ class LeadEventAdmin extends Admin
                 'required' => false,
             ),
         ));
-        $datagrid->add('eventType', 'doctrine_orm_callback', array(
-            'label' => 'Event type',
+        $datagrid->add('description', 'doctrine_orm_callback', array(
+            'label' => 'Title',
             'callback' => function ($queryBuilder, $alias, $field, $values) {
                 if(!$values['value'])
                 {
                     return;
                 }
 
-                $queryBuilder->andWhere($alias . '.eventType = :type OR ' . $alias . '.eventTypeOther = :type');
-                $queryBuilder->setParameter('type', $values['value']);
+                $queryBuilder->andWhere($alias.'.description = :description OR '.$alias.'.descriptionOther = :description');
+                $queryBuilder->setParameter('description', $values['value']);
             },
+            'field_type' => 'choice',
             'field_options' => array(
                 'required' => false,
+                'choices' => $this->getDescriptionChoices()
             )
-        ));
-        $datagrid->add('callStatus', 'doctrine_orm_choice', array(
-            'label' => 'Call status',
+        ));            
+        $datagrid->add('eventType', null, array(
+            'label' => 'Event type',
+            'field_type' => 'choice',
             'field_options' => array(
                 'required' => false,
-            ),
-            'choices' => LeadEvent::getCallStatusChoices()
-        ));
+                'choices' => LeadEvent::getEventTypeChoices()
+            )
+        ));                        
         $datagrid->add('contactPerson', null, array('label' => 'Contact Person'));
         $datagrid->add('dataCounty', 'doctrine_orm_callback', array(
-            'label' => 'County Data',
+            'label' => 'Outreach County',
             'callback' => function ($queryBuilder, $alias, $field, $values) {
                 if(!$values['value'])
                 {
@@ -199,7 +207,6 @@ class LeadEventAdmin extends Admin
         
     public $hiddenFilters = array(
         'contactPerson' => true,
-        'callStatus' => true
     );
 
     public function initializeDefaultFilters()
@@ -211,14 +218,14 @@ class LeadEventAdmin extends Admin
     {
         $spreadsheetMapper
             ->add('Lead', array('type' => 'relation', 'relation_field_name' => 'Lead_id', 'relation_repository' => 'GJGNYDataToolBundle:Lead'))
+            ->add('description', array('label' => 'Title'))
+            ->add('descriptionOther', array('label' => 'Title'))
             ->add('eventType', array('label' => 'Event Type'))
-            ->add('eventTypeOther', array('label' => 'Other Event Type'))
+            ->add('eventTypeOther', array('label' => 'Event Type'))
             ->add('contactPerson', array('label' => 'Contact Person'))
             ->add('date', array('label' => 'Date of event', 'type' => 'date'))
-            ->add('description', array('label' => 'Description'))
             ->add('notes', array('label' => 'Notes'))
             ->add('callStatus', array('label' => 'Call status'))
-            ->add('WhatWasDiscussed', array('label' => 'What was discussed?'))
             ->add('actionsTaken', array('label' => 'Actions taken'))
             ->add('FollowUpItems', array('label' => 'Items to follow-up on in future'))
             ->add('callNotes', array('label' => 'Notes'))
@@ -229,6 +236,7 @@ class LeadEventAdmin extends Admin
     {
         $summaryMapper
             ->addXField('eventType', array('label' => 'Event Type', 'other_field' => 'eventTypeOther'))
+            ->addXField('description', array('label' => 'Title', 'other_field' => 'descriptionOther'))
             ->addXField('contactPerson', array('label' => 'Contact Person'))
             ->addYField('date', array('label' => 'Date', 'type' => 'date'))
         ;
@@ -236,36 +244,26 @@ class LeadEventAdmin extends Admin
 
     // Show ======================================================================
     // ===========================================================================
-    public $showPreHook = array(
-        'template' => 'GJGNYDataToolBundle:LeadEvent:_leadLink.html.twig',
+    public $hideEmptyShowFields = true;
+    public $hideableShowFieldBlacklist = array(
+        'eventType'
     );
     
-    public function initializeShowHooks()
-    {
-        $this->showPreHook['parameters'] = array(
-            'LeadAdmin' =>  $this->configurationPool->getContainer()->get('gjgny.datatool.admin.lead')
-        );
-    }
-    public $hideEmptyShowFields = true;
-
     protected function configureShowField(ShowMapper $showMapper)
     {
         $showMapper
             ->with('Basic Event Data')
-                ->add('eventType', null, array('label' => 'Event Type'))
-                ->add('eventTypeOther', null, array('label' => 'other'))
+                ->add('Lead')
+                ->add('description', null, array('label' => 'Title'))
+                ->add('eventType', null, array('label' => 'Event Type', 'template' => 'GJGNYDataToolBundle:LeadEvent:_eventTypeShow.html.twig'))
                 ->add('date', null, array('label' => 'Date of Event'))
                 ->add('contactPerson', null, array('label' => 'Contact Person'))
-                ->add('description', null, array('label' => 'Description'))
-                ->add('WhatWasDiscussed', null, array('label' => 'What was discussed?'))
+                ->add('notes', null, array('label' => 'Notes'))
                 ->add('actionsTaken', null, array('label' => 'Actions Taken'))
                 ->add('FollowUpItems', null, array('label' => 'Follow-Up Items'))
-                ->add('notes', null, array('label' => 'Notes'))
             ->end()
             ->with('Phone Call Data')
                 ->add('callStatus', null, array('label' => 'Call Status'))
-                ->add('callNotes', null, array('label' => 'Call Notes'))
-//                ->add('canWeCallBack', null, array('label' => 'Can we call back?'))
             ->end()
                 ->with('Training Referral')
                 ->add('institution', null, array('label' => 'Institution'))
@@ -284,13 +282,10 @@ class LeadEventAdmin extends Admin
                 ->add('datetimeLastUpdated', null, array('label' => 'Date Last Updated'))
             ->end()
         ;
-        
-        $this->initializeShowHooks();
     }    
 
     public $showFieldClasses = array (
         'lutCouponType' => 'indented',
-        'eventTypeOther' => 'indented'
     );
 
     
@@ -302,6 +297,11 @@ class LeadEventAdmin extends Admin
         $LeadEvent->setEnteredBy($user);
         $LeadEvent->setLastUpdatedBy($user);
 
+        if($LeadEvent->getDescriptionOther()) {
+            $LeadEvent->setDescription($LeadEvent->getDescriptionOther());
+            $LeadEvent->setDescriptionOther(null);
+        }
+        
         parent::prePersist($LeadEvent);
     }
 
@@ -310,8 +310,47 @@ class LeadEventAdmin extends Admin
         $LeadEvent->setDatetimeLastUpdated(new \DateTime());
         $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
         $LeadEvent->setLastUpdatedBy($user);
-
+        
+        if($LeadEvent->getDescriptionOther()) {
+            $LeadEvent->setDescription($LeadEvent->getDescriptionOther());
+            $LeadEvent->setDescriptionOther(null);
+        }
+        
         parent::preUpdate($LeadEvent);
+    }
+    
+    public function getDescriptionChoices()
+    {
+        $descriptionChoices = array();
+        $em = $this->configurationPool->getContainer()->get('doctrine')->getEntityManager();
+        $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
+
+        $distinctdescriptionQuery = $em->createQuery(
+            'SELECT distinct(le.description) FROM GJGNYDataToolBundle:LeadEvent le JOIN le.Lead l WHERE l.dataCounty=:county'
+        )->setParameter('county', $user->getCounty());
+        $otherdescriptionQuery = $em->createQuery(
+            'SELECT distinct(le.descriptionOther) FROM GJGNYDataToolBundle:LeadEvent le JOIN le.Lead l WHERE l.dataCounty=:county'
+        )->setParameter('county', $user->getCounty());
+        
+        $distinctdescriptions = $distinctdescriptionQuery->getResult();
+        $otherdescriptions = $otherdescriptionQuery->getResult();
+                
+        foreach($distinctdescriptions as $type)
+        {
+            if(isset($type['description']) && trim($type['description']) != "") {
+                $descriptionChoices[$type['description']] = $type['description'];                
+            }
+        }
+        foreach($otherdescriptions as $type)
+        {
+            if(isset($type['descriptionOther']) && trim($type['descriptionOther']) != "") {
+                $descriptionChoices[$type['descriptionOther']] = $type['descriptionOther'];                
+            }
+        }
+        
+        natcasesort($descriptionChoices);
+       
+        return $descriptionChoices;
     }
 
 }
