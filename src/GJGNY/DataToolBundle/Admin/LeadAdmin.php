@@ -611,6 +611,7 @@ class LeadAdmin extends Admin
                 ->add('datetimeEntered', null, array('label' => 'Date Entered'))
                 ->add('lastUpdatedBy', null, array('label' => 'Last Updated By'))
                 ->add('datetimeLastUpdated', null, array('label' => 'Date Last Updated'))
+                ->add('uploadedViaXLS', 'boolean', array('label' => 'Uploaded in Spreadsheet'))
             ->end()
         ;
         

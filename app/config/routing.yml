@@ -25,10 +25,15 @@ adminHome:
 getProgramDate:
   pattern: /getProgramDate/{id}
   defaults: { _controller: GJGNYDataToolBundle:Program:getProgramDate, id: 0 }
+
+uploadXLS:
+  pattern: /uploadXLS/{filename}
+  defaults: { _controller: GJGNYDataToolBundle:Spreadsheet:XLSToDB  }
   
 sonata_user_impersonating:
   pattern: /admin/dashboard
   defaults: { _controller: SonataAdminBundle:Core:dashboard }
+  
   
 # ADMIN =====================
 admin:
@@ -39,8 +44,6 @@ _sonata_admin:
     resource: .
     type: sonata_admin
     prefix: /admin
-    
-        
     
 # FOSUser Bundle
 fos_user_security:

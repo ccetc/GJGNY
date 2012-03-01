@@ -157,13 +157,6 @@ class Lead
     protected $Program;
 
     /**
-     * @var string $dataCounty
-     *
-     * @ORM\Column(name="dataCounty", type="string", length=255, nullable="true")
-     */
-    private $dataCounty;
-
-    /**
      * @var integer $id
      *
      * @ORM\Column(name="id", type="integer")
@@ -666,14 +659,21 @@ class Lead
      */
     private $october2011Raffle;
 
-    // temporary fields  =================================================================
+    // utility fields  =================================================================
     // =========================================================================
     /**
-     * @var smallint $ELPincomplete
+     * @var smallint $uploadedViaXls
      *
-     * @ORM\Column(name="ELPincomplete", type="boolean", nullable="true")
+     * @ORM\Column(name="uploadedViaXls", type="boolean", nullable="true")
      */
-    private $ELPincomplete;
+    private $uploadedViaXls;
+    /**
+     * @var string $dataCounty
+     *
+     * @ORM\Column(name="dataCounty", type="string", length=255, nullable="true")
+     */
+    private $dataCounty;
+
     
     /**
      * Get id
@@ -2222,5 +2222,25 @@ class Lead
     public function getNeedToCall()
     {
         return $this->needToCall;
+    }
+
+    /**
+     * Set uploadedViaXls
+     *
+     * @param boolean $uploadedViaXls
+     */
+    public function setUploadedViaXls($uploadedViaXls)
+    {
+        $this->uploadedViaXls = $uploadedViaXls;
+    }
+
+    /**
+     * Get uploadedViaXls
+     *
+     * @return boolean 
+     */
+    public function getUploadedViaXls()
+    {
+        return $this->uploadedViaXls;
     }
 }

@@ -1,21 +1,24 @@
 
-  <h1>Created</h1>
+  <h1>Inserted {{ insertions|length }} Items</h1>
 
   {% for text in insertions %}
     {{ text }}<br/>
   {% endfor %}
 
-  <br/>
-  <h1>Deleted</h1>
+  <h1>Deleted {{ deletions|length }} Items</h1>
 
   {% for text in deletions %}
     {{ text }}<br/>
   {% endfor %}
 
-  <br/>
-  <h1>Updated or Unchanged</h1>
+  <h1>Updated {{ updates|length }} Items</h1>
 
   {% for text in updates %}
     {{ text }}<br/>
   {% endfor %}
 
+  <h1>Found {{ duplicates|length }} Duplicates</h1>
+
+  {% for text in duplicates %}
+    {{ text }}<br/>
+  {% endfor %}    

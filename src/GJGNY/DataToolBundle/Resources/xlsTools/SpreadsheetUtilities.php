@@ -5,106 +5,116 @@ namespace GJGNY\DataToolBundle\Resources\xlsTools;
 class SpreadsheetUtilities
 {
 
-  private $spreadsheet;
-  public $insertions = array();
-  public $deletions = array();
-  public $updates = array();
+    private $spreadsheet;
+    public $entityManager;
+    public $insertions;
+    public $updates;
+    public $deletions;
+    public $duplicates;
 
-  public function __construct($filename)
-  {
-    $this->spreadsheet = \PHPExcel_IOFactory::load($filename);
-  }
-
-  public function getVal($cell)
-  {
-      if(trim($this->spreadsheet->getActiveSheet()->getCell($cell)->getValue()) == "")
-      {
-          return null;
-      }
-      else
-      {
-        return trim($this->spreadsheet->getActiveSheet()->getCell($cell)->getValue());      
-      }
-  }
-
-  protected function getBoolVal($cell)
-  {
-    if($this->isYes($this->getVal($cell)))
+    public function __construct($filename, $entityManager)
     {
-      return 'yes';
+        $this->spreadsheet = \PHPExcel_IOFactory::load($filename);
+        $this->entityManager = $entityManager;
+        $this->insertions = array();
+        $this->updates = array();
+        $this->deletions = array();
+        $this->duplicates = array();
     }
-    else if($this->isNo($this->getVal($cell)))
+
+    public function processRows()
     {
-      return 'no';
-    }
-    else
-      return false;
-  }
+        $row = 2;
+        $atAnEmptyRow = false;
+        while(!$atAnEmptyRow) {
+            if($this->rowIsEmpty($row)) {
+                $atAnEmptyRow = true;
+            } else {
+                $this->processRow($row);
+            }
 
-  protected function getDateVal($cell)
-  {
-    if(trim($this->getVal($cell)) != "" && trim($this->getVal($cell)) != "N/A" && trim($this->getVal($cell)) != "n/a")
+            $row++;
+        }
+    }
+    
+    public function processRow($row) {
+
+    }
+
+    public function rowIsEmpty($row)
     {
-      $val = trim($this->getVal($cell));
-      return \PHPExcel_Style_NumberFormat::toFormattedString($val, "M/D/YYYY");
+        return trim($this->getVal('A' . $row)) == ''
+                && trim($this->getVal('B' . $row)) == ''
+                && trim($this->getVal('C' . $row)) == ''
+                && trim($this->getVal('D' . $row)) == ''
+                && trim($this->getVal('E' . $row)) == ''
+                && trim($this->getVal('F' . $row)) == '';
     }
-    else
-      return false;
-  }
 
-   protected function getTimeVal($cell)
-  {
-    if(trim($this->getVal($cell)) != "" && trim($this->getVal($cell)) != "N/A" && trim($this->getVal($cell)) != "n/a")
+    public function persistObject($object)
     {
-      $val = trim($this->getVal($cell));
-      return \PHPExcel_Style_NumberFormat::toFormattedString($val, "H:i:s");
+        $this->entityManager->persist($object);
+        $this->entityManager->flush();
     }
-    else
-      return false;
-  }
 
-  
-  protected function getDateTimeVal($cell)
-  {
-    if(trim($this->getVal($cell)) != "" && trim($this->getVal($cell)) != "N/A" && trim($this->getVal($cell)) != "n/a")
+    public function getVal($cell)
     {
-      $val = trim($this->getVal($cell));
-      return \PHPExcel_Style_NumberFormat::toFormattedString($val, "M/D/YYYY H:i:s");
+        if(trim($this->spreadsheet->getActiveSheet()->getCell($cell)->getValue()) == "") {
+            return null;
+        } else {
+            return trim($this->spreadsheet->getActiveSheet()->getCell($cell)->getValue());
+        }
     }
-    else
-      return false;
-  }  
-  
-  protected function getTextVal($cell)
-  {
-    if(trim($this->getVal($cell)) != "" && trim($this->getVal($cell)) != "N/A" && trim($this->getVal($cell)) != "n/a")
+
+    protected function getBoolVal($cell)
     {
-      return trim($this->getVal($cell));
+        if($this->isYes($this->getVal($cell))) {
+            return true;
+        } else if($this->isNo($this->getVal($cell))) {
+            return false;
+        } else {
+            return null;
+        }
     }
-    else
-      return false;
-  }
 
-  protected function isYes($value)
-  {
-    $value = (string) $value;
-    $value = trim(strtoupper($value));
-    return in_array($value, array('YES', 'Y', '1'));
-  }
+    protected function isYes($value)
+    {
+        $value = (string) $value;
+        $value = trim(strtoupper($value));
+        return in_array($value, array('YES', 'Y', '1'));
+    }
 
-  protected function isNo($value)
-  {
-    $value = (string) $value;
-    $value = trim(strtoupper($value));
-    return in_array($value, array('NO', 'n', '0'));
-  }
+    protected function isNo($value)
+    {
+        $value = (string) $value;
+        $value = trim(strtoupper($value));
+        return in_array($value, array('NO', 'N', '0'));
+    }
 
-  protected function makeStringBool($string)
-  {
-    if($string == 'yes')
-      return true;
-    else
-      return false;
-  }
+    protected function getDateVal($cell)
+    {
+        return $this->getAbstractDateTimeVal($cell, "M/D/YYYY");
+    }
+
+    protected function getTimeVal($cell)
+    {
+        return $this->getAbstractDateTimeVal($cell, "H:i:s");
+    }
+
+    protected function getDateTimeVal($cell)
+    {
+        return $this->getAbstractDateTimeVal($cell, "M/D/YYYY H:i:s");
+    }
+
+    protected function getAbstractDateTimeVal($cell, $pattern)
+    {
+        $val = $this->getVal($cell);
+
+        if(isset($val)) {
+            return \PHPExcel_Style_NumberFormat::toFormattedString($val, $pattern);
+        } else {
+            return null;
+        }
+    }
 
 }

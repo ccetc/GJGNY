@@ -5,35 +5,38 @@ namespace GJGNY\DataToolBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use GJGNY\DataToolBundle\Resources\xlsTools;
 
 class SpreadsheetController extends Controller
 {
 
-  public function XLSToDBAction($type)
-  {
-    $leadRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:Lead');
-    $leadEventRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:LeadEvent');
-    $userRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:User');
-    $entityManager = $this->getDoctrine()->getEntityManager();
-
-    switch($type)
+    public function XLSToDBAction($filename)
     {
-      case 'Dryden':
-      case 'Tompkins':
-        $tool = new \GJGNY\DataToolBundle\Resources\xlsTools\LUT('xls/'.$type.'.xls');
-        break;
-      default:
-        break;
+        $entityManager = $this->getDoctrine()->getEntityManager();
+        $leadRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:Lead');
+
+        switch($filename) {
+            case 'GreenBackA':
+            case 'GreenBackB':
+            case 'GreenBackC':
+                $programRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:Program');
+                $spreadsheet = new xlsTools\GreenBack('xls/' . $filename . '.xls', $entityManager, $leadRepository, $programRepository, $filename);
+                $spreadsheet->processRows();
+                break;
+            default:
+                break;
+        }
+        
+        $templateParameters = array();
+        
+        if(isset($spreadsheet)) {
+            $templateParameters['insertions'] = $spreadsheet->insertions;
+            $templateParameters['updates'] = $spreadsheet->updates;
+            $templateParameters['deletions'] = $spreadsheet->deletions;
+            $templateParameters['duplicates'] = $spreadsheet->duplicates;
+        }
+
+        return $this->render('GJGNYDataToolBundle:Spreadsheets:results.html.twig', $templateParameters);
     }
-    $tool->xlsToDB($leadRepository, $leadEventRepository, $userRepository, $entityManager);
-
-
-
-    return $this->render('GJGNYDataToolBundle:Spreadsheets:results.html.twig', array(
-        'insertions' => $tool->insertions,
-        'updates' => $tool->updates,
-        'deletions' => $tool->deletions,
-    ));
-  }
 
 }

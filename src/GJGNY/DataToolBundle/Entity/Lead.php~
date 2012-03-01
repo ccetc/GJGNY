@@ -85,6 +85,7 @@ class Lead
     protected static $leadStatusChoices = array(
         'active lead' => 'active lead',
         'process complete' => 'process complete',
+        'had previous upgrade' => 'had previous upgrade',
         'not interested' => 'not interested',
         'referred out of program' => 'referred out of program'
     );
@@ -668,11 +669,11 @@ class Lead
     // temporary fields  =================================================================
     // =========================================================================
     /**
-     * @var smallint $ELPincomplete
+     * @var smallint $uploadedViaXls
      *
-     * @ORM\Column(name="ELPincomplete", type="boolean", nullable="true")
+     * @ORM\Column(name="uploadedViaXls", type="boolean", nullable="true")
      */
-    private $ELPincomplete;
+    private $uploadedViaXls;
     
     /**
      * Get id
@@ -2201,5 +2202,25 @@ class Lead
     public function getCampaignChoiceOther()
     {
         return $this->campaignChoiceOther;
+    }
+
+    /**
+     * Set needToCall
+     *
+     * @param boolean $needToCall
+     */
+    public function setNeedToCall($needToCall)
+    {
+        $this->needToCall = $needToCall;
+    }
+
+    /**
+     * Get needToCall
+     *
+     * @return boolean 
+     */
+    public function getNeedToCall()
+    {
+        return $this->needToCall;
     }
 }
