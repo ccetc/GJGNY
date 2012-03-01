@@ -107,7 +107,22 @@ class Lead
         'Multifamily' => 'Multifamily',
         "Commercial / Non-Profit / Gov't" => "Commercial / Non-Profit / Gov't",
     );
+    
+    protected static $CRISStatusChoices = array(
+        'Approved for free audit' => 'Approved for free audit',
+        'Approved for reduced cost audit' => 'Approved for reduced cost audit',
+        'Customer Ineligible' => 'Customer Ineligible',
+        'Pending/Hold - Customer' => 'Pending/Hold - Customer',
+        'Customer selected HP contractor' => 'Customer selected HP contractor',
+        'HP Audit Complete' => 'HP Audit Complete'
+    );
 
+    public static function getCRISStatusChoices()
+    {
+        return self::$CRISStatusChoices;
+    }
+    
+            
     public static function getLeadCategoryChoices()
     {
         return self::$leadCategoryChoices;
@@ -155,13 +170,6 @@ class Lead
      * @ORM\JoinColumn(name="Program_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $Program;
-
-    /**
-     * @var string $dataCounty
-     *
-     * @ORM\Column(name="dataCounty", type="string", length=255, nullable="true")
-     */
-    private $dataCounty;
 
     /**
      * @var integer $id
@@ -220,7 +228,7 @@ class Lead
     /**
      * @var integer $Zip
      *
-     * @ORM\Column(name="Zip", type="string", length=5, nullable="true")
+     * @ORM\Column(name="Zip", type="string", length=125, nullable="true")
      */
     private $Zip;
 
@@ -505,6 +513,13 @@ class Lead
      * @ORM\Column(name="dateOfUpgrade", type="date", nullable="true")
      */
     private $dateOfUpgrade;
+    /**
+     * @var string $CRISStatus
+     *
+     * @ORM\Column(name="CRISStatus", type="string", length=255, nullable="true")
+     */
+    private $CRISStatus;
+
 
     /**
      * @var date $upgradeStatusNotes
@@ -666,7 +681,7 @@ class Lead
      */
     private $october2011Raffle;
 
-    // temporary fields  =================================================================
+    // utility fields  =================================================================
     // =========================================================================
     /**
      * @var smallint $uploadedViaXls
@@ -674,6 +689,13 @@ class Lead
      * @ORM\Column(name="uploadedViaXls", type="boolean", nullable="true")
      */
     private $uploadedViaXls;
+    /**
+     * @var string $dataCounty
+     *
+     * @ORM\Column(name="dataCounty", type="string", length=255, nullable="true")
+     */
+    private $dataCounty;
+
     
     /**
      * Get id
@@ -2222,5 +2244,45 @@ class Lead
     public function getNeedToCall()
     {
         return $this->needToCall;
+    }
+
+    /**
+     * Set uploadedViaXls
+     *
+     * @param boolean $uploadedViaXls
+     */
+    public function setUploadedViaXls($uploadedViaXls)
+    {
+        $this->uploadedViaXls = $uploadedViaXls;
+    }
+
+    /**
+     * Get uploadedViaXls
+     *
+     * @return boolean 
+     */
+    public function getUploadedViaXls()
+    {
+        return $this->uploadedViaXls;
+    }
+
+    /**
+     * Set CRISStatus
+     *
+     * @param string $cRISStatus
+     */
+    public function setCRISStatus($cRISStatus)
+    {
+        $this->CRISStatus = $cRISStatus;
+    }
+
+    /**
+     * Get CRISStatus
+     *
+     * @return string 
+     */
+    public function getCRISStatus()
+    {
+        return $this->CRISStatus;
     }
 }

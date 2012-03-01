@@ -84,7 +84,8 @@ class LeadAdmin extends Admin
                     ->add('step3aContractor', null, array('label' => 'Name of contractor', 'required' => false))
                     ->add('step3bWorkDone', null, array('label' => 'What was done (air sealing, insulating, upgrade heating system, etc.)', 'required' => false))
                     ->add('step3cHowFinanced', 'choice', array('required' => false, 'label' => 'How was it financed', 'choices' => Lead::getHowAssessmentFinancedChoices()))
-                    ->add('upgradeStatusNotes', null, array('label' => 'Notes', 'required' => false))
+                ->add('CRISStatus', 'choice', array('label' => 'CRIS Status', 'required' => false, 'choices' => Lead::getCRISStatusChoices()))
+                ->add('upgradeStatusNotes', null, array('label' => 'Notes', 'required' => false))
             ->end()
             ->with('Outreach')
                 ->add('CommunityGroupsConnectedTo', null, array('label' => 'Community groups connected to', 'required' => false))
@@ -488,6 +489,7 @@ class LeadAdmin extends Admin
             ->add('step3aContractor', array('label' => 'Name of contractor'))
             ->add('step3bWorkDone', array('label' => 'What was done?'))
             ->add('step3cHowFinanced', array('label' => 'How was it financed'))
+            ->add('CRISStatus', array('label' => 'CRIS Status'))
                 
 
         ;
@@ -558,6 +560,7 @@ class LeadAdmin extends Admin
                 ->add('step3bWorkDone', null, array('label' => 'What was done?'))
                 ->add('step3cHowFinanced', null, array('label' => 'How was it financed?'))
                 ->add('upgradeStatusNotes', null, array('label' => 'Notes'))
+                ->add('CRISStatus', null, array('label' => 'CRIS Status'))
             ->end()
             ->with('Outreach')
                 ->add('CommunityGroupsConnectedTo', null, array('label' => 'Community groups connected to'))
@@ -611,7 +614,7 @@ class LeadAdmin extends Admin
                 ->add('datetimeEntered', null, array('label' => 'Date Entered'))
                 ->add('lastUpdatedBy', null, array('label' => 'Last Updated By'))
                 ->add('datetimeLastUpdated', null, array('label' => 'Date Last Updated'))
-                ->add('uploadedViaXLS', 'boolean', array('label' => 'Uploaded in Spreadsheet'))
+                ->add('uploadedViaXLS', 'boolean', array('label' => 'Uploaded via Spreadsheet'))
             ->end()
         ;
         
@@ -655,9 +658,9 @@ class LeadAdmin extends Admin
         $Lead->setDatetimeEntered(new \DateTime());
         $Lead->setDatetimeLastUpdated(new \DateTime());
         $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
-        if(!$Lead->getEnteredBy()) $Lead->setEnteredBy($user);
-        $Lead->setLastUpdatedBy($user);
-        $Lead->setDataCounty($user->getCounty());
+        if(!$Lead->getEnteredBy()) $Lead->setEnteredBy($user); // could be set in form
+        $Lead->setLastUpdatedBy($user);        
+        if(!$Lead->getDataCounty()) $Lead->setDataCounty($user->getCounty()); // could be set in spreadsheet import
 
         parent::prePersist($Lead);
     }

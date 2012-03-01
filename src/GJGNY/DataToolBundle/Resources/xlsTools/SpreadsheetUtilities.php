@@ -6,16 +6,16 @@ class SpreadsheetUtilities
 {
 
     private $spreadsheet;
-    public $entityManager;
+    public $admin;
     public $insertions;
     public $updates;
     public $deletions;
     public $duplicates;
 
-    public function __construct($filename, $entityManager)
+    public function __construct($filename, $admin)
     {
         $this->spreadsheet = \PHPExcel_IOFactory::load($filename);
-        $this->entityManager = $entityManager;
+        $this->admin = $admin;
         $this->insertions = array();
         $this->updates = array();
         $this->deletions = array();
@@ -53,8 +53,7 @@ class SpreadsheetUtilities
 
     public function persistObject($object)
     {
-        $this->entityManager->persist($object);
-        $this->entityManager->flush();
+        $this->admin->create($object);
     }
 
     public function getVal($cell)

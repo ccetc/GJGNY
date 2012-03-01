@@ -10,11 +10,11 @@ class BasicLeadUpload extends SpreadsheetUtilities
 {
     public $leadRepository;
     
-    public function __construct($filename, $entityManager, $leadRepository)
+    public function __construct($filename, $admin, $leadRepository)
     {
         $this->leadRepository = $leadRepository;
         
-        parent::__construct($filename, $entityManager);
+        parent::__construct($filename, $admin);
     }    
 
     public function processRow($row)
@@ -32,20 +32,21 @@ class BasicLeadUpload extends SpreadsheetUtilities
     
     public function checkForDuplicates($row)
     {
-        $firstAndLastName = $this->leadRepository->findBy(array(
+        $firstAndLastNameAndCity = $this->leadRepository->findOneBy(array(
             'FirstName' => $this->getFirstName($row),
-            'LastName' => $this->getLastName($row)
+            'LastName' => $this->getLastName($row),
+            'City' => $this->getCity($row)            
         ));
         
-        $lastNameAndAddress = $this->leadRepository->findBy(array(
+        $lastNameAndAddress = $this->leadRepository->findOneBy(array(
             'Address' => $this->getAddress($row),
             'LastName' => $this->getLastName($row)
         ));
         
-        if($firstAndLastName) {
-            return true;
+        if($firstAndLastNameAndCity) {
+            return $firstAndLastNameAndCity;
         } else if($lastNameAndAddress) {
-            return true;
+            return $lastNameAndAddress;
         } else {
             return false;
         }
@@ -86,77 +87,77 @@ class BasicLeadUpload extends SpreadsheetUtilities
         
     }
        
-    private function getFirstName($row)
+    protected function getFirstName($row)
     {
         return $this->getVal('A' . $row);
     }
 
-    private function getLastName($row)
+    protected function getLastName($row)
     {
         return $this->getVal('B' . $row);
     }
 
-    private function getMiddleInitial($row)
+    protected function getMiddleInitial($row)
     {
         return $this->getVal('C' . $row);
     }
 
-    private function getAddress($row)
+    protected function getAddress($row)
     {
         return $this->getVal('D' . $row);
     }
 
-    private function getCity($row)
+    protected function getCity($row)
     {
         return $this->getVal('E' . $row);
     }
 
-    private function getState($row)
+    protected function getState($row)
     {
         return $this->getVal('F' . $row);
     }
 
-    private function getZip($row)
+    protected function getZip($row)
     {
         return $this->getVal('G' . $row);
     }
 
-    private function getTown($row)
+    protected function getTown($row)
     {
         return $this->getVal('H' . $row);
     }
 
-    private function getCounty($row)
+    protected function getCounty($row)
     {
         return $this->getVal('I' . $row);
     }
 
-    private function getPrimaryPhone($row)
+    protected function getPrimaryPhone($row)
     {
         return $this->getVal('J' . $row);
     }
 
-    private function getPrimaryPhoneType($row)
+    protected function getPrimaryPhoneType($row)
     {
         return $this->getVal('K' . $row);
     }
 
-    private function getSecondaryPhone($row)
+    protected function getSecondaryPhone($row)
     {
         return $this->getVal('L' . $row);
     }
 
-    private function getSecondaryPhoneType($row)
+    protected function getSecondaryPhoneType($row)
     {
         return $this->getVal('M' . $row);
     }
 
-    private function getPersonalEmail($row)
+    protected function getPersonalEmail($row)
     {
         return $this->getVal('N' . $row);
     }
     
-    private function getWorkEmail($row)
+    protected function getWorkEmail($row)
     {
         return $this->getVal('O' . $row);
     }    

@@ -14,15 +14,19 @@ class SpreadsheetController extends Controller
     {
         $entityManager = $this->getDoctrine()->getEntityManager();
         $leadRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:Lead');
-
+        $leadAdmin = $this->get('gjgny.datatool.admin.lead');        
+        
         switch($filename) {
             case 'GreenBackA':
             case 'GreenBackB':
             case 'GreenBackC':
                 $programRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:Program');
-                $spreadsheet = new xlsTools\GreenBack('xls/' . $filename . '.xls', $entityManager, $leadRepository, $programRepository, $filename);
+                $spreadsheet = new xlsTools\GreenBack('xls/' . $filename . '.xls', $leadAdmin, $leadRepository, $programRepository, $filename);
                 $spreadsheet->processRows();
                 break;
+            case 'CRIS':
+                $spreadsheet = new xlsTools\CRIS('xls/' . $filename . '.xls', $leadAdmin, $leadRepository);
+                $spreadsheet->processRows();                
             default:
                 break;
         }

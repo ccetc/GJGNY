@@ -65,6 +65,7 @@ class Lead
     );
     protected static $SourceOfLeadChoices = array(
         'Contractor' => 'Contractor',
+        'CRIS Database' => 'CRIS Database',
         'Door to door canvas' => 'Door to door canvas',
         'E-mail' => 'E-mail',
         'Neighbor / Friends' => 'Neighbor / Friends',
@@ -107,7 +108,22 @@ class Lead
         'Multifamily' => 'Multifamily',
         "Commercial / Non-Profit / Gov't" => "Commercial / Non-Profit / Gov't",
     );
+    
+    protected static $CRISStatusChoices = array(
+        'Approved for free audit' => 'Approved for free audit',
+        'Approved for reduced cost audit' => 'Approved for reduced cost audit',
+        'Customer Ineligible' => 'Customer Ineligible',
+        'Pending/Hold - Customer' => 'Pending/Hold - Customer',
+        'Customer selected HP contractor' => 'Customer selected HP contractor',
+        'HP Audit Complete' => 'HP Audit Complete'
+    );
 
+    public static function getCRISStatusChoices()
+    {
+        return self::$CRISStatusChoices;
+    }
+    
+            
     public static function getLeadCategoryChoices()
     {
         return self::$leadCategoryChoices;
@@ -213,7 +229,7 @@ class Lead
     /**
      * @var integer $Zip
      *
-     * @ORM\Column(name="Zip", type="string", length=5, nullable="true")
+     * @ORM\Column(name="Zip", type="string", length=125, nullable="true")
      */
     private $Zip;
 
@@ -498,6 +514,13 @@ class Lead
      * @ORM\Column(name="dateOfUpgrade", type="date", nullable="true")
      */
     private $dateOfUpgrade;
+    /**
+     * @var string $CRISStatus
+     *
+     * @ORM\Column(name="CRISStatus", type="string", length=255, nullable="true")
+     */
+    private $CRISStatus;
+
 
     /**
      * @var date $upgradeStatusNotes
@@ -929,7 +952,6 @@ class Lead
     {
         $this->LeadEvents = new \Doctrine\Common\Collections\ArrayCollection();
         $this->DateOfLead = new \DateTime();
-        $this->ELPincomplete = 0;
         $this->State = 'NY';
     }
 
@@ -1964,26 +1986,6 @@ class Lead
     }
 
     /**
-     * Set ELPincomplete
-     *
-     * @param boolean $eLPincomplete
-     */
-    public function setELPincomplete($eLPincomplete)
-    {
-        $this->ELPincomplete = $eLPincomplete;
-    }
-
-    /**
-     * Get ELPincomplete
-     *
-     * @return boolean 
-     */
-    public function getELPincomplete()
-    {
-        return $this->ELPincomplete;
-    }
-
-    /**
      * Set postPledge
      *
      * @param string $postPledge
@@ -2242,5 +2244,25 @@ class Lead
     public function getUploadedViaXls()
     {
         return $this->uploadedViaXls;
+    }
+
+    /**
+     * Set CRISStatus
+     *
+     * @param string $cRISStatus
+     */
+    public function setCRISStatus($cRISStatus)
+    {
+        $this->CRISStatus = $cRISStatus;
+    }
+
+    /**
+     * Get CRISStatus
+     *
+     * @return string 
+     */
+    public function getCRISStatus()
+    {
+        return $this->CRISStatus;
     }
 }

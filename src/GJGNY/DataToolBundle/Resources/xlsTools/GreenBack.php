@@ -7,17 +7,15 @@ use \PHPExcel;
 /**
  */
 class GreenBack extends BasicLeadUpload
-{
-    
-    public $programSource;
+{    
     public $programRepository;
     public $sheetName;
     
-    public function __construct($filename, $entityManager, $leadRepository, $programRepository, $sheetName)
+    public function __construct($filename, $admin, $leadRepository, $programRepository, $sheetName)
     {
         $this->programRepository = $programRepository;
         $this->sheetName = $sheetName;
-        parent::__construct($filename, $entityManager, $leadRepository);
+        parent::__construct($filename, $admin, $leadRepository);
     }        
     
     public function setExtraFields($Lead, $row)
