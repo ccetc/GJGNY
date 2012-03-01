@@ -11,6 +11,12 @@ class CRIS extends BasicLeadUpload
     public function __construct($filename, $admin, $leadRepository)
     {
         parent::__construct($filename, $admin, $leadRepository);
+    
+        $this->fieldPairsToCheckForDuplicates[] = array(
+                'FirstName' => 'getFirstName',
+                'LastName' => 'getLastName',
+                'Zip' => 'getNormalZip'
+        );     
     }        
     
     public function processRow($row)
@@ -18,13 +24,13 @@ class CRIS extends BasicLeadUpload
         if($this->checkForDuplicates($row)) {
             $Lead = $this->checkForDuplicates($row);
             $Lead->setCRISStatus($this->getCRISStatus($row));
-            $this->persistObject($Lead);                
-            $this->updates[] = $this->getFirstName($row).' '.$this->getLastName($row);
+            $this->updateObject($Lead);                
+            $this->updates[] = $this->getFirstName($row).' '.$this->getLastName($row).' (match found : '.$Lead->getFirstName().' '.$Lead->getLastName().' '.$Lead->getCity().')';
         } else {
             $Lead = $this->createLead();
             $Lead = $this->setBasicFields($Lead, $row);
             $Lead = $this->setExtraFields($Lead, $row);
-            $this->persistObject($Lead);
+            $this->createObject($Lead);
             $this->insertions[] = $this->getFirstName($row).' '.$this->getLastName($row);
         }
     }
@@ -36,11 +42,10 @@ class CRIS extends BasicLeadUpload
         $Lead->setSourceOfLead('CRIS Database');
         $Lead->setDateOfLead(null);
         
-        $zip = $this->getZip($row);
-        $zipParts = explode('-', $zip);
-        if(in_array($zipParts[0], $this->tompkinsZips)) {
+        $normalZip = $this->getNormalZip($row);
+        if(in_array($normalZip, $this->tompkinsZips)) {
             $Lead->setDataCounty('Tompkins');            
-        } else if(in_array($zipParts[0], $this->broomeZips)) {
+        } else if(in_array($normalZip, $this->broomeZips)) {
             $Lead->setDataCounty('Broome');            
         }
         
@@ -90,6 +95,12 @@ class CRIS extends BasicLeadUpload
             return null;
         }
         
+    }
+    
+    protected function getNormalZip($row)
+    {
+        $zipParts = explode('-', $this->getZip($row));
+        return $zipParts[0];
     }
 
     protected function getPersonalEmail($row)

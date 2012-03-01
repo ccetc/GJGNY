@@ -4,8 +4,6 @@ namespace GJGNY\DataToolBundle\Resources\xlsTools;
 
 use \PHPExcel;
 
-/**
- */
 class BasicLeadUpload extends SpreadsheetUtilities
 {
     public $leadRepository;
@@ -14,45 +12,72 @@ class BasicLeadUpload extends SpreadsheetUtilities
     {
         $this->leadRepository = $leadRepository;
         
+        /**
+         * array of arrays of field name, method name pairs
+         */
+        $this->fieldPairsToCheckForDuplicates = array(
+            array(
+                'personalEmail' => 'getPersonalEmail'
+            ),
+            array(
+                'LastName' => 'getLastName',
+                'phone' => 'getPrimaryPhone'
+            ),
+            array(
+                'LastName' => 'getLastName',
+                'Address' => 'getAddress'
+            ),
+            array(
+                'FirstName' => 'getFirstName',
+                'LastName' => 'getLastName',
+                'Zip' => 'getZip'
+            )
+        );
+        
         parent::__construct($filename, $admin);
     }    
 
     public function processRow($row)
     {
         if($this->checkForDuplicates($row)) {
-            $this->duplicates[] = $this->getFirstName($row).' '.$this->getLastName($row);
+            $duplicate = $this->checkForDuplicates($row);
+            $this->duplicates[] = $this->getFirstName($row).' '.$this->getLastName($row).' (Duplicate: '.$duplicate->getFirstName().' '.$duplicate->getLastName.')';
         } else {
             $Lead = $this->createLead();
             $Lead = $this->setBasicFields($Lead, $row);
             $Lead = $this->setExtraFields($Lead, $row);
-            $this->persistObject($Lead);
+            $this->createObject($Lead);
             $this->insertions[] = $this->getFirstName($row).' '.$this->getLastName($row);
         }
     }
     
     public function checkForDuplicates($row)
     {
-        $firstAndLastNameAndCity = $this->leadRepository->findOneBy(array(
-            'FirstName' => $this->getFirstName($row),
-            'LastName' => $this->getLastName($row),
-            'City' => $this->getCity($row)            
-        ));
-        
-        $lastNameAndAddress = $this->leadRepository->findOneBy(array(
-            'Address' => $this->getAddress($row),
-            'LastName' => $this->getLastName($row)
-        ));
-        
-        if($firstAndLastNameAndCity) {
-            return $firstAndLastNameAndCity;
-        } else if($lastNameAndAddress) {
-            return $lastNameAndAddress;
-        } else {
-            return false;
-        }
+        foreach($this->fieldPairsToCheckForDuplicates as $fieldPairs)
+        {
+            $keysAndValues = array();
+            
+            foreach($fieldPairs as $field => $method)
+            {
+                if($this->$method($row)) $keysAndValues[$field] = $this->$method($row);
+            }
+            
+            // as long as there are some fields to check for
+            if(!empty($keysAndValues)) {
+                $result = $this->leadRepository->findOneBy($keysAndValues);
+
+                if($result) {
+                    return $result;
+                }
+            }    
                 
+        }
+        
+        return false;
     }
     
+    protected $fieldPairsToCheckForDuplicates = array();
+
     public function createLead()
     {
         return new \GJGNY\DataToolBundle\Entity\Lead();
@@ -84,7 +109,7 @@ class BasicLeadUpload extends SpreadsheetUtilities
     
     public function setExtraFields($Lead, $row)
     {
-        
+        // can be implemented by child class
     }
        
     protected function getFirstName($row)

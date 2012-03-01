@@ -2,14 +2,45 @@
 
 namespace GJGNY\DataToolBundle\Resources\xlsTools;
 
+/**
+ * Utilities to manage the importing of an xls spreadsheet with SonataAdminBundle
+ */
 class SpreadsheetUtilities
 {
-
+    /**
+     * The spreadsheet to import
+     * @var PHPExcel Spreadsheet
+     */
     private $spreadsheet;
+    
+    /**
+     * The SonataAdmin class to import to
+     * @var SonataAdmin/Admin
+     */
     public $admin;
+    
+    /**
+     * Array of string representations of insertions made
+     * @var string
+     */
     public $insertions;
+    
+    /**
+     * Array of string representations of updatse made
+     * @var string
+     */
     public $updates;
+    
+    /**
+     * Array of string representations of deletions made
+     * @var string
+     */
     public $deletions;
+    
+    /**
+     * Array of string representations of duplicates found and ignored
+     * @var string
+     */
     public $duplicates;
 
     public function __construct($filename, $admin)
@@ -24,7 +55,7 @@ class SpreadsheetUtilities
 
     public function processRows()
     {
-        $row = 2;
+        $row = 2; // assumes first row is headings
         $atAnEmptyRow = false;
         while(!$atAnEmptyRow) {
             if($this->rowIsEmpty($row)) {
@@ -38,7 +69,7 @@ class SpreadsheetUtilities
     }
     
     public function processRow($row) {
-
+        // should be implemented by a child class
     }
 
     public function rowIsEmpty($row)
@@ -51,11 +82,16 @@ class SpreadsheetUtilities
                 && trim($this->getVal('F' . $row)) == '';
     }
 
-    public function persistObject($object)
+    public function createObject($object)
     {
         $this->admin->create($object);
     }
 
+    public function updateObject($object)
+    {
+        $this->admin->update($object);
+    }
+    
     public function getVal($cell)
     {
         if(trim($this->spreadsheet->getActiveSheet()->getCell($cell)->getValue()) == "") {
