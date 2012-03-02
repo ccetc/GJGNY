@@ -20,6 +20,15 @@ class BasicLeadUpload extends SpreadsheetUtilities
                 'personalEmail' => 'getPersonalEmail'
             ),
             array(
+                'workEmail' => 'workEmail'
+            ),
+            array(
+                'personalEmail' => 'workEmail'
+            ),
+            array(
+                'workEmail' => 'personalEmail'
+            ),
+            array(
                 'LastName' => 'getLastName',
                 'phone' => 'getPrimaryPhone'
             ),
