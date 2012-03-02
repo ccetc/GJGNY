@@ -28,6 +28,22 @@ class BasicLeadUpload extends SpreadsheetUtilities
                 'phone' => 'getPrimaryPhone'
             ),
             array(
+                'LastName' => 'getLastName',
+                'secondaryPhone' => 'getPrimaryPhone'
+            ),
+            array(
+                'FirstName' => 'getFirstName',
+                'secondaryPhone' => 'getPrimaryPhone'
+            ),
+            array(
+                'LastName' => 'getLastName',
+                'phone' => 'getSecondaryPhone'
+            ),
+            array(
+                'FirstName' => 'getFirstName',
+                'phone' => 'getSecondaryPhone'
+            ),
+            array(
                 'FirstName' => 'getFirstName',
                 'Address' => 'getAddress'
             ),
@@ -68,16 +84,14 @@ class BasicLeadUpload extends SpreadsheetUtilities
             foreach($fieldPairs as $field => $method)
             {
                 if($this->$method($row)) $keysAndValues[$field] = $this->$method($row);
+                else break 2; // if any value is empty, it will throw off the pair (ex: check firstName + phone and phone is empty)
             }
             
-            // as long as there are some fields to check for
-            if(!empty($keysAndValues)) {
-                $result = $this->leadRepository->findOneBy($keysAndValues);
+            $result = $this->leadRepository->findOneBy($keysAndValues);
 
-                if($result) {
-                    return $result;
-                }
-            }    
+            if($result) {
+                return $result;
+            }
                 
         }
         
