@@ -85,7 +85,7 @@ class BasicLeadUpload extends SpreadsheetUtilities
             foreach($fieldPairs as $field => $method)
             {
                 if($this->$method($row)) $keysAndValues[$field] = $this->$method($row);
-                else $emptyValueFound; // if any value is empty, it will throw off the pair (ex: check firstName + phone and phone is empty)
+                else $emptyValueFound = true; // if any value is empty, it will throw off the pair (ex: check firstName + phone and phone is empty)
             }
             
             if(!$emptyValueFound) {
