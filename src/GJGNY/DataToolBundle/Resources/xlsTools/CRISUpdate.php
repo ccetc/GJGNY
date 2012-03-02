@@ -6,7 +6,7 @@ use \PHPExcel;
 
 /**
  */
-class CRIS extends BasicLeadUpload
+class CRISUpdate extends BasicLeadUpload
 {    
     public function __construct($filename, $admin, $leadRepository)
     {
@@ -25,7 +25,7 @@ class CRIS extends BasicLeadUpload
             $Lead = $this->checkForDuplicates($row);
             $Lead->setCRISStatus($this->getCRISStatus($row));
             $this->updateObject($Lead);                
-            $this->updates[] = $this->getFirstName($row).' '.$this->getLastName($row).' (match found : '.$Lead->getFirstName().' '.$Lead->getLastName().' '.$Lead->getCity().')';
+            $this->updates[] = $this->getFirstName($row).' '.$this->getLastName($row).' (match found : '.$Lead->getFirstName().' '.$Lead->getLastName().')';
         } else {
             $Lead = $this->createLead();
             $Lead = $this->setBasicFields($Lead, $row);

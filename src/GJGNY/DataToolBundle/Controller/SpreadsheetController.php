@@ -24,8 +24,8 @@ class SpreadsheetController extends Controller
                 $spreadsheet = new xlsTools\GreenBack('xls/' . $filename . '.xls', $leadAdmin, $leadRepository, $programRepository, $filename);
                 $spreadsheet->processRows();
                 break;
-            case 'CRIS':
-                $spreadsheet = new xlsTools\CRIS('xls/' . $filename . '.xls', $leadAdmin, $leadRepository);
+            case 'CRISUpdate':
+                $spreadsheet = new xlsTools\CRISUpdate('xls/' . $filename . '.xls', $leadAdmin, $leadRepository);
                 $spreadsheet->processRows();                
             default:
                 break;

@@ -24,6 +24,14 @@ class BasicLeadUpload extends SpreadsheetUtilities
                 'phone' => 'getPrimaryPhone'
             ),
             array(
+                'FirstName' => 'getFirstName',
+                'phone' => 'getPrimaryPhone'
+            ),
+            array(
+                'FirstName' => 'getFirstName',
+                'Address' => 'getAddress'
+            ),
+            array(
                 'LastName' => 'getLastName',
                 'Address' => 'getAddress'
             ),
