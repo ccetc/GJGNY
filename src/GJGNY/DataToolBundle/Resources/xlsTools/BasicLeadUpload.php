@@ -80,17 +80,20 @@ class BasicLeadUpload extends SpreadsheetUtilities
         foreach($this->fieldPairsToCheckForDuplicates as $fieldPairs)
         {
             $keysAndValues = array();
+            $emptyValueFound = false;
             
             foreach($fieldPairs as $field => $method)
             {
                 if($this->$method($row)) $keysAndValues[$field] = $this->$method($row);
-                else break 2; // if any value is empty, it will throw off the pair (ex: check firstName + phone and phone is empty)
+                else $emptyValueFound; // if any value is empty, it will throw off the pair (ex: check firstName + phone and phone is empty)
             }
             
-            $result = $this->leadRepository->findOneBy($keysAndValues);
+            if(!$emptyValueFound) {
+                $result = $this->leadRepository->findOneBy($keysAndValues);
 
-            if($result) {
-                return $result;
+                if($result) {
+                    return $result;
+                }
             }
                 
         }
