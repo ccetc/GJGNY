@@ -2,9 +2,13 @@
 	
 ## Future
 1.	Excel importing	
- - downloadable template		
-     - not all fields		
-	- basic info + event
+	- better duplicate checking
+		- LIKE %names%
+		- if just name matches, alert
+		- strip - ( ) and spaces from phones
+	- Generic Tool
+		- form fields and basic excel fields
+	- CRIS Tool
 2.	Portal Features
  - media page
 10.	Cleanup	Code

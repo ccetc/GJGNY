@@ -1,4 +1,6 @@
 # GJGNY - TODOfinished
+## 1.3.1 - refactored excel importing
+
 ## 1.3		
 1. <del>shorten view page
 2. <del>Portals
