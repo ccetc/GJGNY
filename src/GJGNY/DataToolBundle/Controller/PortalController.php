@@ -44,6 +44,7 @@ class PortalController extends Controller
                     ->add('firstName', 'text', array('label' => 'First Name'))
                     ->add('lastName', 'text', array('label' => 'Last Name'))
                     ->add('email', 'text', array('label' => 'E-mail'))
+                    ->add('phone', 'text', array('label' => 'Phone'))
                     ->add('town', 'text', array('label' => 'Town'))
                     ->add('county', 'choice', array('label' => 'County', 'choices' => $counties))
                     ->getForm();
@@ -78,7 +79,8 @@ class PortalController extends Controller
                     $lead->setNeedToCall(true);
                     $lead->setProgram($portalMatch->getNotificationProgram());
                     $lead->setDataCounty($portalMatch->getCountyOwnedBy());
-
+		    $lead->setPhone($data['phone']);
+		    
                     $newLeadLink = $this->getPageLink().'/admin/gjgny/datatool/lead/list'.
                             '?filter[Program][type]=&filter[Program][value]='.$portalMatch->getNotificationProgram()->getId().
                             '&filter[FirstName][type]=&filter[FirstName][value]='.$data['firstName'].
@@ -89,9 +91,8 @@ class PortalController extends Controller
                         $this->sendSignupNotificationEmail($lead, $notificationUser->getEmail(), $newLeadLink);
                     }
 
-                    $em = $this->getDoctrine()->getEntityManager();
-                    $em->persist($lead);
-                    $em->flush();
+	            $leadAdmin = $this->get('gjgny.datatool.admin.lead');        	    
+	            $leadAdmin->create($lead);
 
                     $session->setFlash('page-message', 'You have been signed up.  Thank you.');
 
