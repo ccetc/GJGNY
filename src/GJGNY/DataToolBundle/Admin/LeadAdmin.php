@@ -312,9 +312,7 @@ class LeadAdmin extends Admin
         $datagrid->add('step2bSubmitted', null, array('label' => 'GJGNY Application Submitted'));
         $datagrid->add('reportReceived', null, array('label' => 'Report Received'));
         $datagrid->add('step2dCompleted', null, array('label' => 'Assessment Complete'));
-        $datagrid->add('dateOfAssessment', 'doctrine_orm_date_range', array('label' => 'Date of Assessment'));
         $datagrid->add('step3', null, array('label' => 'Upgrade Complete'));
-        $datagrid->add('dateOfUpgrade', 'doctrine_orm_date_range', array('label' => 'Date of Upgrade'));
         
         $datagrid->add('october2011Raffle', 'doctrine_orm_callback', array(
             'label' => '10/11 Raffle',
@@ -376,6 +374,9 @@ class LeadAdmin extends Admin
         $datagrid->add('DateOfLead', 'doctrine_orm_date_range', array('label' => 'Date of First Contact'));
         $datagrid->add('DateOfNextFollowup', 'doctrine_orm_date_range', array('label' => 'Date of Next Follow-up'));
         $datagrid->add('datetimeEntered', 'doctrine_orm_date_range', array('label' => 'Date Entered'));
+        $datagrid->add('datetimeUpdated', 'doctrine_orm_date_range', array('label' => 'Date Updated'));
+        $datagrid->add('dateOfAssessment', 'doctrine_orm_date_range', array('label' => 'Date of Assessment'));
+        $datagrid->add('dateOfUpgrade', 'doctrine_orm_date_range', array('label' => 'Date of Upgrade'));
         
         $this->initializeDefaultFilters();
     }
@@ -412,6 +413,7 @@ class LeadAdmin extends Admin
         'commercial' => true,
         'multifamily' => true,
         'datetimeEntered' => true,
+        'datetimeUpdated' => true,
         'step2aInterested' => true,
         'step2bSubmitted' => true,
         'reportReceived' => true,
