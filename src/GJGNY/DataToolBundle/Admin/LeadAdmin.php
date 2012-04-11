@@ -374,7 +374,7 @@ class LeadAdmin extends Admin
         $datagrid->add('DateOfLead', 'doctrine_orm_date_range', array('label' => 'Date of First Contact'));
         $datagrid->add('DateOfNextFollowup', 'doctrine_orm_date_range', array('label' => 'Date of Next Follow-up'));
         $datagrid->add('datetimeEntered', 'doctrine_orm_date_range', array('label' => 'Date Entered'));
-        $datagrid->add('datetimeUpdated', 'doctrine_orm_date_range', array('label' => 'Date Updated'));
+        $datagrid->add('datetimeLastUpdated', 'doctrine_orm_date_range', array('label' => 'Date Updated'));
         $datagrid->add('dateOfAssessment', 'doctrine_orm_date_range', array('label' => 'Date of Assessment'));
         $datagrid->add('dateOfUpgrade', 'doctrine_orm_date_range', array('label' => 'Date of Upgrade'));
         
@@ -413,7 +413,7 @@ class LeadAdmin extends Admin
         'commercial' => true,
         'multifamily' => true,
         'datetimeEntered' => true,
-        'datetimeUpdated' => true,
+        'datetimeLastUpdated' => true,
         'step2aInterested' => true,
         'step2bSubmitted' => true,
         'reportReceived' => true,
