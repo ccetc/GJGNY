@@ -313,7 +313,33 @@ class LeadAdmin extends Admin
         $datagrid->add('reportReceived', null, array('label' => 'Report Received'));
         $datagrid->add('step2dCompleted', null, array('label' => 'Assessment Complete'));
         $datagrid->add('step3', null, array('label' => 'Upgrade Complete'));
-        
+        $datagrid->add('CRISStatus', 'doctrine_orm_choice', array(
+            'label' => 'CRIS Status',
+            'field_options' => array(
+                'required' => false,
+                'choices' => Lead::getCRISStatusChoices()
+            ),
+            'field_type' => 'choice'
+        ));
+	$datagrid->add('inCRIS', 'doctrine_orm_callback', array(
+            'label' => 'in CRIS',
+            'callback' => function($queryBuilder, $alias, $field, $values) {
+                if(!$values['value']) {
+                    return;
+                }
+                if($values['value'] == 'true') {
+                    $queryBuilder->andWhere($alias . '.CRISStatus IS NOT NULL AND '.$alias.'.CRISStatus!=:emptyString');
+                } else if($values['value'] == 'false'){
+		    $queryBuilder->andWhere($alias . '.CRISStatus IS NULL OR '.$alias.'.CRISStatus=:emptyString');
+		}
+                $queryBuilder->setParameter('emptyString',"");
+            },
+            'field_type' => 'choice',
+            'field_options' => array(
+                'required' => false,
+                'choices' => array('true' => 'true', 'false' => 'false')
+            )
+        ));	
         $datagrid->add('october2011Raffle', 'doctrine_orm_callback', array(
             'label' => '10/11 Raffle',
             'callback' => function($queryBuilder, $alias, $field, $values) {
@@ -422,7 +448,9 @@ class LeadAdmin extends Admin
         'dateOfUpgrade' => true,
         'dateOfAssessment' => true,
         'leadCategory' => true,
-        'leadEventTitle' => true
+        'leadEventTitle' => true,
+	'CRISStatus' => true,
+	'inCRIS' => true
     );
 
     protected function configureSpreadsheetFields(SpreadsheetMapper $spreadsheetMapper)
