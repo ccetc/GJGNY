@@ -520,8 +520,6 @@ class LeadAdmin extends Admin
             ->add('step3bWorkDone', array('label' => 'What was done?'))
             ->add('step3cHowFinanced', array('label' => 'How was it financed'))
             ->add('CRISStatus', array('label' => 'CRIS Status'))
-                
-
         ;
     }
     
