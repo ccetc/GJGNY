@@ -310,7 +310,6 @@ class LeadAdmin extends Admin
         ));
         $datagrid->add('step2aInterested', null, array('label' => 'Interested in Assessment'));
         $datagrid->add('step2bSubmitted', null, array('label' => 'GJGNY Application Submitted'));
-        $datagrid->add('reportReceived', null, array('label' => 'Report Received'));
         $datagrid->add('step2dCompleted', null, array('label' => 'Assessment Complete'));
         $datagrid->add('step3', null, array('label' => 'Upgrade Complete'));
         $datagrid->add('CRISStatus', 'doctrine_orm_choice', array(
@@ -340,24 +339,6 @@ class LeadAdmin extends Admin
                 'choices' => array('true' => 'true', 'false' => 'false')
             )
         ));	
-        $datagrid->add('october2011Raffle', 'doctrine_orm_callback', array(
-            'label' => '10/11 Raffle',
-            'callback' => function($queryBuilder, $alias, $field, $values) {
-                if(!$values['value'])
-                {
-                    return;
-                }
-                if($values['value'] == 'true')
-                {
-                    $queryBuilder->andWhere($alias . '.october2011Raffle = 1');
-                }
-            },
-            'field_type' => 'choice',
-            'field_options' => array(
-                'required' => false,
-                'choices' => array('true' => 'true')
-            )
-        ));
         $datagrid->add('leadEventTitle', 'doctrine_orm_callback', array(
             'label' => 'Has Event with Title',
             'callback' => function($queryBuilder, $alias, $field, $values) {
@@ -397,7 +378,6 @@ class LeadAdmin extends Admin
         $datagrid->add('landlord', null, array('label' => 'Landlord'));
         
         // leave the dates for last since they are tall
-        $datagrid->add('DateOfLead', 'doctrine_orm_date_range', array('label' => 'Date of First Contact'));
         $datagrid->add('DateOfNextFollowup', 'doctrine_orm_date_range', array('label' => 'Date of Next Follow-up'));
         $datagrid->add('datetimeEntered', 'doctrine_orm_date_range', array('label' => 'Date Entered'));
         $datagrid->add('datetimeLastUpdated', 'doctrine_orm_date_range', array('label' => 'Date Updated'));
@@ -429,8 +409,6 @@ class LeadAdmin extends Admin
         'leadType' => true,
         'Campaign' => true,
         'PathStep' => true,
-        'october2011Raffle' => true,
-        'DateOfLead' => true,
         'DateOfNextFollowup' => true,
         'leadCategory',
         'homeowner' => true,
@@ -442,7 +420,6 @@ class LeadAdmin extends Admin
         'datetimeLastUpdated' => true,
         'step2aInterested' => true,
         'step2bSubmitted' => true,
-        'reportReceived' => true,
         'step2dCompleted' => true,
         'step3' => true,
         'dateOfUpgrade' => true,
