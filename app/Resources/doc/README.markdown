@@ -19,3 +19,6 @@ There are about 10 places in the code where the set of counties using the data t
 The ``Lead`` Entity has many fields that are actually groups of boolean fields.  This is not easily supported by Doctrine or Sonata, and our implementation is shakey.
 
 The messiest piece of this is the display of form fields and show fields.  Each of these fields and groups of fields has a set of pre/post hooks that give the groups labels, and indent the fields.  This is particularly confusing for the first field of each group, since in needs two pre hooks.
+
+## Documentation
+All ISSUES, IDEAS, and FEATURES are documented on the [trello board](https://trello.com/board/gjgny-data-tool/4f8f2635067c6a6d600139e3).
