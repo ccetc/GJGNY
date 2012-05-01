@@ -12,6 +12,9 @@ class SpreadsheetController extends Controller
 
     public function XLSToDBAction($filename)
     {
+        ini_set('memory_limit', '1024M');
+        set_time_limit ( 0 );
+
         $entityManager = $this->getDoctrine()->getEntityManager();
         $leadRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:Lead');
         $leadAdmin = $this->get('gjgny.datatool.admin.lead');        
