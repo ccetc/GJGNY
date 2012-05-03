@@ -76,6 +76,7 @@ class LeadAdmin extends Admin
                 ->add('step2aInterested', null, array('label' => 'Interested in Home Energy assessment', 'required' => false))
                 ->add('step2bSubmitted', null, array('label' => 'GJGNY application submitted', 'required' => false))
                 ->add('step2dCompleted', null, array('label' => 'Assessment Complete', 'required' => false))
+                ->add('step2eContractor', null, array('label' => 'Name of contractor', 'required' => false))
                     ->add('dateOfAssessment', null, array('label' => 'Date', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
                 ->add('reportReceived', null, array('label' => 'Report Received', 'required' => false))
                 ->add('scopeOfWorkSubmitted', null, array('label' => 'Scope of Work Submitted', 'required' => false))
@@ -157,6 +158,7 @@ class LeadAdmin extends Admin
         'dateOfUpgrade' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'reportReceived' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'scopeOfWorkSubmitted' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'step2eContractor' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'step3aContractor' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'step3bWorkDone' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'step3cHowFinanced' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
@@ -191,6 +193,7 @@ class LeadAdmin extends Admin
         'dateOfUpgrade' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'reportReceived' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'scopeOfWorkSubmitted' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'step2eContractor' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'step3aContractor' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'step3bWorkDone' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'step3cHowFinanced' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
@@ -493,6 +496,7 @@ class LeadAdmin extends Admin
             ->add('scopeOfWorkSubmitted', array('label' => 'Scope of Work Submitted'))
             ->add('step3', array('label' => 'Upgrade Complete', 'type' => 'boolean'))
             ->add('dateOfUpgrade', array('label' => 'Date of Upgrade', 'type' => 'date'))
+            ->add('step2eContractor', array('label' => 'Name of contractor'))
             ->add('step3aContractor', array('label' => 'Name of contractor'))
             ->add('step3bWorkDone', array('label' => 'What was done?'))
             ->add('step3cHowFinanced', array('label' => 'How was it financed'))
@@ -506,6 +510,7 @@ class LeadAdmin extends Admin
             ->addYField('SourceOfLead', array('label' => 'Source of Lead'))
             ->addYField('Program', array('label' => 'Program Source','type' => 'relation', 'relation_field_name' => 'Program_id', 'relation_repository' => 'GJGNYDataToolBundle:Program'))
             ->addYField('DateOfLead', array('label' => 'Date of First Contact', 'type' => 'date'))
+            ->addXField('CRISStatus', array('label' => 'CRIS Status'))
             ->addXField('City')
             ->addXField('Zip')
         ;
@@ -559,6 +564,7 @@ class LeadAdmin extends Admin
                 ->add('dateOfAssessment', null, array('label' => 'Date'))
                 ->add('reportReceived', null, array('label' => 'Report Received'))
                 ->add('scopeOfWorkSubmitted', null, array('label' => 'Scope of Work Submitted'))
+                ->add('step2eContractor', null, array('label' => 'Name of contractor'))
                 ->add('step3', null, array('label' => 'Upgrade Complete'))
                 ->add('dateOfUpgrade', null, array('label' => 'Date'))
                 ->add('step3aContractor', null, array('label' => 'Name of contractor'))
@@ -651,6 +657,7 @@ class LeadAdmin extends Admin
         
         'dateOfAssessment' => 'indented',
         'dateOfUpgrade' => 'indented',
+        'step2eContractor' => 'indented',
         'step3aContractor' => 'indented',
         'step3bWorkDone' => 'indented',
         'step3cHowFinanced' => 'indented',

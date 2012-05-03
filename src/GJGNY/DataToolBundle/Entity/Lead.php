@@ -466,6 +466,12 @@ class Lead
      * @ORM\Column(name="step2dCompleted", type="boolean", nullable="true")
      */
     private $step2dCompleted;
+    /**
+     * @var string $step2eContractor
+     *
+     * @ORM\Column(name="step2eContractor", type="string", length=255, nullable="true")
+     */
+    private $step2eContractor;
 
     /**
      * @var string $step3aContractor
@@ -2265,5 +2271,25 @@ class Lead
     public function getCRISStatus()
     {
         return $this->CRISStatus;
+    }
+
+    /**
+     * Set step2eContractor
+     *
+     * @param string $step2eContractor
+     */
+    public function setStep2eContractor($step2eContractor)
+    {
+        $this->step2eContractor = $step2eContractor;
+    }
+
+    /**
+     * Get step2eContractor
+     *
+     * @return string 
+     */
+    public function getStep2eContractor()
+    {
+        return $this->step2eContractor;
     }
 }

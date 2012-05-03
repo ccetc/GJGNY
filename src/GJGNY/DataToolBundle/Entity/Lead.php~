@@ -65,6 +65,7 @@ class Lead
     );
     protected static $SourceOfLeadChoices = array(
         'Contractor' => 'Contractor',
+        'CRIS Database' => 'CRIS Database',
         'Door to door canvas' => 'Door to door canvas',
         'E-mail' => 'E-mail',
         'Neighbor / Friends' => 'Neighbor / Friends',
@@ -84,6 +85,7 @@ class Lead
     );
     protected static $leadStatusChoices = array(
         'active lead' => 'active lead',
+	'unresponsive' => 'unresponsive',
         'process complete' => 'process complete',
         'had previous upgrade' => 'had previous upgrade',
         'not interested' => 'not interested',
@@ -464,6 +466,12 @@ class Lead
      * @ORM\Column(name="step2dCompleted", type="boolean", nullable="true")
      */
     private $step2dCompleted;
+    /**
+     * @var string $step2eContractor
+     *
+     * @ORM\Column(name="step2eContractor", type="string", length=255, nullable="true")
+     */
+    private $step2eContractor;
 
     /**
      * @var string $step3aContractor
@@ -951,7 +959,6 @@ class Lead
     {
         $this->LeadEvents = new \Doctrine\Common\Collections\ArrayCollection();
         $this->DateOfLead = new \DateTime();
-        $this->ELPincomplete = 0;
         $this->State = 'NY';
     }
 
@@ -1983,26 +1990,6 @@ class Lead
     public function getTrainingExperience()
     {
         return $this->trainingExperience;
-    }
-
-    /**
-     * Set ELPincomplete
-     *
-     * @param boolean $eLPincomplete
-     */
-    public function setELPincomplete($eLPincomplete)
-    {
-        $this->ELPincomplete = $eLPincomplete;
-    }
-
-    /**
-     * Get ELPincomplete
-     *
-     * @return boolean 
-     */
-    public function getELPincomplete()
-    {
-        return $this->ELPincomplete;
     }
 
     /**
