@@ -1572,7 +1572,7 @@ class Lead
      *
      * @param \Application\Sonata\UserBundle\Entity\User $enteredBy
      */
-    public function setEnteredBy(\Application\Sonata\UserBundle\Entity\User $enteredBy)
+    public function setEnteredBy($enteredBy)
     {
         $this->enteredBy = $enteredBy;
     }
@@ -1592,7 +1592,7 @@ class Lead
      *
      * @param \Application\Sonata\UserBundle\Entity\User $lastUpdatedBy
      */
-    public function setLastUpdatedBy(\Application\Sonata\UserBundle\Entity\User $lastUpdatedBy)
+    public function setLastUpdatedBy($lastUpdatedBy)
     {
         $this->lastUpdatedBy = $lastUpdatedBy;
     }
