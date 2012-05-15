@@ -5,11 +5,8 @@ The [GJGNY Data Tool](http://gjgny.ccext.net) is a Symfony project with no front
 There is a HowTo document for users on google docs: <https://docs.google.com/document/d/1vF_RKP2v3gn9tHgKdNK724ksB1szY8ZVeO8Cx6Z_qiQ/edit>
 
 ## Cron Jobs
-### E-mail digests
-Once a week, the ``Digest`` Command is run.  This command sends a e-mail digest to the set of administrators defined in the config file outlining the number of Leads that need to be called.
-
 ### Lead status updates
-Every day, the ``Lead`` Command is run.  This command updates all Leads awaiting follow-up who have reached their date of next follow-up by labelling them as "need to call".
+Every day, the ``Lead:process`` Command is run.  This command updates all Leads awaiting follow-up who have reached their date of next follow-up by labelling them as "need to call".  For each with a user assigned to them, that user will receive an e-mail listing the new leads that they need to call.
 
 ## "Broken Windows" - areas for improvement
 ### Counties using the tool

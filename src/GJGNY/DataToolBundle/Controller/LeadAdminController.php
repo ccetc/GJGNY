@@ -200,7 +200,6 @@ class LeadAdminController extends Controller
             $userChoices[$user->getId()] = $user->__toString();
         }
         
-        
         $form = $this->createFormBuilder()
             ->add('userFrom', 'choice', array(
                 'choices' => $userChoices,

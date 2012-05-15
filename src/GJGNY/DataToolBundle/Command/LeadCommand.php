@@ -20,11 +20,13 @@ class LeadCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $leadRepository = $this->getContainer()->get('doctrine')->getRepository('GJGNYDataToolBundle:Lead');
+        $userRepository = $this->getContainer()->get('doctrine')->getRepository('ApplicationSonataUserBundle:User');
         $entityManager = $this->getContainer()->get('doctrine')->getEntityManager();
-
-        $tool = new \GJGNY\DataToolBundle\Resources\classes\LeadProcessing();
+        $leadAdmin = $this->getContainer()->get('gjgny.datatool.admin.lead');
         
-        $count = $tool->checkForLeadsToCall($entityManager, $leadRepository);
+        $tool = new \GJGNY\DataToolBundle\Resources\classes\LeadProcessing($this->getContainer()->get('mailer'), $entityManager, $leadRepository, $userRepository, $leadAdmin, $this->getContainer()->getParameter('fos_user.registration.confirmation.from_email'));
+        
+        $count = $tool->checkForLeadsToCall();
 
         $output->writeln($count.' Leads Updated');
     }

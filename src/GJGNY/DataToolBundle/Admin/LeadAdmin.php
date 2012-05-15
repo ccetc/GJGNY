@@ -249,14 +249,24 @@ class LeadAdmin extends Admin
                     'label' => 'Actions'
                 ))
         ;
+        
+        $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
+        $this->listActionButtons = array(
+            array(
+                'route' => 'list',
+                'parameters' => array(
+                    'filter[userAssignedTo][value]' => $user->getId()
+                ),
+                'text' => 'My Leads'
+            ),
+            array(
+                'route' => 'assignLeadsSelectUser',
+                'text' => 'Re-Assign Leads'
+            )
+        );
     }
     
-    public $listActionButtons = array(
-        array(
-            'route' => 'assignLeadsSelectUser',
-            'text' => 'Re-Assign Leads'
-        )
-    );
+    
 
     public function getBatchActions()
     {
@@ -478,7 +488,12 @@ class LeadAdmin extends Admin
         'leadCategory' => true,
         'leadEventTitle' => true,
 	'CRISStatus' => true,
-	'inCRIS' => true
+	'inCRIS' => true,
+        'Zip' => true,
+        'City' => true,
+        'county' => true,
+        'leadStatus' => true,
+        'SourceOfLead' => true
     );
 
     protected function configureSpreadsheetFields(SpreadsheetMapper $spreadsheetMapper)
