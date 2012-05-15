@@ -1862,7 +1862,7 @@ class Lead
      *
      * @param GJGNY\DataToolBundle\Entity\Program $program
      */
-    public function setProgram(\GJGNY\DataToolBundle\Entity\Program $program)
+    public function setProgram($program)
     {
         $this->Program = $program;
     }
@@ -2301,9 +2301,8 @@ class Lead
     /**
      * Set userAssignedTo
      *
-     * @param Application\Sonata\UserBundle\Entity\User $userAssignedTo
      */
-    public function setUserAssignedTo(\Application\Sonata\UserBundle\Entity\User $userAssignedTo)
+    public function setUserAssignedTo($userAssignedTo)
     {
         $this->userAssignedTo = $userAssignedTo;
     }
