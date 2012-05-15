@@ -1,0 +1,57 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends base_template %}
+
+{% block actions %}
+    <div class="sonata-actions">
+            {% if admin.hasroute('list') and admin.isGranted('LIST')%}
+                <a class="btn" href="{{ admin.generateUrl('list') }}">{% trans from 'SonataAdminBundle' %}link_action_list{% endtrans %}</a>
+            {% endif %}
+
+    </div>
+{% endblock %}
+
+{% block form %}
+    <div class="alert-message info block-message">
+        Use this form to transfer a selection of one user's Leads to another user.
+    </div>
+  
+  
+    <form class="form-stacked" action="{{ admin.generateUrl('assignLeadsSelectUser') }}" {{ form_enctype(form) }} method="POST">
+
+        {% if form.vars.errors|length > 0 %}
+            <div class="sonata-ba-form-error">
+                {{ form_errors(form) }}
+            </div>
+        {% endif %}
+        
+        <div class="clearfix">
+            {{ form_label(form.userFrom) }}
+            <div class="input">
+                {{ form_widget(form.userFrom, { 'attr': {'class': 'span8'} }) }}
+            </div>
+        </div><!-- /clearfix -->
+        <div class="clearfix">
+            {{ form_label(form.userTo) }}
+            <div class="input">
+                {{ form_widget(form.userTo, { 'attr': {'class': 'span8'} }) }}
+            </div>
+        </div><!-- /clearfix -->
+        
+        {{ form_rest(form) }}
+
+        <div class="" style="">
+            <input class="btn primary" type="submit" name="next" value="Next"/>
+            <a class="btn" href="{{ admin.generateUrl('list') }}">{% trans from 'SonataAdminBundle' %}btn_cancel{% endtrans %}</a>
+        </div>
+    </form>
+{% endblock %}

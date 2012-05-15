@@ -58,7 +58,7 @@ class LeadAdmin extends Admin
                 ->add('needToCall', null, array('label' => 'Need to Call'))
                 ->add('leadStatus', 'choice', array('required' => false, 'label' => 'Lead Status', 'choices' => Lead::getLeadStatusChoices()))
                 ->add('DateOfNextFollowup', null, array('label' => 'Date of next Follow-up', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
-                ->add('enteredBy', 'sonata_type_model', array('label' => 'Entered By', 'required' => false), array('edit' => 'standard'))
+                ->add('userAssignedTo', 'sonata_type_model', array('label' => 'Assigned To', 'required' => false), array('edit' => 'standard'))
             ->end()
             ->setHelps(array(
                 'DateOfNextFollowup' => 'Lead will be marked "need to call" on this date'
@@ -218,9 +218,14 @@ class LeadAdmin extends Admin
         'template' => 'GJGNYDataToolBundle:Lead:_editPostHook.html.twig',
     );
 
-    
     // List ======================================================================
     // ===========================================================================
+    public function configureRoutes(RouteCollection $collection)
+    {
+        $collection->add('assignLeads', 'assignLeads/{userToId}/{userFromId}');
+        $collection->add('assignLeadsSelectUser', 'assignLeadsSelectUser');
+    }
+
     public $listPreHook = array('template' => 'GJGNYDataToolBundle:Lead:_listPreHook.html.twig');
 
     protected function configureListFields(ListMapper $listMapper)
@@ -244,6 +249,25 @@ class LeadAdmin extends Admin
                     'label' => 'Actions'
                 ))
         ;
+    }
+    
+    public $listActionButtons = array(
+        array(
+            'route' => 'assignLeadsSelectUser',
+            'text' => 'Re-Assign Leads'
+        )
+    );
+
+    public function getBatchActions()
+    {
+        $actions = parent::getBatchActions();
+
+        $actions['transfer'] = array(
+            'label' => 'Transfer selected to me',
+            'ask_confirmation' => true
+        );
+        
+        return array_reverse($actions);
     }
     
     protected function configureDatagridFilters(DatagridMapper $datagrid)
@@ -282,7 +306,8 @@ class LeadAdmin extends Admin
                 'required' => false,
                 'choices' => $this->getProgramSourceChoices()
             )
-        ));        $datagrid->add('leadStatus', 'doctrine_orm_choice', array(
+        ));
+        $datagrid->add('leadStatus', 'doctrine_orm_choice', array(
             'label' => 'Lead Status',
             'field_type' => 'choice',
             'field_options' => array(
@@ -379,13 +404,36 @@ class LeadAdmin extends Admin
         $datagrid->add('homeowner', null, array('label' => 'Homeowner'));
         $datagrid->add('renter', null, array('label' => 'Renter'));
         $datagrid->add('landlord', null, array('label' => 'Landlord'));
-        
+        $datagrid->add('userAssignedTo', 'doctrine_orm_callback', array(
+            'label' => 'Assigned To',
+            'callback' => function($queryBuilder, $alias, $field, $values) {
+                if(!$values['value'])
+                {
+                    return;
+                }
+                if(!$values['value'] || $values['value'] == "")
+                {
+                    return;
+                }
+                $queryBuilder->leftjoin($alias.'.userAssignedTo', 'u');
+                $queryBuilder->andWhere('u.id = :userId');
+                $queryBuilder->setParameter('userId',$values['value']);
+                
+            },
+            'field_type' => 'choice',
+            'field_options' => array(
+                'required' => false,
+                'choices' => $this->getAssignedToChoices()
+            )
+        ));
+            
         // leave the dates for last since they are tall
         $datagrid->add('DateOfNextFollowup', 'doctrine_orm_date_range', array('label' => 'Date of Next Follow-up'));
         $datagrid->add('datetimeEntered', 'doctrine_orm_date_range', array('label' => 'Date Entered'));
         $datagrid->add('datetimeLastUpdated', 'doctrine_orm_date_range', array('label' => 'Date Updated'));
         $datagrid->add('dateOfAssessment', 'doctrine_orm_date_range', array('label' => 'Date of Assessment'));
         $datagrid->add('dateOfUpgrade', 'doctrine_orm_date_range', array('label' => 'Date of Upgrade'));
+        
         
         $this->initializeDefaultFilters();
     }
@@ -547,6 +595,7 @@ class LeadAdmin extends Admin
                 ->add('needToCall', null, array('label' => 'Need to Call'))
                 ->add('leadStatus', null, array('label' => 'Lead Status'))
                 ->add('DateOfNextFollowup', null, array('label' => 'Date of next followup'))
+                ->add('userAssignedTo', null, array('label' => 'Assigned To'))
             ->end()
             ->with('Lead Type')
                 ->add('leadTypeUpgrade', null, array('label' => 'Energy Upgrade'))
@@ -669,11 +718,14 @@ class LeadAdmin extends Admin
     {
         $Lead->setDatetimeEntered(new \DateTime());
         $Lead->setDatetimeLastUpdated(new \DateTime());
-        $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
-        if(!$Lead->getEnteredBy()) $Lead->setEnteredBy($user); // could be set in form
-        $Lead->setLastUpdatedBy($user);        
-        if(!$Lead->getDataCounty()) $Lead->setDataCounty($user->getCounty()); // could be set in spreadsheet import
-
+        
+        if( $this->configurationPool->getContainer()->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
+            if(!$Lead->getEnteredBy()) $Lead->setEnteredBy($user); // could be set in form
+            if(!$Lead->getLastUpdatedBy()) $Lead->setLastUpdatedBy($user);        
+            if(!$Lead->getDataCounty()) $Lead->setDataCounty($user->getCounty()); // could be set in spreadsheet import
+        }
+            
         parent::prePersist($Lead);
     }
     
@@ -707,5 +759,25 @@ class LeadAdmin extends Admin
        
         return $programSourceChoices;
     }
+    public function getAssignedToChoices()
+    {
+        $assignedToChoices = array();
+        $em = $this->configurationPool->getContainer()->get('doctrine')->getEntityManager();
+        $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
 
+        $userQuery = $em->createQuery(
+            'SELECT u.firstName, u.lastName, u.id FROM ApplicationSonataUserBundle:User u WHERE u.county=:county ORDER BY u.firstName ASC'
+        )->setParameter('county', $user->getCounty());
+        
+        $users = $userQuery->getResult();
+                
+        foreach($users as $u)
+        {
+            if(isset($u['firstName']) && trim($u['firstName']) != "") {
+                $assignedToChoices[$u['id']] = $u['firstName'].' '.$u['lastName'];                
+            }
+        }
+       
+        return $assignedToChoices;
+    }
 }

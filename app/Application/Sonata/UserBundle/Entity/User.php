@@ -59,6 +59,7 @@ class User extends BaseUser
     protected $LeadEventsUpdated;
     protected $LeadsEntered;
     protected $LeadsUpdated;
+    protected $LeadsAssignedTo;
     protected $ProgramsUpdated;
     protected $ProgramsEntered;
     protected $notificationPortals;
@@ -200,7 +201,25 @@ class User extends BaseUser
     {
         return $this->LeadsEntered;
     }
+    /**
+     * Add LeadsAssignedTo
+     *
+     * @param GJGNY\DataToolBundle\Entity\Lead $LeadsAssignedTo
+     */
+    public function addLeadsAssignedTo(\GJGNY\DataToolBundle\Entity\Lead $LeadsAssignedTo)
+    {
+        $this->LeadsAssignedTo[] = $LeadsAssignedTo;
+    }
 
+    /**
+     * Get LeadsAssignedTo
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getLeadsAssignedTo()
+    {
+        return $this->LeadsAssignedTo;
+    }
     /**
      * Add LeadsUpdated
      *

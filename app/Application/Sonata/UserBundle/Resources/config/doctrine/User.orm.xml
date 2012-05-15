@@ -18,6 +18,7 @@
         <one-to-many field="LeadEventsUpdated" target-entity="GJGNY\DataToolBundle\Entity\LeadEvent" mapped-by="lastUpdatedBy" />
         <one-to-many field="LeadsEntered" target-entity="GJGNY\DataToolBundle\Entity\Lead" mapped-by="enteredBy" />
         <one-to-many field="LeadsUpdated" target-entity="GJGNY\DataToolBundle\Entity\Lead" mapped-by="lastUpdatedBy" />
+        <one-to-many field="LeadsAssignedTo" target-entity="GJGNY\DataToolBundle\Entity\Lead" mapped-by="userAssignedTo" />
         <one-to-many field="ProgramsEntered" target-entity="GJGNY\DataToolBundle\Entity\Program" mapped-by="enteredBy" />
         <one-to-many field="ProgramsUpdated" target-entity="GJGNY\DataToolBundle\Entity\Program" mapped-by="lastUpdatedBy" />
 

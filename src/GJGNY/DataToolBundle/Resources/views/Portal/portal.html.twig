@@ -7,6 +7,23 @@
             <link rel="stylesheet" href="{{ asset('bundles/ccetcbootstrap/bootstrap/bootstrap.css') }}" type="text/css" media="all" >
             <link rel="stylesheet" href="{{ asset('styles/portals.css') }}" type="text/css" media="all" >
         {% endblock %}
+            
+        {% block javascripts %}
+            <script src="{{ asset('bundles/sonatajquery/jquery-1.7.1.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('bundles/sonatajquery/jquery-ui-1.8.17.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('bundles/sonatajquery/jquery-ui-i18n.js') }}" type="text/javascript"></script>
+
+            <script src="{{ asset('bundles/ccetcbootstrap/bootstrap/js/bootstrap-tabs.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('bundles/ccetcbootstrap/bootstrap/js/bootstrap-alerts.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('bundles/ccetcbootstrap/bootstrap/js/bootstrap-modal.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('bundles/ccetcbootstrap/bootstrap/js/bootstrap-buttons.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('bundles/ccetcbootstrap/bootstrap/js/bootstrap-twipsy.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('bundles/ccetcbootstrap/bootstrap/js/bootstrap-popover.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('bundles/ccetcbootstrap/bootstrap/js/bootstrap-scrollspy.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('bundles/ccetcbootstrap/bootstrap/js/bootstrap-dropdown.js') }}" type="text/javascript"></script>
+
+            <script src="{{ asset('bundles/sonataadmin/jquery/jquery.form.js') }}" type="text/javascript"></script>
+        {% endblock %}
 
         <title>
             {% block title %}
@@ -90,17 +107,24 @@
                 {% else %}
                     <div class="row">
                         <div class="span8" id="portal-signup">
-                            <form class="form-stacked" action="{{ path('signup', {'url' : portal.url}) }}" method="post" {{ form_enctype(form) }}>
+                            <form id="portal-signup-form" class="form-stacked" action="{{ path('signup', {'url' : portal.url}) }}" method="post" {{ form_enctype(form) }}>
                                 {{ form_widget(form) }}
 
                                 <div class="actions">
-                                    <input class="btn large primary" value="Sign Up" type="submit" />
+                                    <input id="portal-signup-submit" class="btn large primary" value="Sign Up" type="submit" />
                                     <a href="{{ path('portal', {'url': portal.url}) }}" class="btn large">cancel</a> 
                                 </div>
                             </form>
                         </div>
                     </div>
+                    <script>
+                        jQuery('form#portal-signup-form').submit(function(e) {
+                            var btn = jQuery('input#portal-signup-submit');
+                            btn.button('loading');
+                        });
+                    </script>
                 {% endif %}
+
 
             </div>
           

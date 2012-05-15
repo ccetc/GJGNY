@@ -5,6 +5,9 @@ use Sonata\AdminBundle\Controller\CRUDController as Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Sonata\AdminBundle\Datagrid\ORM\ProxyQuery;
+use Symfony\Component\Form\CallbackValidator;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormError;
 
 class LeadAdminController extends Controller
 {
@@ -24,6 +27,7 @@ class LeadAdminController extends Controller
         $object = $this->processUrlFormValues($object);        
 
         $object->setEnteredBy($this->get('security.context')->getToken()->getUser());
+        $object->setUserAssignedTo($this->get('security.context')->getToken()->getUser());
         
         $this->admin->setSubject($object);
 
@@ -102,9 +106,9 @@ class LeadAdminController extends Controller
         asort($array);
         $view['Program']->set('choices', $array);
 
-        $array = $view['enteredBy']->get('choices');
+        $array = $view['userAssignedTo']->get('choices');
         asort($array);
-        $view['enteredBy']->set('choices', $array);        
+        $view['userAssignedTo']->set('choices', $array);        
         
         // set the theme for the current Admin Form
         $this->get('twig')->getExtension('form')->setTheme($view, $this->admin->getFormTheme());
@@ -179,5 +183,133 @@ class LeadAdminController extends Controller
                     'form' => $view,
                     'object' => $object,
                 ));
+    }
+    
+    public function assignLeadsSelectUserAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        // get users
+        $userRepository = $this->getDoctrine()->getRepository("ApplicationSonataUserBundle:User");
+        $currentUser = $this->get('security.context')->getToken()->getUser();
+        $users = $userRepository->findBy(array('county' => $currentUser->getCounty()), array('firstName' => "ASC"));
+        $userChoices = array();
+        
+        foreach($users as $user)
+        {
+            $userChoices[$user->getId()] = $user->__toString();
+        }
+        
+        
+        $form = $this->createFormBuilder()
+            ->add('userFrom', 'choice', array(
+                'choices' => $userChoices,
+                'label' => 'Transfer a selection of this User\'s Leads:'
+            ))
+            ->add('userTo', 'choice', array(
+                'choices' => $userChoices,
+                'label' => 'to this User:'
+            ));
+        
+        $form->
+            addValidator(new CallbackValidator(function(FormInterface $form)
+            {
+                if ($form["userFrom"]->getData() == $form["userTo"]->getData())
+                {
+                    $form->addError(new FormError('Please select two different users'));
+                }
+            })
+        );
+       
+        $form = $form->getForm();
+        
+        if($this->get('request')->getMethod() == 'POST') {
+            $form->bindRequest($this->get('request'));
+
+            if($form->isValid()) {
+                $data = $form->getData();
+
+                return new RedirectResponse($this->admin->generateUrl('assignLeads', array('userFromId' => $data['userFrom'], 'userToId' => $data['userTo'])));              
+            }
+        }
+        
+        return $this->render("GJGNYDataToolBundle:Lead:assignLeadsSelectUser.html.twig", array(
+                    'form' => $form->createView(),
+                    'action' => 'assignLeadsSelectUser',
+                ));
+        
+    }
+    
+    public function assignLeadsAction($userFromId, $userToId)
+    {
+        $userRepository = $this->getDoctrine()->getRepository('ApplicationSonataUserBundle:User');
+        $userFrom = $userRepository->findOneById($userFromId);       
+        $userTo = $userRepository->findOneById($userToId);
+        $em = $this->getDoctrine()->getEntityManager();
+
+        if(count($userFrom->getLeadsAssignedTo()) > 0) {
+            $leadChoices = array();        
+
+            foreach($userFrom->getLeadsAssignedTo() as $lead)
+            {
+                $leadChoices[$lead->getId()] = $lead->__toString();
+            }
+
+            $form = $this->createFormBuilder()
+                ->add('leads', 'choice', array(
+                    'choices' => $leadChoices,
+                    'multiple' => true,
+                    'expanded' => true,
+                    'label' => "Transfer which of ".$userFrom->__toString()."'s Leads to ".$userTo->__toString()."?"
+                ))
+                ->getForm();
+
+            if($this->get('request')->getMethod() == 'POST') {
+                $form->bindRequest($this->get('request'));
+
+                if($form->isValid()) {
+                    $data = $form->getData();
+
+                    foreach($data['leads'] as $leadId)
+                    {
+                        $leadRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:Lead');
+                        $lead = $leadRepository->findOneById($leadId);
+
+                        $lead->setUserAssignedTo($userTo);
+                        $em->persist($lead);
+                        $em->flush();
+                    }
+
+                    $this->get('session')->setFlash('sonata_flash_success', count($data['leads']).' Leads have been transferred.');
+                    return new RedirectResponse($this->admin->generateUrl('list'));              
+                }
+            }
+
+            return $this->render("GJGNYDataToolBundle:Lead:assignLeads.html.twig", array(
+                        'form' => $form->createView(),
+                        'action' => 'assignLeads',
+                        'userTo' => $userTo,
+                        'userFrom' => $userFrom
+                    ));
+        } else {
+            $this->get('session')->setFlash('sonata_flash_error', $userFrom->__toString().' has no Leads to transfer.');
+                return new RedirectResponse($this->admin->generateUrl('assignLeadsSelectUser'));   
+        }
+    }
+    public function batchActionTransfer($query)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $currentUser = $this->get('security.context')->getToken()->getUser();
+
+        foreach($query->getQuery()->iterate() as $pos => $object) {
+            $object[0]->setUserAssignedTo($currentUser);
+        }
+
+        $em->flush();
+        $em->clear();
+
+        $this->getRequest()->getSession()->setFlash('sonata_flash_success', 'The selected Leads have been transferred');
+
+        return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }
 }

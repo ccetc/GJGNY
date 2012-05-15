@@ -36,7 +36,12 @@ class Lead
      * @ORM\Column(name="datetimeLastUpdated", type="datetime", nullable="true")
      */
     private $datetimeLastUpdated;
-
+    
+    /** @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="LeadsAssignedTo")
+     *  @ORM\JoinColumn(name="userAssignedTo_id", referencedColumnName="id", onDelete="SET NULL") 
+     */
+    protected $userAssignedTo;
+    
     public function __toString()
     {
         $s = $this->FirstName . ' ';
@@ -2291,5 +2296,25 @@ class Lead
     public function getStep2eContractor()
     {
         return $this->step2eContractor;
+    }
+
+    /**
+     * Set userAssignedTo
+     *
+     * @param Application\Sonata\UserBundle\Entity\User $userAssignedTo
+     */
+    public function setUserAssignedTo(\Application\Sonata\UserBundle\Entity\User $userAssignedTo)
+    {
+        $this->userAssignedTo = $userAssignedTo;
+    }
+
+    /**
+     * Get userAssignedTo
+     *
+     * @return Application\Sonata\UserBundle\Entity\User 
+     */
+    public function getUserAssignedTo()
+    {
+        return $this->userAssignedTo;
     }
 }

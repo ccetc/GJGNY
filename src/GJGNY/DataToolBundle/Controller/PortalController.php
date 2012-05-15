@@ -12,12 +12,14 @@
 namespace GJGNY\DataToolBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 
 class PortalController extends Controller
 {
 
     public function portalAction($url, $signup = false)
     {
+        $em = $this->getDoctrine()->getEntityManager();
         $portalRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:Portal');
         $portal = $portalRepository->findOneByUrl($url);
 
@@ -91,9 +93,27 @@ class PortalController extends Controller
                         $this->sendSignupNotificationEmail($lead, $notificationUser->getEmail(), $newLeadLink);
                     }
 
+                    
+                    // create the lead
+                    // NOTES:
+                    //  - we need to be able to insert the lead, and add object acl permissions even though there is no logged in user
+                    //  - this code is copied from SonataAdminBundle\Security\Handler\AclSecurityHandler->createObjectSecurity
+                    //
 	            $leadAdmin = $this->get('gjgny.datatool.admin.lead');        	    
-	            $leadAdmin->create($lead);
+	         
+                    $leadAdmin->getModelManager()->create($lead);
+                    
+                    $securityHandler = $leadAdmin->getSecurityHandler();
 
+                    $objectIdentity = ObjectIdentity::fromDomainObject($lead);
+                    $acl = $securityHandler->getObjectAcl($objectIdentity);
+                    if (is_null($acl)) {
+                        $acl = $securityHandler->createAcl($objectIdentity);
+                    }
+
+                    $securityHandler->addObjectClassAces($acl, $securityHandler->buildSecurityInformation($leadAdmin));
+                    $securityHandler->updateAcl($acl);
+                    
                     $session->setFlash('page-message', 'You have been signed up.  Thank you.');
 
                     return $this->redirect($this->generateUrl('portal', array('url' => $portal->getUrl())));

@@ -5,6 +5,6 @@
     	{% if object.address%}{{ object.address }}<br/>{% endif %}
     	{{ object.city }}{% if object.city %}{% endif %}{% if object.state and object.city %}, {% endif %}{% if object.state %}{{ object.state }}{% endif %}
         {% if object.city or object.state %}<br/>{% endif %}
-        {{ object.zip }}
+        {{ object.zip }}        
     </div>
 {% endblock %}
