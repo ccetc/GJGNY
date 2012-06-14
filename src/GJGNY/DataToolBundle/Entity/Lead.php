@@ -60,9 +60,9 @@ class Lead
         'AL' => "Alabama", 'AK' => "Alaska", 'AZ' => "Arizona", 'AR' => "Arkansas", 'CA' => "California", 'CO' => "Colorado", 'CT' => "Connecticut", 'DE' => "Delaware", 'DC' => "District Of Columbia", 'FL' => "Florida", 'GA' => "Georgia", 'HI' => "Hawaii", 'ID' => "Idaho", 'IL' => "Illinois", 'IN' => "Indiana", 'IA' => "Iowa", 'KS' => "Kansas", 'KY' => "Kentucky", 'LA' => "Louisiana", 'ME' => "Maine", 'MD' => "Maryland", 'MA' => "Massachusetts", 'MI' => "Michigan", 'MN' => "Minnesota", 'MS' => "Mississippi", 'MO' => "Missouri", 'MT' => "Montana", 'NE' => "Nebraska", 'NV' => "Nevada", 'NH' => "New Hampshire", 'NJ' => "New Jersey", 'NM' => "New Mexico", 'NY' => "New York", 'NC' => "North Carolina", 'ND' => "North Dakota", 'OH' => "Ohio", 'OK' => "Oklahoma", 'OR' => "Oregon", 'PA' => "Pennsylvania", 'RI' => "Rhode Island", 'SC' => "South Carolina", 'SD' => "South Dakota", 'TN' => "Tennessee", 'TX' => "Texas", 'UT' => "Utah", 'VT' => "Vermont", 'VA' => "Virginia", 'WA' => "Washington", 'WV' => "West Virginia", 'WI' => "Wisconsin", 'WY' => "Wyoming"
     );
     protected static $campaignChoices = array(
-        'campaignChoiceTalkingToNeighbors' => 'talking to neighbors',
+        'campaignChoiceTalkingToNeighbors' => 'Give program flyer to neighbor or friends',
         'campaignChoiceFormEnergyTeam' => 'forming an energy team',
-        'campaignChoiceAppearInVideo' => 'appearing in testimonial video',
+        'campaignChoiceAppearInVideo' => 'appear in a testimonial',
         'campaignChoiceShareExperience' => 'sharing experience with others',
         'campaignChoiceVolunteer' => 'becoming a volunteer',
         'campaignChoiceSteward' => 'becoming a senior energy steward',
