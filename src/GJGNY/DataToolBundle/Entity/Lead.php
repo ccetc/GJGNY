@@ -142,7 +142,7 @@ class Lead
         'Pending/Hold - Customer' => 'Pending/Hold - Customer',
         'Customer selected HP contractor' => 'Customer selected HP contractor',
         'HP Audit Complete' => 'HP Audit Complete',
-        'HP Upgrade Complete' => 'HP Upgrade Complete'
+        'HP work complete' => 'HP work complete'
     );
     
     
