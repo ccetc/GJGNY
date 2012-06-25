@@ -63,10 +63,10 @@ class Lead
         'campaignChoiceTalkingToNeighbors' => 'Give program flyer to neighbor or friends',
         'campaignChoiceFormEnergyTeam' => 'forming an energy team',
         'campaignChoiceAppearInVideo' => 'appear in a testimonial',
-        'campaignChoiceShareExperience' => 'sharing experience with others',
         'campaignChoiceVolunteer' => 'becoming a volunteer',
         'campaignChoiceSteward' => 'becoming a senior energy steward',
-        'campaignChoiceEvent' => 'presenting at an event'
+        'campaignChoiceEvent' => 'presenting at an event',
+        'campaignChoicePresent' => 'setup presentation at workplace or organization'
     );
     protected static $SourceOfLeadChoices = array(
         'Contractor' => 'Contractor',
@@ -89,13 +89,33 @@ class Lead
         'GJGNY Loan' => 'GJGNY Loan'
     );
     protected static $leadStatusChoices = array(
-        'active lead' => 'active lead',
-	'unresponsive' => 'unresponsive',
-        'process complete' => 'process complete',
-        'had previous upgrade' => 'had previous upgrade',
         'not interested' => 'not interested',
-        'referred out of program' => 'referred out of program'
+        'interested but is a renter' => 'interested but is a renter',
+        'active: pre-assessment' => 'active: pre-assessment',
+        'stuck: pre-assessment' => 'stuck: pre-assessment',
+        'active: post-assessment' => 'active: post-assessment',
+        'stuck: post assessment' => 'stuck: post assessment',
+	'unresponsive' => 'unresponsive',
+        'upgrade complete' => 'upgrade complete',
     );
+    
+    protected static $upgradeStatusChoices = array(
+        'Interested in assessment - No app submitted' => 'Interested in assessment - No app submitted',
+        'Referred to WAP / Empower' => 'Referred to WAP / Empower',
+        'GJGNY app submitted' => 'GJGNY app submitted',
+        'GJGNY app missing information' => 'GJGNY app missing information',
+        'GJGNY app denied ' => 'GJGNY app denied ',
+        'GJGNY app approved' => 'GJGNY app approved',
+        'GJGNY assessment reservation number expired' => 'GJGNY assessment reservation number expired',
+        'Assessment Scheduled' => 'Assessment Scheduled',
+        'Assessment Complete' => 'Assessment Complete',
+        'Applied for financing ' => 'Applied for financing ',
+        'Approved for financing ' => 'Approved for financing ',
+        'Denied for financing' => 'Denied for financing',
+        'Work scope submitted' => 'Work scope submitted',
+        'Upgrade Complete' => 'Upgrade Complete'
+    );
+    
     protected static $leadTypeChoices = array(
         'leadTypeUpgrade' => 'Energy Upgrade',
         'leadTypeOutreach' => 'Outreach',
@@ -121,14 +141,20 @@ class Lead
         'Customer Ineligible' => 'Customer Ineligible',
         'Pending/Hold - Customer' => 'Pending/Hold - Customer',
         'Customer selected HP contractor' => 'Customer selected HP contractor',
-        'HP Audit Complete' => 'HP Audit Complete'
+        'HP Audit Complete' => 'HP Audit Complete',
+        'HP Upgrade Complete' => 'HP Upgrade Complete'
     );
-
+    
+    
+    public static function getUpgradeStatusChoices()
+    {
+        return self::$upgradeStatusChoices;
+    }
+    
     public static function getCRISStatusChoices()
     {
         return self::$CRISStatusChoices;
     }
-    
             
     public static function getLeadCategoryChoices()
     {
@@ -332,6 +358,18 @@ class Lead
      */
     private $DateOfNextFollowup;
 
+    /**
+     * @var smallint $appointmentMade
+     *
+     * @ORM\Column(name="appointmentMade", type="boolean", nullable="true")
+     */
+    private $appointmentMade;
+    /**
+     * @var date $dateOfNextAppointment
+     *
+     * @ORM\Column(name="dateOfNextAppointment", type="date", nullable="true")
+     */
+    private $dateOfNextAppointment;
 
     // Lead Type  =================================================================
     // =========================================================================
@@ -526,6 +564,14 @@ class Lead
      * @ORM\Column(name="dateOfUpgrade", type="date", nullable="true")
      */
     private $dateOfUpgrade;
+    
+    /**
+     * @var date $dateAppSubmitted
+     *
+     * @ORM\Column(name="dateAppSubmitted", type="date", nullable="true")
+     */
+    private $dateAppSubmitted;
+    
     /**
      * @var string $CRISStatus
      *
@@ -533,6 +579,12 @@ class Lead
      */
     private $CRISStatus;
 
+    /**
+     * @var string $upgradeStatus
+     *
+     * @ORM\Column(name="upgradeStatus", type="string", length=255, nullable="true")
+     */
+    private $upgradeStatus;
 
     /**
      * @var date $upgradeStatusNotes
@@ -596,6 +648,12 @@ class Lead
      * @ORM\Column(name="campaignChoiceEvent", type="boolean", nullable="true")
      */
     private $campaignChoiceEvent;
+    /**
+     * @var smallint $campaignChoicePresent
+     *
+     * @ORM\Column(name="campaignChoicePresent", type="boolean", nullable="true")
+     */
+    private $campaignChoicePresent;
     /**
      * @var string $campaignChoiceOther
      *
@@ -2315,5 +2373,105 @@ class Lead
     public function getUserAssignedTo()
     {
         return $this->userAssignedTo;
+    }
+
+    /**
+     * Set appointmentMade
+     *
+     * @param boolean $appointmentMade
+     */
+    public function setAppointmentMade($appointmentMade)
+    {
+        $this->appointmentMade = $appointmentMade;
+    }
+
+    /**
+     * Get appointmentMade
+     *
+     * @return boolean 
+     */
+    public function getAppointmentMade()
+    {
+        return $this->appointmentMade;
+    }
+
+    /**
+     * Set dateOfNextAppointment
+     *
+     * @param date $dateOfNextAppointment
+     */
+    public function setDateOfNextAppointment($dateOfNextAppointment)
+    {
+        $this->dateOfNextAppointment = $dateOfNextAppointment;
+    }
+
+    /**
+     * Get dateOfNextAppointment
+     *
+     * @return date 
+     */
+    public function getDateOfNextAppointment()
+    {
+        return $this->dateOfNextAppointment;
+    }
+
+    /**
+     * Set campaignChoicePresent
+     *
+     * @param boolean $campaignChoicePresent
+     */
+    public function setCampaignChoicePresent($campaignChoicePresent)
+    {
+        $this->campaignChoicePresent = $campaignChoicePresent;
+    }
+
+    /**
+     * Get campaignChoicePresent
+     *
+     * @return boolean 
+     */
+    public function getCampaignChoicePresent()
+    {
+        return $this->campaignChoicePresent;
+    }
+
+    /**
+     * Set upgradeStatus
+     *
+     * @param string $upgradeStatus
+     */
+    public function setUpgradeStatus($upgradeStatus)
+    {
+        $this->upgradeStatus = $upgradeStatus;
+    }
+
+    /**
+     * Get upgradeStatus
+     *
+     * @return string 
+     */
+    public function getUpgradeStatus()
+    {
+        return $this->upgradeStatus;
+    }
+
+    /**
+     * Set dateAppSubmitted
+     *
+     * @param date $dateAppSubmitted
+     */
+    public function setDateAppSubmitted($dateAppSubmitted)
+    {
+        $this->dateAppSubmitted = $dateAppSubmitted;
+    }
+
+    /**
+     * Get dateAppSubmitted
+     *
+     * @return date 
+     */
+    public function getDateAppSubmitted()
+    {
+        return $this->dateAppSubmitted;
     }
 }

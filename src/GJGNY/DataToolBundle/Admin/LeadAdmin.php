@@ -54,14 +54,16 @@ class LeadAdmin extends Admin
             ->with('Lead History')
                 ->add('Program', 'sonata_type_model', array('label' => 'Program Source', 'required' => false), array('edit' => 'standard'))
                 ->add('SourceOfLead', 'choice', array('required' => false, 'label' => 'Source of Lead', 'choices' => Lead::getSourceOfLeadChoices()))
+                ->add('appointmentMade', null, array('label' => 'Appointment Made'))
+                ->add('dateOfNextAppointment', null, array('label' => 'Date of next appointment', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
                 ->add('DateOfLead', 'date', array('label' => 'Date of First Contact', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
-                ->add('needToCall', null, array('label' => 'Need to Call'))
+                ->add('needToCall', null, array('label' => 'Need to Contact'))
                 ->add('leadStatus', 'choice', array('required' => false, 'label' => 'Lead Status', 'choices' => Lead::getLeadStatusChoices()))
                 ->add('DateOfNextFollowup', null, array('label' => 'Date of next Follow-up', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
                 ->add('userAssignedTo', 'sonata_type_model', array('label' => 'Assigned To', 'required' => false), array('edit' => 'standard'))
             ->end()
             ->setHelps(array(
-                'DateOfNextFollowup' => 'Lead will be marked "need to call" on this date'
+                'DateOfNextFollowup' => 'Lead will be marked "need to contact" on this date'
             ))
             ->with('Lead Type')
                 ->add('leadTypeUpgrade', null, array('label' => 'Energy Upgrade', 'required' => false))
@@ -72,20 +74,15 @@ class LeadAdmin extends Admin
                 ->add('renter', null, array('label' => 'Renter', 'required' => false))
                 ->add('landlord', null, array('label' => 'Landlord', 'required' => false))
             ->end()
-            ->with('Energy Upgrade Status')    
-                ->add('step2aInterested', null, array('label' => 'Interested in Home Energy assessment', 'required' => false))
-                ->add('step2bSubmitted', null, array('label' => 'GJGNY application submitted', 'required' => false))
-                ->add('step2dCompleted', null, array('label' => 'Assessment Complete', 'required' => false))
-                ->add('step2eContractor', null, array('label' => 'Name of contractor', 'required' => false))
-                    ->add('dateOfAssessment', null, array('label' => 'Date', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
-                ->add('reportReceived', null, array('label' => 'Report Received', 'required' => false))
-                ->add('scopeOfWorkSubmitted', null, array('label' => 'Scope of Work Submitted', 'required' => false))
-                ->add('step3', null, array('label' => 'Upgrade Complete', 'required' => false))
-                    ->add('dateOfUpgrade', null, array('label' => 'Date', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
-                    ->add('step3aContractor', null, array('label' => 'Name of contractor', 'required' => false))
-                    ->add('step3bWorkDone', null, array('label' => 'What was done (air sealing, insulating, upgrade heating system, etc.)', 'required' => false))
-                    ->add('step3cHowFinanced', 'choice', array('required' => false, 'label' => 'How was it financed', 'choices' => Lead::getHowAssessmentFinancedChoices()))
+            ->with('Energy Upgrade')    
+                ->add('upgradeStatus', 'choice', array('label' => 'Upgrade Status', 'required' => false, 'choices' => Lead::getUpgradeStatusChoices()))
                 ->add('CRISStatus', 'choice', array('label' => 'CRIS Status', 'required' => false, 'choices' => Lead::getCRISStatusChoices()))
+                ->add('step2eContractor', null, array('label' => 'Name of contractor', 'required' => false))
+                ->add('dateAppSubmitted', null, array('label' => 'Date Application Submitted', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
+                ->add('dateOfAssessment', null, array('label' => 'Date of Assessment', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
+                ->add('dateOfUpgrade', null, array('label' => 'Date of Upgrade', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
+                ->add('step3bWorkDone', null, array('label' => 'Description of work completed', 'required' => false))
+                ->add('step3cHowFinanced', 'choice', array('required' => false, 'label' => 'How was it financed', 'choices' => Lead::getHowAssessmentFinancedChoices()))
                 ->add('upgradeStatusNotes', null, array('label' => 'Notes', 'required' => false))
             ->end()
             ->with('Outreach')
@@ -93,7 +90,7 @@ class LeadAdmin extends Admin
                 ->add('campaignChoiceTalkingToNeighbors', null, array('label' => 'Give program flyer to neighbor or friends', 'required' => false))
                 ->add('campaignChoiceFormEnergyTeam', null, array('label' => 'forming an energy team', 'required' => false))
                 ->add('campaignChoiceAppearInVideo', null, array('label' => 'appear in a testimonial', 'required' => false))
-                ->add('campaignChoiceShareExperience', null, array('label' => 'sharing upgrade experience with others', 'required' => false))
+                ->add('campaignChoicePresent', null, array('label' => 'set up presentation at workplace or organization', 'required' => false))
                 ->add('campaignChoiceVolunteer', null, array('label' => 'becoming a volunteer', 'required' => false))
                 ->add('campaignChoiceSteward', null, array('label' => 'becoming a senion energy steward', 'required' => false))
                 ->add('campaignChoiceEvent', null, array('label' => 'presenting at an event', 'required' => false))
@@ -154,14 +151,6 @@ class LeadAdmin extends Admin
         'campaignChoiceOther' => 'SonataAdminBundle:Hook:_otherFormFieldPre.html.twig',
 
         // indented fields
-        'dateOfAssessment' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-        'dateOfUpgrade' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-        'reportReceived' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-        'scopeOfWorkSubmitted' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-        'step2eContractor' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-        'step3aContractor' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-        'step3bWorkDone' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-        'step3cHowFinanced' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'renter' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'landlord' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         
@@ -169,7 +158,7 @@ class LeadAdmin extends Admin
         // NOTE: the indent divs for the first choices are included in the field group label hooks below
         'campaignChoiceFormEnergyTeam' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'campaignChoiceAppearInVideo' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-        'campaignChoiceShareExperience' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'campaignChoicePresent' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'campaignChoiceVolunteer' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'campaignChoiceSteward' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'campaignChoiceEvent' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
@@ -189,14 +178,6 @@ class LeadAdmin extends Admin
         'campaignChoiceOther' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         
         // indented fields
-        'dateOfAssessment' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'dateOfUpgrade' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'reportReceived' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'scopeOfWorkSubmitted' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'step2eContractor' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'step3aContractor' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'step3bWorkDone' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'step3cHowFinanced' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'homeowner' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'renter' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'landlord' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
@@ -205,7 +186,7 @@ class LeadAdmin extends Admin
         'campaignChoiceTalkingToNeighbors' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'campaignChoiceFormEnergyTeam' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'campaignChoiceAppearInVideo' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'campaignChoiceShareExperience' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'campaignChoicePresent' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'campaignChoiceVolunteer' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'campaignChoiceSteward' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'campaignChoiceEvent' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
@@ -325,7 +306,15 @@ class LeadAdmin extends Admin
                 'choices' => Lead::getLeadStatusChoices()
             )
         ));
-        $datagrid->add('needToCall', null, array('label' => 'Need to Call'));
+        $datagrid->add('upgradeStatus', 'doctrine_orm_choice', array(
+            'label' => 'Upgrade Status',
+            'field_type' => 'choice',
+            'field_options' => array(
+                'required' => false,
+                'choices' => Lead::getUpgradeStatusChoices()
+            )
+        ));
+        $datagrid->add('needToCall', null, array('label' => 'Need to Contact'));
         $datagrid->add('dataCounty', 'doctrine_orm_choice', array(
             'label' => 'Outreach County',
             'field_type' => 'choice',
@@ -346,10 +335,6 @@ class LeadAdmin extends Admin
                 'choices' => Lead::getCampaignChoices()
             )
         ));
-        $datagrid->add('step2aInterested', null, array('label' => 'Interested in Assessment'));
-        $datagrid->add('step2bSubmitted', null, array('label' => 'GJGNY Application Submitted'));
-        $datagrid->add('step2dCompleted', null, array('label' => 'Assessment Complete'));
-        $datagrid->add('step3', null, array('label' => 'Upgrade Complete'));
         $datagrid->add('CRISStatus', 'doctrine_orm_choice', array(
             'label' => 'CRIS Status',
             'field_options' => array(
@@ -414,6 +399,7 @@ class LeadAdmin extends Admin
         $datagrid->add('homeowner', null, array('label' => 'Homeowner'));
         $datagrid->add('renter', null, array('label' => 'Renter'));
         $datagrid->add('landlord', null, array('label' => 'Landlord'));
+        $datagrid->add('appointmentMade', null, array('label' => 'Appointment Made?'));
         $datagrid->add('userAssignedTo', 'doctrine_orm_callback', array(
             'label' => 'Assigned To',
             'callback' => function($queryBuilder, $alias, $field, $values) {
@@ -443,7 +429,6 @@ class LeadAdmin extends Admin
         $datagrid->add('datetimeLastUpdated', 'doctrine_orm_date_range', array('label' => 'Date Updated'));
         $datagrid->add('dateOfAssessment', 'doctrine_orm_date_range', array('label' => 'Date of Assessment'));
         $datagrid->add('dateOfUpgrade', 'doctrine_orm_date_range', array('label' => 'Date of Upgrade'));
-        
         
         $this->initializeDefaultFilters();
     }
@@ -487,12 +472,14 @@ class LeadAdmin extends Admin
         'dateOfAssessment' => true,
         'leadCategory' => true,
         'leadEventTitle' => true,
+        'appointmentMade' => true,
 	'CRISStatus' => true,
 	'inCRIS' => true,
         'Zip' => true,
         'City' => true,
         'county' => true,
         'leadStatus' => true,
+        'upgradeStatus' => true,
         'SourceOfLead' => true
     );
 
@@ -520,7 +507,7 @@ class LeadAdmin extends Admin
             ->add('leadReferral', array('label' => 'Referral / Nomination'))
             ->add('DateOfLead', array('label' => 'Date of First Contact', 'type' => 'date'))
             ->add('leadStatus', array('label' => 'Lead Status'))
-            ->add('needToCall', null, array('label' => 'Need to Call', 'type' => 'boolean'))                
+            ->add('needToCall', null, array('label' => 'Need to Contact', 'type' => 'boolean'))                
             ->add('DateOfNextFollowup', array('label' => 'Date of next Follow-up', 'type' => 'date'))
             
             ->add('leadTypeUpgrade', array('label' => 'Lead Type: Energy Upgrade', 'type' => 'boolean'))
@@ -546,21 +533,16 @@ class LeadAdmin extends Admin
             ->add('campaignChoiceTalkingToNeighbors', array('label' => 'Campaign interest: Give program flyer to neighbor or friends', 'type' => 'boolean'))
             ->add('campaignChoiceFormEnergyTeam', array('label' => 'Campaign interest: forming an energy team', 'type' => 'boolean'))
             ->add('campaignChoiceAppearInVideo', array('label' => 'Campaign interest: appear in a testimonial', 'type' => 'boolean'))
-            ->add('campaignChoiceShareExperience', array('label' => 'Campaign interest: sharing upgrade experience with others', 'type' => 'boolean'))
+            ->add('campaignChoicePresent', array('label' => 'Campaign interest: setup presentation at workplace or organization', 'type' => 'boolean'))
             ->add('campaignChoiceVolunteer', array('label' => 'Campaign interest: becoming a volunteer', 'type' => 'boolean'))
             ->add('campaignChoiceSteward', array('label' => 'Campaign interest: becoming an energy steward', 'type' => 'boolean'))
             ->add('campaignChoiceEvent', array('label' => 'Campaign interest: presenting at event', 'type' => 'boolean'))
             ->add('campaignChoiceOther', array('label' => 'Campaign interest other'))
     
-            ->add('step2aInterested', array('label' => 'Interested in assessment', 'type' => 'boolean'))
-            ->add('step2bSubmitted', array('label' => 'GJGNY application submitted', 'type' => 'boolean'))
-            ->add('step2dCompleted', array('label' => 'Assessment completed', 'type' => 'boolean'))
+            ->add('upgradeStatus', array('label' => 'Upgrade Status'))
             ->add('dateOfAssessment', array('label' => 'Date of Assessment', 'type' => 'date'))
-            ->add('scopeOfWorkSubmitted', array('label' => 'Scope of Work Submitted'))
-            ->add('step3', array('label' => 'Upgrade Complete', 'type' => 'boolean'))
             ->add('dateOfUpgrade', array('label' => 'Date of Upgrade', 'type' => 'date'))
             ->add('step2eContractor', array('label' => 'Name of contractor'))
-            ->add('step3aContractor', array('label' => 'Name of contractor'))
             ->add('step3bWorkDone', array('label' => 'What was done?'))
             ->add('step3cHowFinanced', array('label' => 'How was it financed'))
             ->add('CRISStatus', array('label' => 'CRIS Status'))
@@ -573,6 +555,7 @@ class LeadAdmin extends Admin
             ->addYField('SourceOfLead', array('label' => 'Source of Lead'))
             ->addYField('Program', array('label' => 'Program Source','type' => 'relation', 'relation_field_name' => 'Program_id', 'relation_repository' => 'GJGNYDataToolBundle:Program'))
             ->addYField('DateOfLead', array('label' => 'Date of First Contact', 'type' => 'date'))
+            ->addXField('upgradeStatus', array('label' => 'Upgrade Status'))
             ->addXField('CRISStatus', array('label' => 'CRIS Status'))
             ->addXField('City')
             ->addXField('Zip')
@@ -606,8 +589,10 @@ class LeadAdmin extends Admin
             ->with('Lead History')
                 ->add('SourceOfLead', null, array('label' => 'Source of Lead'))
                 ->add('Program', null, array('label' => 'Program Source'))
+                ->add('appointmentMade', null, array('label' => 'Appointment Made'))
+                ->add('dateOfNextAppointment', null, array('label' => 'Date of next appointment'))
                 ->add('DateOfLead', null, array('label' => 'Date of Lead'))
-                ->add('needToCall', null, array('label' => 'Need to Call'))
+                ->add('needToCall', null, array('label' => 'Need to Contact'))
                 ->add('leadStatus', null, array('label' => 'Lead Status'))
                 ->add('DateOfNextFollowup', null, array('label' => 'Date of next followup'))
                 ->add('userAssignedTo', null, array('label' => 'Assigned To'))
@@ -621,28 +606,23 @@ class LeadAdmin extends Admin
                 ->add('renter', null, array('label' => 'Renter'))
                 ->add('landlord', null, array('label' => 'Landlord'))
             ->end()
-            ->with('Enery Upgrade Status')
-                ->add('step2aInterested', null, array('label' => 'Interested in Home Energy Assessment'))
-                ->add('step2bSubmitted', null, array('label' => 'GJGNY Application Submitted'))
-                ->add('step2dCompleted', null, array('label' => 'Assessment Complete'))
-                ->add('dateOfAssessment', null, array('label' => 'Date'))
-                ->add('reportReceived', null, array('label' => 'Report Received'))
-                ->add('scopeOfWorkSubmitted', null, array('label' => 'Scope of Work Submitted'))
+            ->with('Enery Upgrade')
+                ->add('upgradeStatus', null, array('label' => 'Upgrade Status'))
+                ->add('CRISStatus', null, array('label' => 'CRIS Status'))
                 ->add('step2eContractor', null, array('label' => 'Name of contractor'))
-                ->add('step3', null, array('label' => 'Upgrade Complete'))
-                ->add('dateOfUpgrade', null, array('label' => 'Date'))
-                ->add('step3aContractor', null, array('label' => 'Name of contractor'))
-                ->add('step3bWorkDone', null, array('label' => 'What was done?'))
+                ->add('dateAppSubmitted', null, array('label' => 'Date Application Submitted'))
+                ->add('dateOfAssessment', null, array('label' => 'Date of Assessment'))
+                ->add('dateOfUpgrade', null, array('label' => 'Date of Upgrade'))
+                ->add('step3bWorkDone', null, array('label' => 'Description of work completed'))
                 ->add('step3cHowFinanced', null, array('label' => 'How was it financed?'))
                 ->add('upgradeStatusNotes', null, array('label' => 'Notes'))
-                ->add('CRISStatus', null, array('label' => 'CRIS Status'))
             ->end()
             ->with('Outreach')
                 ->add('CommunityGroupsConnectedTo', null, array('label' => 'Community groups connected to'))
                 ->add('campaignChoiceTalkingToNeighbors', null, array('label' => 'Campaign Interest: Give program flyer to neighbor or friends'))
                 ->add('campaignChoiceFormEnergyTeam', null, array('label' => 'Campaign Interest: forming an energy team'))
                 ->add('campaignChoiceAppearInVideo', null, array('label' => 'Campaign Interest: appear in a testimonial'))
-                ->add('campaignChoiceShareExperience', null, array('label' => 'Campaign Interest: sharing experience with others'))
+                ->add('campaignChoicePresent', null, array('label' => 'Campaign Interest: setup presentation at workplace or organization'))
                 ->add('campaignChoiceVolunteer', null, array('label' => 'Campaign Interest: becoming a volunteer'))
                 ->add('campaignChoiceSteward', null, array('label' => 'Campaign Interest: becoming an energy steward'))
                 ->add('campaignChoiceEvent', null, array('label' => 'Campaign Interest: presentating at an event'))
@@ -718,15 +698,6 @@ class LeadAdmin extends Admin
     public $showFieldClasses = array (
         'primaryPhoneType' => 'indented',
         'secondaryPhoneType' => 'indented',
-        
-        'dateOfAssessment' => 'indented',
-        'dateOfUpgrade' => 'indented',
-        'step2eContractor' => 'indented',
-        'step3aContractor' => 'indented',
-        'step3bWorkDone' => 'indented',
-        'step3cHowFinanced' => 'indented',
-        'scopeOfWorkSubmitted' => 'indented',
-        'reportReceived' => 'indented',
     );
     
     public function prePersist($Lead)

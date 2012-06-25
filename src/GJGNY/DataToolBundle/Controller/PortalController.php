@@ -13,6 +13,9 @@ namespace GJGNY\DataToolBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
+use Symfony\Component\Form\CallbackValidator;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormError;
 
 class PortalController extends Controller
 {
@@ -46,11 +49,41 @@ class PortalController extends Controller
                     ->add('firstName', 'text', array('label' => 'First Name'))
                     ->add('lastName', 'text', array('label' => 'Last Name'))
                     ->add('email', 'text', array('label' => 'E-mail'))
-                    ->add('phone', 'text', array('label' => 'Phone'))
+                    ->add('phone', 'text', array('label' => 'Phone', 'required' => true))
                     ->add('town', 'text', array('label' => 'Town'))
-                    ->add('county', 'choice', array('label' => 'County', 'choices' => $counties))
-                    ->getForm();
+                    ->add('county', 'choice', array('label' => 'County', 'choices' => $counties));
 
+            $form->
+                addValidator(new CallbackValidator(function(FormInterface $form)
+                {
+                    if (!$form["firstName"]->getData() && trim($form["firstName"]->getData()) == "" )
+                    {
+                        $form->addError(new FormError('Please enter your first name'));
+                    }
+                })
+            );
+            $form->
+                addValidator(new CallbackValidator(function(FormInterface $form)
+                {
+                    if (!$form["lastName"]->getData() && trim($form["lastName"]->getData()) == "" )
+                    {
+                        $form->addError(new FormError('Please enter your last name'));
+                    }
+                })
+            );
+            $form->
+                addValidator(new CallbackValidator(function(FormInterface $form)
+                {
+                    if (!$form["phone"]->getData() && trim($form["phone"]->getData()) == "" )
+                    {
+                        $form->addError(new FormError('Please enter your phone number'));
+                    }
+                })
+            );
+            
+            $form = $form->getForm();
+                
+                
             if($request->getMethod() == 'POST') {
                 $form->bindRequest($request);
 

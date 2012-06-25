@@ -107,7 +107,7 @@
                 {% else %}
                     <div class="row">
                         <div class="span8" id="portal-signup">
-                            <form id="portal-signup-form" class="form-stacked" action="{{ path('signup', {'url' : portal.url}) }}" method="post" {{ form_enctype(form) }}>
+                            <form id="portal-signup-form" novalidate="novalidate" class="form-stacked" action="{{ path('signup', {'url' : portal.url}) }}" method="post" {{ form_enctype(form) }}>
                                 {{ form_widget(form) }}
 
                                 <div class="actions">

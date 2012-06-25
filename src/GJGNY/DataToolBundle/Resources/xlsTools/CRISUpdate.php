@@ -23,6 +23,11 @@ class CRISUpdate extends BasicLeadUpload
     {
         if($this->checkForDuplicates($row)) {
             $Lead = $this->checkForDuplicates($row);
+            
+            if($Lead->getCRISStatus() != $this->getCRISStatus($row)) {
+                $Lead->setNeedToCall(true);
+            }
+            
             $Lead->setCRISStatus($this->getCRISStatus($row));
             $this->updateObject($Lead);                
             $this->updates[] = $this->getFirstName($row).' '.$this->getLastName($row).' (match found : '.$Lead->getFirstName().' '.$Lead->getLastName().')';
@@ -41,6 +46,7 @@ class CRISUpdate extends BasicLeadUpload
         $Lead->setLeadTypeUpgrade(true);
         $Lead->setSourceOfLead('CRIS Database');
         $Lead->setDateOfLead(null);
+        $Lead->setNeedToCall(true);
         
         $normalZip = $this->getNormalZip($row);
         if(in_array($normalZip, $this->tompkinsZips)) {
