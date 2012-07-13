@@ -113,6 +113,7 @@ class Lead
         'Approved for financing ' => 'Approved for financing ',
         'Denied for financing' => 'Denied for financing',
         'Work scope submitted' => 'Work scope submitted',
+        'Work scope approved' => 'Work scope approved',
         'Upgrade Complete' => 'Upgrade Complete'
     );
     
@@ -140,8 +141,11 @@ class Lead
         'Approved for reduced cost audit' => 'Approved for reduced cost audit',
         'Customer Ineligible' => 'Customer Ineligible',
         'Pending/Hold - Customer' => 'Pending/Hold - Customer',
+        'Customer Non-Responsive' => 'Customer Non-Responsive',
+        'Audit Approval Expired' => 'Audit Approval Expired',
         'Customer selected HP contractor' => 'Customer selected HP contractor',
         'HP Audit Complete' => 'HP Audit Complete',
+        'HP work approved' => 'HP work approved',
         'HP work complete' => 'HP work complete'
     );
     
