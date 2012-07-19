@@ -323,8 +323,36 @@ class LeadAdmin extends Admin
                 'choices' => array('Broome' => 'Broome', 'Tompkins' => 'Tompkins')
             )
         ));
-        $datagrid->add('personalEmail', null, array('label' => 'Personal E-mail'));
-        $datagrid->add('workEmail', null, array('label' => 'Work E-mail'));
+        $datagrid->add('personalEmail', 'doctrine_orm_callback', array(
+            'label' => 'Email',
+            'callback' => function ($queryBuilder, $alias, $field, $values) {
+                if(!$values['value'])
+                {
+                    return;
+                }
+
+                $queryBuilder->andWhere($alias.'.personalEmail LIKE :email OR '.$alias.'.workEmail LIKE :email');
+                $queryBuilder->setParameter('email', '%' . $values['value'] . '%');
+            },
+            'field_options' => array(
+                'required' => false,
+            ),
+        ));
+        $datagrid->add('phone', 'doctrine_orm_callback', array(
+            'label' => 'Phone',
+            'callback' => function ($queryBuilder, $alias, $field, $values) {
+                if(!$values['value'])
+                {
+                    return;
+                }
+
+                $queryBuilder->andWhere($alias.'.phone LIKE :phone OR '.$alias.'.secondaryPhone LIKE :phone');
+                $queryBuilder->setParameter('phone', '%' . $values['value'] . '%');
+            },
+            'field_options' => array(
+                'required' => false,
+            ),
+        ));
         $datagrid->add('organization', null, array('label' => 'Work / Organization'));
         $datagrid->add('Campaign', 'doctrine_orm_callback', array(
             'label' => 'Campaign interest',
@@ -450,7 +478,7 @@ class LeadAdmin extends Admin
     }
     public $hiddenFilters = array(
         'personalEmail' => true,
-        'workEmail' => true,
+        'phone' => true,
         'organization' => true,
         'leadType' => true,
         'Campaign' => true,
