@@ -55,6 +55,11 @@ services:
       tags:
         - { name: sonata.admin, manager_type: orm, group: Portals, label: Portal Settings }
       arguments: [null, GJGNY\DataToolBundle\Entity\PortalSettings, GJGNYDataToolBundle:PortalSettingsAdmin]
+    gjgny.datatool.admin.contractor:
+      class: GJGNY\DataToolBundle\Admin\ContractorAdmin
+      tags:
+        - { name: sonata.admin, manager_type: orm, group: Portals, label: Contractors }
+      arguments: [null, GJGNY\DataToolBundle\Entity\Contractor, GJGNYDataToolBundle:ContractorAdmin]      
 
 
 parameters:

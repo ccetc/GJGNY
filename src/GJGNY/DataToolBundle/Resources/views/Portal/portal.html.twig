@@ -4,7 +4,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
         {% block stylesheets %}
-            <link rel="stylesheet" href="{{ asset('bundles/ccetcbootstrap/bootstrap/bootstrap.css') }}" type="text/css" media="all" >
+            <link rel="stylesheet" href="{{ asset('bundles/ccetcbootstrap/bootstrap/bootstrap.min.css') }}" type="text/css" media="all" >
             <link rel="stylesheet" href="{{ asset('styles/portals.css') }}" type="text/css" media="all" >
         {% endblock %}
             
@@ -102,6 +102,38 @@
                         <div class="span7">
                             <h2>Events</h2>
                             {{ portal.events|raw }}
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:25px;">
+                        <div class="span14">
+                            <h2>Contractors</h2>
+                            <table class="" style="border: 1px solid #ccc;">
+                                <thead style="background: #666; color: white;">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Address</th>
+                                        <th>Contact</th>
+                                        <th>Specialties</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for contractor in contractors %}
+                                        <tr>
+                                            <td>
+                                                {% if contractor.filename != "" %}<img style="width: 150px;" src="{{ asset('images/Portals/' ~ contractor.filename ) }}" />{% endif %}
+                                                {{ contractor.name }}
+                                            </td>
+                                            <td>{{ contractor.address }}</td>
+                                            <td>
+                                                {% if contractor.email != "" %}<a href="mailto:{{ contractor.email }}">{{ contractor.email }}</a><br/>{% endif %}
+                                                {% if contractor.website != "" %}<a href="{{ contractor.website }}">{{ contractor.website }}</a><br/>{% endif %}
+                                                {% if contractor.phone != "" %}{{ contractor.phone }}<br/>{% endif %}
+                                            </td>
+                                            <td>{{ contractor.specialties }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 {% else %}

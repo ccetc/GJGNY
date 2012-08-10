@@ -1,0 +1,7 @@
+{% extends 'SonataAdminBundle:CRUD:base_show_field.html.twig' %}
+
+{% block field%}
+    {% if object.filename %}
+        <img src="{{ asset('images/Portals/' ~ object.filename ) }}" style="height: 50px;" />
+    {% endif %}
+{% endblock %}

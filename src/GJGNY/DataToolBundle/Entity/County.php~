@@ -32,6 +32,10 @@ class County
      * @ORM\ManyToMany(targetEntity="PortalSettings", mappedBy="counties")
      */
     private $portalsServedBy;
+    /**
+     * @ORM\ManyToMany(targetEntity="Contractor", mappedBy="counties")
+     */
+    private $contractors;
     
     /** @ORM\OneToMany(targetEntity="PortalSettings", mappedBy="countyOwnedBy", cascade={"persist", "remove"}) */
     protected $portalsOwned;

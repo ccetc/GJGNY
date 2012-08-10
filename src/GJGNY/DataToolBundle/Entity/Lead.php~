@@ -81,6 +81,7 @@ class Lead
         'Program' => 'Program',
         'Presentation' => 'Presentation',
         'Tabling' => 'Tabling',
+        'TV News' => 'TV News',
         'Website' => 'Website',
     );
     protected static $howAssessmentFinancedChoices = array(
@@ -113,6 +114,7 @@ class Lead
         'Approved for financing ' => 'Approved for financing ',
         'Denied for financing' => 'Denied for financing',
         'Work scope submitted' => 'Work scope submitted',
+        'Work scope approved' => 'Work scope approved',
         'Upgrade Complete' => 'Upgrade Complete'
     );
     
@@ -140,9 +142,12 @@ class Lead
         'Approved for reduced cost audit' => 'Approved for reduced cost audit',
         'Customer Ineligible' => 'Customer Ineligible',
         'Pending/Hold - Customer' => 'Pending/Hold - Customer',
+        'Customer Non-Responsive' => 'Customer Non-Responsive',
+        'Audit Approval Expired' => 'Audit Approval Expired',
         'Customer selected HP contractor' => 'Customer selected HP contractor',
         'HP Audit Complete' => 'HP Audit Complete',
-        'HP Upgrade Complete' => 'HP Upgrade Complete'
+        'HP work approved' => 'HP work approved',
+        'HP work complete' => 'HP work complete'
     );
     
     
@@ -2453,5 +2458,25 @@ class Lead
     public function getUpgradeStatus()
     {
         return $this->upgradeStatus;
+    }
+
+    /**
+     * Set dateAppSubmitted
+     *
+     * @param date $dateAppSubmitted
+     */
+    public function setDateAppSubmitted($dateAppSubmitted)
+    {
+        $this->dateAppSubmitted = $dateAppSubmitted;
+    }
+
+    /**
+     * Get dateAppSubmitted
+     *
+     * @return date 
+     */
+    public function getDateAppSubmitted()
+    {
+        return $this->dateAppSubmitted;
     }
 }

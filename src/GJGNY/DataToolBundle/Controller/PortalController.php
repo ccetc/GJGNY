@@ -42,6 +42,8 @@ class PortalController extends Controller
 
         asort($counties);
 
+        $contractorRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:Contractor');
+
         if($signup) {
             $request = $this->getRequest();
 
@@ -157,7 +159,8 @@ class PortalController extends Controller
         $templateParameters = array(
             'portal' => $portal,
             'partnerLogos' => $partnerLogos,
-            'signup' => $signup
+            'signup' => $signup,
+            'contractors' => $contractorRepository->findBy(array(), array('name' => 'ASC'))
         );
 
         if($signup)

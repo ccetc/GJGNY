@@ -1,0 +1,294 @@
+<?php
+
+namespace GJGNY\DataToolBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * GJGNY\DataToolBundle\Entity\Contractor
+ *
+ * @ORM\Table()
+ * @ORM\Entity
+ */
+class Contractor
+{
+    /**
+     * @var integer $id
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string $name
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable="true")
+     */
+    private $name;
+
+    /**
+     * @var text $specialties
+     *
+     * @ORM\Column(name="specialties", type="text", nullable="true")
+     */
+    private $specialties;
+
+    /**
+     * @var string $address
+     *
+     * @ORM\Column(name="address", type="string", length=255, nullable="true")
+     */
+    private $address;
+
+    /**
+     * @var string $phone
+     *
+     * @ORM\Column(name="phone", type="string", length=255, nullable="true")
+     */
+    private $phone;
+
+    /**
+     * @var string $website
+     *
+     * @ORM\Column(name="website", type="string", length=255, nullable="true")
+     */
+    private $website;
+
+    /**
+     * @var string $email
+     *
+     * @ORM\Column(name="email", type="string", length=255, nullable="true")
+     */
+    private $email;
+
+    /**
+     * @var string $filename
+     *
+     * @ORM\Column(name="filename", type="string", length=255, nullable="true")
+     */
+    private $filename;
+    
+    /**
+     * @var string $file
+     *
+     * @ORM\Column(name="file", type="string", length=255, nullable=true)
+     */
+    protected $file;       
+    
+    public function __toString()
+    {
+        return $this->name;
+    }
+    
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set specialties
+     *
+     * @param text $specialties
+     */
+    public function setSpecialties($specialties)
+    {
+        $this->specialties = $specialties;
+    }
+
+    /**
+     * Get specialties
+     *
+     * @return text 
+     */
+    public function getSpecialties()
+    {
+        return $this->specialties;
+    }
+
+    /**
+     * Set address
+     *
+     * @param string $address
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+    }
+
+    /**
+     * Get address
+     *
+     * @return string 
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * Set phone
+     *
+     * @param string $phone
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+    }
+
+    /**
+     * Get phone
+     *
+     * @return string 
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * Set website
+     *
+     * @param string $website
+     */
+    public function setWebsite($website)
+    {
+        $this->website = $website;
+    }
+
+    /**
+     * Get website
+     *
+     * @return string 
+     */
+    public function getWebsite()
+    {
+        return $this->website;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string 
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+    
+     public function getAbsolutePath()
+    {
+        return null === $this->filename ? null : $this->getUploadRootDir() . '/' . $this->filename;
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->filename ? null : $this->getUploadDir() . '/' . $this->filename;
+    }
+
+    protected function getUploadDir()
+    {
+        return __DIR__.'/../../../../web/images/Portals';
+    }
+
+    public function upload()
+    {
+        // the file property can be empty if the field is not required
+        if(null === $this->file)
+        {
+            return;
+        }
+
+        // we use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+        // move takes the target directory and then the target filename to move to
+        $this->file->move($this->getUploadDir(), $this->file->getClientOriginalName());
+
+        // set the path property to the filename where you'ved saved the file
+        $this->setFilename($this->file->getClientOriginalName());
+
+        // clean up the file property as you won't need it anymore
+        $this->file = null;
+    }
+    
+    public function __construct()
+    {
+        $this->counties = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Set filename
+     *
+     * @param string $filename
+     */
+    public function setFilename($filename)
+    {
+        $this->filename = $filename;
+    }
+
+    /**
+     * Get filename
+     *
+     * @return string 
+     */
+    public function getFilename()
+    {
+        return $this->filename;
+    }
+
+    /**
+     * Set file
+     *
+     * @param string $file
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file
+     *
+     * @return string 
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+}

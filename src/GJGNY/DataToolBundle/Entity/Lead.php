@@ -81,6 +81,7 @@ class Lead
         'Program' => 'Program',
         'Presentation' => 'Presentation',
         'Tabling' => 'Tabling',
+        'TV News' => 'TV News',
         'Website' => 'Website',
     );
     protected static $howAssessmentFinancedChoices = array(
