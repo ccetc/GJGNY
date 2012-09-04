@@ -48,11 +48,8 @@ div#portal-steps {
     font-size: 16px;
 }
 
-div#portal-steps a.btn {
-    text-align: center;
-    width: 80px;
-    margin: 10px auto;
-    display: block;
+div#portal-steps li {
+    line-height: 24px;
 }
 
 div#partner-logo-container img {
