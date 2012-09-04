@@ -48,6 +48,13 @@ div#portal-steps {
     font-size: 16px;
 }
 
+div#portal-steps a.btn {
+    text-align: center;
+    width: 80px;
+    margin: 10px auto;
+    display: block;
+}
+
 div#partner-logo-container img {
     height: 66px;
     padding: 5px;
