@@ -315,13 +315,13 @@ class LeadAdmin extends Admin
             )
         ));
         $datagrid->add('needToCall', null, array('label' => 'Need to Contact'));
-        $datagrid->add('dataCounty', 'doctrine_orm_choice', array(
+        $datagrid->add('dataCounty', null, array(
             'label' => 'Outreach County',
             'field_type' => 'choice',
             'field_options' => array(
                 'required' => false,
-                'choices' => array('Broome' => 'Broome', 'Tompkins' => 'Tompkins')
-            )
+                'choices' => array('Broome' => 'Broome', 'Tompkins' => 'Tompkins'),
+            ),
         ));
         $datagrid->add('personalEmail', 'doctrine_orm_callback', array(
             'label' => 'Email',
@@ -448,7 +448,7 @@ class LeadAdmin extends Admin
             'field_options' => array(
                 'required' => false,
                 'choices' => $this->getAssignedToChoices()
-            )
+            ),
         ));
             
         // leave the dates for last since they are tall
@@ -585,8 +585,14 @@ class LeadAdmin extends Admin
             ->addYField('DateOfLead', array('label' => 'Date of First Contact', 'type' => 'date'))
             ->addXField('upgradeStatus', array('label' => 'Upgrade Status'))
             ->addXField('CRISStatus', array('label' => 'CRIS Status'))
+            ->addXField('County')
+            ->addXField('Town')
             ->addXField('City')
             ->addXField('Zip')
+            ->addYField('County')
+            ->addYField('Town')
+            ->addYField('City')
+            ->addYField('Zip')
         ;
     }
 

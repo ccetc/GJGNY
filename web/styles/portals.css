@@ -42,6 +42,7 @@ div#heading-container {
 
 div#btn-container {
     margin: 20px 0;
+    float: right;
 }
 
 div#portal-steps {
@@ -55,4 +56,12 @@ div#portal-steps li {
 div#partner-logo-container img {
     height: 66px;
     padding: 5px;
+}
+
+div.about-container {
+    margin: 25px 0;
+}
+
+div.about-container p {
+    font-style: italic;
 }
