@@ -267,7 +267,8 @@ class LeadAdmin extends Admin
         $datagrid->add('LastName', null, array('label' => 'Last name'));
         $datagrid->add('City');
         $datagrid->add('Zip');
-        $datagrid->add('county');
+        $datagrid->add('county', null, array(), null, array('expanded' => true, 'multiple' => true));
+            
         $datagrid->add('SourceOfLead', 'doctrine_orm_choice', array(
             'label' => 'Source of Lead',
             'field_options' => array(
