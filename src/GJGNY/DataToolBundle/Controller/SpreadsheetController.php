@@ -71,7 +71,10 @@ class SpreadsheetController extends Controller
         {
             if(count($county->getLeads()) == 0) {
                 $response .= $county->__toString()." has 0 leads<br/>";
+                $em->remove($county);
             }
+            $em->flush();
+            $em->clear();            
         }
         
         return $response;
