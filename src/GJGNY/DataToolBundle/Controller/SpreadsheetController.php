@@ -63,18 +63,20 @@ class SpreadsheetController extends Controller
     
     protected function removeUnusedCounties()
     {
+        ini_set('memory_limit', '1024M');
+        set_time_limit ( 0 );
+
         $countyRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:County');
+        $countyAdmin = $this->get('gjgny.datatool.admin.county');
         $em = $this->getDoctrine()->getEntityManager();        
         $response = "";
 
         foreach($countyRepository->findAll() as $county)
         {
             if(count($county->getLeads()) == 0) {
-                $response .= $county->__toString()." has 0 leads<br/>";
-               // $em->remove($county);
+                $response .= $county->__toString()." removed<br/>";
+                $countyAdmin->delete($county);
             }
-//            $em->flush();
-//            $em->clear();            
         }
         
         return $response;

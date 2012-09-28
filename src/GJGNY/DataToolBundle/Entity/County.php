@@ -29,7 +29,7 @@ class County
     private $name;
     
     /**
-     * @ORM\ManyToMany(targetEntity="PortalSettings", mappedBy="counties")
+     * @ORM\ManyToMany(targetEntity="PortalSettings", mappedBy="countiesServed")
      */
     private $portalsServedBy;
     

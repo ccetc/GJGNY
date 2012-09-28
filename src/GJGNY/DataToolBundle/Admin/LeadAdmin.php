@@ -15,7 +15,6 @@ use GJGNY\DataToolBundle\Admin\LeadEventAdmin as LeadEventAdmin;
 
 class LeadAdmin extends Admin
 {
-
     protected $maxPerPage = 10;
     protected $classnameLabel = 'Leads';
     protected $entityLabel = 'Lead';
