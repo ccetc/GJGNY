@@ -43,7 +43,7 @@ class SpreadsheetController extends Controller
             $templateParameters['duplicates'] = $spreadsheet->duplicates;
             $templateParameters['notFound'] = $spreadsheet->notFound;
         }
-
+        
         return $this->render('GJGNYDataToolBundle:Spreadsheets:results.html.twig', $templateParameters);
     }
     
