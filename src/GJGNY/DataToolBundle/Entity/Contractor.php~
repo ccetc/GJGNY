@@ -24,55 +24,49 @@ class Contractor
     /**
      * @var string $name
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255, nullable="true")
      */
     private $name;
 
     /**
      * @var text $specialties
      *
-     * @ORM\Column(name="specialties", type="text")
+     * @ORM\Column(name="specialties", type="text", nullable="true")
      */
     private $specialties;
 
     /**
      * @var string $address
      *
-     * @ORM\Column(name="address", type="string", length=255)
+     * @ORM\Column(name="address", type="string", length=255, nullable="true")
      */
     private $address;
 
     /**
      * @var string $phone
      *
-     * @ORM\Column(name="phone", type="string", length=255)
+     * @ORM\Column(name="phone", type="string", length=255, nullable="true")
      */
     private $phone;
 
     /**
      * @var string $website
      *
-     * @ORM\Column(name="website", type="string", length=255)
+     * @ORM\Column(name="website", type="string", length=255, nullable="true")
      */
     private $website;
 
     /**
      * @var string $email
      *
-     * @ORM\Column(name="email", type="string", length=255)
+     * @ORM\Column(name="email", type="string", length=255, nullable="true")
      */
     private $email;
 
     /**
-     * @ORM\ManyToMany(targetEntity="County", inversedBy="contractors")
-     * @ORM\JoinTable(name="ContractorsToCounties")
-     */
-    private $counties;
-    
-    /**
      * @var string $filename
      *
-     * @ORM\Column(name="filename", type="string", length=255)
+     * @ORM\Column(name="filename", type="string", length=255, nullable="true")
      */
     private $filename;
     
@@ -82,6 +76,11 @@ class Contractor
      * @ORM\Column(name="file", type="string", length=255, nullable=true)
      */
     protected $file;       
+    
+    public function __toString()
+    {
+        return $this->name;
+    }
     
     /**
      * Get id
@@ -246,5 +245,50 @@ class Contractor
 
         // clean up the file property as you won't need it anymore
         $this->file = null;
+    }
+    
+    public function __construct()
+    {
+        $this->counties = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Set filename
+     *
+     * @param string $filename
+     */
+    public function setFilename($filename)
+    {
+        $this->filename = $filename;
+    }
+
+    /**
+     * Get filename
+     *
+     * @return string 
+     */
+    public function getFilename()
+    {
+        return $this->filename;
+    }
+
+    /**
+     * Set file
+     *
+     * @param string $file
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file
+     *
+     * @return string 
+     */
+    public function getFile()
+    {
+        return $this->file;
     }
 }

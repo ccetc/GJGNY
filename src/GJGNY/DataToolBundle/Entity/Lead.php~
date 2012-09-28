@@ -284,6 +284,10 @@ class Lead
      */
     private $county;
 
+    /** @ORM\ManyToOne(targetEntity="County", inversedBy="leads") */
+    protected $countyEntity;
+    
+    
     /**
      * @var string $phone
      *
@@ -576,6 +580,26 @@ class Lead
      * @ORM\Column(name="dateAppSubmitted", type="date", nullable="true")
      */
     private $dateAppSubmitted;
+
+    /**
+     * @var date $dateAppApproved
+     *
+     * @ORM\Column(name="dateAppApproved", type="date", nullable="true")
+     */
+    private $dateAppApproved;
+    /**
+     * @var date $dateContractorSelected
+     *
+     * @ORM\Column(name="dateContractorSelected", type="date", nullable="true")
+     */
+    private $dateContractorSelected;
+    /**
+     * @var date $dateWorkScopeApproved
+     *
+     * @ORM\Column(name="dateWorkScopeApproved", type="date", nullable="true")
+     */
+    private $dateWorkScopeApproved;
+    
     
     /**
      * @var string $CRISStatus
@@ -765,12 +789,20 @@ class Lead
      * @ORM\Column(name="uploadedViaXls", type="boolean", nullable="true")
      */
     private $uploadedViaXls;
+
+    /**
+     * @var string $crisResNumber
+     *
+     * @ORM\Column(name="crisResNumber", type="string", length=255, nullable="true")
+     */
+    private $crisResNumber;
+    
     /**
      * @var string $dataCounty
      *
      * @ORM\Column(name="dataCounty", type="string", length=255, nullable="true")
      */
-    private $dataCounty;
+    private $dataCounty;    
 
     
     /**
@@ -2478,5 +2510,105 @@ class Lead
     public function getDateAppSubmitted()
     {
         return $this->dateAppSubmitted;
+    }
+
+    /**
+     * Set dateAppApproved
+     *
+     * @param date $dateAppApproved
+     */
+    public function setDateAppApproved($dateAppApproved)
+    {
+        $this->dateAppApproved = $dateAppApproved;
+    }
+
+    /**
+     * Get dateAppApproved
+     *
+     * @return date 
+     */
+    public function getDateAppApproved()
+    {
+        return $this->dateAppApproved;
+    }
+
+    /**
+     * Set dateContractorSelected
+     *
+     * @param date $dateContractorSelected
+     */
+    public function setDateContractorSelected($dateContractorSelected)
+    {
+        $this->dateContractorSelected = $dateContractorSelected;
+    }
+
+    /**
+     * Get dateContractorSelected
+     *
+     * @return date 
+     */
+    public function getDateContractorSelected()
+    {
+        return $this->dateContractorSelected;
+    }
+
+    /**
+     * Set dateWorkScopeApproved
+     *
+     * @param date $dateWorkScopeApproved
+     */
+    public function setDateWorkScopeApproved($dateWorkScopeApproved)
+    {
+        $this->dateWorkScopeApproved = $dateWorkScopeApproved;
+    }
+
+    /**
+     * Get dateWorkScopeApproved
+     *
+     * @return date 
+     */
+    public function getDateWorkScopeApproved()
+    {
+        return $this->dateWorkScopeApproved;
+    }
+
+    /**
+     * Set countyEntity
+     *
+     * @param GJGNY\DataToolBundle\Entity\County $countyEntity
+     */
+    public function setCountyEntity(\GJGNY\DataToolBundle\Entity\County $countyEntity)
+    {
+        $this->countyEntity = $countyEntity;
+    }
+
+    /**
+     * Get countyEntity
+     *
+     * @return GJGNY\DataToolBundle\Entity\County 
+     */
+    public function getCountyEntity()
+    {
+        return $this->countyEntity;
+    }
+
+    /**
+     * Set crisResNumber
+     *
+     * @param string $crisResNumber
+     */
+    public function setCrisResNumber($crisResNumber)
+    {
+        $this->crisResNumber = $crisResNumber;
+    }
+
+    /**
+     * Get crisResNumber
+     *
+     * @return string 
+     */
+    public function getCrisResNumber()
+    {
+        return $this->crisResNumber;
     }
 }

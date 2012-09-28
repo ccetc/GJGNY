@@ -1,0 +1,10 @@
+{% extends 'SonataAdminBundle:CRUD:base_show_field.html.twig' %}
+
+{% block field%}
+        {% if object.type %}
+            {{ object.type }}
+        {% endif %}            
+        {% if object.typeOther %}
+            {{ object.typeOther }}
+        {% endif %}
+{% endblock %}

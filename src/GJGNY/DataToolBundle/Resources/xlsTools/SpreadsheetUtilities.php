@@ -43,6 +43,12 @@ class SpreadsheetUtilities
      */
     public $duplicates;
 
+    /**
+     * Array of string representations of leas not found and ignored
+     * @var string
+     */
+    public $notFound;    
+    
     public function __construct($filename, $admin)
     {
         $this->spreadsheet = \PHPExcel_IOFactory::load($filename);
@@ -63,7 +69,6 @@ class SpreadsheetUtilities
             } else {
                 $this->processRow($row);
             }
-
             $row++;
         }
     }

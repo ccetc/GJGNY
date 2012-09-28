@@ -59,7 +59,12 @@ services:
       class: GJGNY\DataToolBundle\Admin\ContractorAdmin
       tags:
         - { name: sonata.admin, manager_type: orm, group: Portals, label: Contractors }
-      arguments: [null, GJGNY\DataToolBundle\Entity\Contractor, GJGNYDataToolBundle:ContractorAdmin]      
+      arguments: [null, GJGNY\DataToolBundle\Entity\Contractor, GJGNYDataToolBundle:ContractorAdmin] 
+    gjgny.datatool.admin.county:
+      class: GJGNY\DataToolBundle\Admin\CountyAdmin
+      tags:
+        - { name: sonata.admin, manager_type: orm, group: Settings, label: Counties }
+      arguments: [null, GJGNY\DataToolBundle\Entity\County, GJGNYDataToolBundle:CountyAdmin] 
 
 
 parameters:

@@ -17,8 +17,16 @@
     {{ text }}<br/>
   {% endfor %}
 
-  <h1>Found {{ duplicates|length }} Duplicates</h1>
+  <h1>Found and ignored {{ duplicates|length }} Duplicates</h1>
 
   {% for text in duplicates %}
     {{ text }}<br/>
-  {% endfor %}    
+  {% endfor %} 
+    
+  {% if notFound|length > 0 %}  
+      <h1>Could not find {{ notFound|length }} entries, they have been ignored</h1>
+
+      {% for text in notFound %}
+        {{ text }}<br/>
+      {% endfor %}
+  {% endif %}

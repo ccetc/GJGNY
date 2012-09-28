@@ -36,6 +36,9 @@ class County
     /** @ORM\OneToMany(targetEntity="PortalSettings", mappedBy="countyOwnedBy", cascade={"persist", "remove"}) */
     protected $portalsOwned;
 
+    /** @ORM\OneToMany(targetEntity="Lead", mappedBy="countyEntity", cascade={"persist", "remove"}) */
+    protected $leads;    
+    
     public function __toString()
     {
         return $this->name;
@@ -104,5 +107,25 @@ class County
     public function getPortalsOwned()
     {
         return $this->portalsOwned;
+    }
+
+    /**
+     * Add leads
+     *
+     * @param GJGNY\DataToolBundle\Entity\Lead $leads
+     */
+    public function addLead(\GJGNY\DataToolBundle\Entity\Lead $leads)
+    {
+        $this->leads[] = $leads;
+    }
+
+    /**
+     * Get leads
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getLeads()
+    {
+        return $this->leads;
     }
 }

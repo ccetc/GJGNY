@@ -43,7 +43,7 @@ class LeadAdmin extends Admin
                 ))
                 ->add('Zip', null, array('required' => false))
                 ->add('Town', null, array('required' => false))
-                ->add('county', null, array('required' => false))
+                ->add('countyEntity', 'sonata_type_model', array('required' => false, 'label' => 'County'))
                 ->add('phone', null, array('required' => false))
                 ->add('primaryPhoneType', null, array('label' => 'type', 'required' => false))
                 ->add('secondaryPhone', null, array('label' => 'Secondary Phone', 'required' => false))
@@ -79,7 +79,10 @@ class LeadAdmin extends Admin
                 ->add('CRISStatus', 'choice', array('label' => 'CRIS Status', 'required' => false, 'choices' => Lead::getCRISStatusChoices()))
                 ->add('step2eContractor', null, array('label' => 'Name of contractor', 'required' => false))
                 ->add('dateAppSubmitted', null, array('label' => 'Date Application Submitted', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
+                ->add('dateAppApproved', null, array('label' => 'Date Application Approved', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
+                ->add('dateContractorSelected', null, array('label' => 'Date Contractor Selected', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
                 ->add('dateOfAssessment', null, array('label' => 'Date of Assessment', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
+                ->add('dateWorkScopeApproved', null, array('label' => 'Date Work Scope Approved', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
                 ->add('dateOfUpgrade', null, array('label' => 'Date of Upgrade', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
                 ->add('step3bWorkDone', null, array('label' => 'Description of work completed', 'required' => false))
                 ->add('step3cHowFinanced', 'choice', array('required' => false, 'label' => 'How was it financed', 'choices' => Lead::getHowAssessmentFinancedChoices()))
@@ -215,7 +218,6 @@ class LeadAdmin extends Admin
                 ->addIdentifier('LastName', 'string', array('label' => 'Name','template' => 'GJGNYDataToolBundle:Lead:_name.html.twig'))
                 ->add('Contact', 'string', array('template' => 'GJGNYDataToolBundle:Lead:_contact.html.twig'))
                 ->add('Address', null, array('template' => 'GJGNYDataToolBundle:Lead:_address.html.twig'))
-                
                 ->add('SourceOfLead', null, array('label' => 'Source of Lead'))
                 ->add('Program', null, array('label' => 'Program Source'))
                 ->add('DateOfLead', null, array('label' => 'Date of First Contact', 'template' => 'GJGNYDataToolBundle:Lead:_dateOfLead.html.twig'))
@@ -267,7 +269,6 @@ class LeadAdmin extends Admin
         $datagrid->add('LastName', null, array('label' => 'Last name'));
         $datagrid->add('City');
         $datagrid->add('Zip');
-        $datagrid->add('county');
         $datagrid->add('SourceOfLead', 'doctrine_orm_choice', array(
             'label' => 'Source of Lead',
             'field_options' => array(
@@ -352,16 +353,6 @@ class LeadAdmin extends Admin
             'field_options' => array(
                 'required' => false,
             ),
-        ));
-        $datagrid->add('organization', null, array('label' => 'Work / Organization'));
-        $datagrid->add('Campaign', 'doctrine_orm_callback', array(
-            'label' => 'Campaign interest',
-            'callback' => array($this, 'handleCheckboxChoiceFilter'),
-            'field_type' => 'choice',
-            'field_options' => array(
-                'required' => false,
-                'choices' => Lead::getCampaignChoices()
-            )
         ));
         $datagrid->add('CRISStatus', 'doctrine_orm_choice', array(
             'label' => 'CRIS Status',
@@ -454,9 +445,14 @@ class LeadAdmin extends Admin
         // leave the dates for last since they are tall
         $datagrid->add('DateOfNextFollowup', 'doctrine_orm_date_range', array('label' => 'Date of Next Follow-up'));
         $datagrid->add('datetimeEntered', 'doctrine_orm_date_range', array('label' => 'Date Entered'));
-        $datagrid->add('datetimeLastUpdated', 'doctrine_orm_date_range', array('label' => 'Date Updated'));
+        $datagrid->add('dateAppSubmitted', 'doctrine_orm_date_range', array('label' => 'Date Application Submitted'));
+        $datagrid->add('dateAppApproved', 'doctrine_orm_date_range', array('label' => 'Date Application Approved'));
         $datagrid->add('dateOfAssessment', 'doctrine_orm_date_range', array('label' => 'Date of Assessment'));
+        $datagrid->add('dateWorkScopeApproved', 'doctrine_orm_date_range', array('label' => 'Date Work Scope Approved'));
         $datagrid->add('dateOfUpgrade', 'doctrine_orm_date_range', array('label' => 'Date of Upgrade'));
+        
+        $datagrid->add('countyEntity', null, array('label' => 'County'), null, array('expanded' => true, 'multiple' => true));
+
         
         $this->initializeDefaultFilters();
     }
@@ -496,6 +492,9 @@ class LeadAdmin extends Admin
         'step2bSubmitted' => true,
         'step2dCompleted' => true,
         'step3' => true,
+        'dateAppSubmitted' => true,
+        'dateAppApproved' => true,
+        'dateWorkScopeApproved' => true,
         'dateOfUpgrade' => true,
         'dateOfAssessment' => true,
         'leadCategory' => true,
@@ -505,12 +504,12 @@ class LeadAdmin extends Admin
 	'inCRIS' => true,
         'Zip' => true,
         'City' => true,
-        'county' => true,
+        'countyEntity' => true,
         'leadStatus' => true,
         'upgradeStatus' => true,
         'SourceOfLead' => true
     );
-
+    
     protected function configureSpreadsheetFields(SpreadsheetMapper $spreadsheetMapper)
     {
         $spreadsheetMapper
@@ -522,7 +521,7 @@ class LeadAdmin extends Admin
             ->add('State')
             ->add('Zip')
             ->add('Town')
-            ->add('county')
+            ->add('countyEntity', array('label' => 'County', 'type' => 'relation', 'relation_field_name' => 'countyEntity_id', 'relation_repository' => 'GJGNYDataToolBundle:County'))
             ->add('phone', array('label' => 'Primary Phone'))
             ->add('primaryPhoneType', array('label' => 'primary phone type'))
             ->add('secondaryPhone', array('label' => 'Secondary Phone'))
@@ -568,12 +567,16 @@ class LeadAdmin extends Admin
             ->add('campaignChoiceOther', array('label' => 'Campaign interest other'))
     
             ->add('upgradeStatus', array('label' => 'Upgrade Status'))
-            ->add('dateOfAssessment', array('label' => 'Date of Assessment', 'type' => 'date'))
-            ->add('dateOfUpgrade', array('label' => 'Date of Upgrade', 'type' => 'date'))
             ->add('step2eContractor', array('label' => 'Name of contractor'))
             ->add('step3bWorkDone', array('label' => 'What was done?'))
             ->add('step3cHowFinanced', array('label' => 'How was it financed'))
             ->add('CRISStatus', array('label' => 'CRIS Status'))
+            ->add('dateAppSubmitted', array('label' => 'Date Application Submitted', 'type' => 'date'))
+            ->add('dateAppApproved', array('label' => 'Date Application Approved', 'type' => 'date'))
+            ->add('dateContractorSelected', array('label' => 'Date Contractor Selected', 'type' => 'date'))
+            ->add('dateOfAssessment', array('label' => 'Date of Assessment', 'type' => 'date'))
+            ->add('dateWorkScopeApproved', array('label' => 'Date Work Scope Approved', 'type' => 'date'))
+            ->add('dateOfUpgrade', array('label' => 'Date of Upgrade', 'type' => 'date'))
         ;
     }
     
@@ -585,11 +588,11 @@ class LeadAdmin extends Admin
             ->addYField('DateOfLead', array('label' => 'Date of First Contact', 'type' => 'date'))
             ->addXField('upgradeStatus', array('label' => 'Upgrade Status'))
             ->addXField('CRISStatus', array('label' => 'CRIS Status'))
-            ->addXField('County')
+            ->addXField('countyEntity', array('label' => 'County', 'type' => 'relation', 'relation_field_name' => 'countyEntity_id', 'relation_repository' => 'GJGNYDataToolBundle:County'))
             ->addXField('Town')
             ->addXField('City')
             ->addXField('Zip')
-            ->addYField('County')
+            ->addYField('countyEntity', array('label' => 'County', 'type' => 'relation', 'relation_field_name' => 'countyEntity_id', 'relation_repository' => 'GJGNYDataToolBundle:County'))
             ->addYField('Town')
             ->addYField('City')
             ->addYField('Zip')
@@ -612,7 +615,7 @@ class LeadAdmin extends Admin
                 ->add('State')
                 ->add('Zip')
                 ->add('Town')
-                ->add('county', null, array('label' => 'County'))
+                ->add('countyEntity', null, array('label' => 'County'))
                 ->add('phone', null, array('label' => 'Phone'))
                 ->add('primaryPhoneType', null, array('label' => 'type'))
                 ->add('secondaryPhone', null, array('label' => 'Secondary Phone'))
@@ -645,7 +648,10 @@ class LeadAdmin extends Admin
                 ->add('CRISStatus', null, array('label' => 'CRIS Status'))
                 ->add('step2eContractor', null, array('label' => 'Name of contractor'))
                 ->add('dateAppSubmitted', null, array('label' => 'Date Application Submitted'))
+                ->add('dateAppApproved', null, array('label' => 'Date Application Approved'))
+                ->add('dateContractorSelected', null, array('label' => 'Date Contractor Selected'))
                 ->add('dateOfAssessment', null, array('label' => 'Date of Assessment'))
+                ->add('dateWorkScopeApproved', null, array('label' => 'Date Work Scope Approved'))
                 ->add('dateOfUpgrade', null, array('label' => 'Date of Upgrade'))
                 ->add('step3bWorkDone', null, array('label' => 'Description of work completed'))
                 ->add('step3cHowFinanced', null, array('label' => 'How was it financed?'))

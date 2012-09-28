@@ -8,9 +8,10 @@ class BasicLeadUpload extends SpreadsheetUtilities
 {
     public $leadRepository;
     
-    public function __construct($filename, $admin, $leadRepository)
+    public function __construct($filename, $admin, $leadRepository, $countyRespository)
     {
         $this->leadRepository = $leadRepository;
+        $this->countyRespository = $countyRespository;
         
         /**
          * array of arrays of field name, method name pairs
@@ -126,7 +127,6 @@ class BasicLeadUpload extends SpreadsheetUtilities
         $Lead->setCity($this->getCity($row));
         $Lead->setState($this->getState($row));
         $Lead->setZip($this->getZip($row));
-        $Lead->setCounty($this->getCounty($row));
         $Lead->setPhone($this->getPrimaryPhone($row));
         $Lead->setPrimaryPhoneType($this->getPrimaryPhoneType($row));
         $Lead->setSecondaryPhone($this->getSecondaryPhone($row));
@@ -134,6 +134,10 @@ class BasicLeadUpload extends SpreadsheetUtilities
         $Lead->setPersonalEmail($this->getPersonalEmail($row));
         $Lead->setWorkEmail($this->getWorkEmail($row));
 
+        if($this->getCounty($row) && $county = $this->countyRespository->findOneByName($this->getCounty($row))) {
+            $Lead->setCounty($county);
+        }
+        
         $Lead->setDatetimeEntered(new \DateTime());
         $Lead->setDatetimeLastUpdated(new \DateTime());
         $Lead->setUploadedViaXls(true);

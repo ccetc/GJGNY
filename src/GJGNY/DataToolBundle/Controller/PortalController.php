@@ -110,7 +110,7 @@ class PortalController extends Controller
                     $lead->setLastName($data['lastName']);
                     $lead->setPersonalEmail($data['email']);
                     $lead->setTown($data['town']);
-                    $lead->setCounty($userCounty->getName());
+                    $lead->setCountyEntity($userCounty);
                     $lead->setDatetimeEntered(new \DateTime());
                     $lead->setLeadStatus('active lead');
                     $lead->setNeedToCall(true);
