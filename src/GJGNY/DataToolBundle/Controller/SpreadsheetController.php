@@ -73,9 +73,13 @@ class SpreadsheetController extends Controller
 
         foreach($countyRepository->findAll() as $county)
         {
-            if(count($county->getLeads()) == 0) {
+            $numberOfLeads = count($county->getLeads());
+            
+            if($numberOfLeads == 0) {
                 $response .= $county->__toString()." removed<br/>";
                 $countyAdmin->delete($county);
+            } else {
+                $response .= $county->__toString()." has ".$numberOfLeads.' Leads<br/>';
             }
         }
         
