@@ -61,13 +61,3 @@
     git=http://github.com/symfony/AsseticBundle.git
     target=/bundles/Symfony/Bundle/AsseticBundle
     version=v1.0.1
-
-[SonataBlockBundle]
-    git=git://github.com/sonata-project/SonataBlockBundle.git
-    target=/bundles/Sonata/BlockBundle
-    version=origin/2.0
-
-[SonataCacheBundle]
-    git=git://github.com/sonata-project/SonataCacheBundle.git
-    target=/bundles/Sonata/CacheBundle
-    version=origin/2.0
