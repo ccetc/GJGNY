@@ -19,13 +19,13 @@ class CRISInfo extends BasicLeadUpload
     
     public function processRow($row)
     {
-        $leadByResNumber = $this->leadRepository->findOneByCrisResNumber($this->getResNumber($row));
-        $leadByBasicInfo = $this->checkForDuplicates($row);
+        $leadFromResNumber = $this->leadRepository->findOneByCrisResNumber($this->getResNumber($row));
+        $leadFromBasicInfo = $this->checkForDuplicates($row);
         
-        if($leadByResNumber) {
-            $this->updateLead($leadByResNumber, $row, 'res number');
-        } else if($leadByBasicInfo) {
-            $this->updateLead($leadByBasicInfo, $row, 'basic info');            
+        if($leadFromResNumber) {
+            $this->updateLead($leadFromResNumber, $row, 'res number');
+        } else if($leadFromBasicInfo) {
+            $this->updateLead($leadFromBasicInfo, $row, 'basic info');            
         } else {
             $this->insertLead($row);
         }
