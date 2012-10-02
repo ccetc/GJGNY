@@ -24,6 +24,7 @@ class CRISDates extends BasicLeadUpload
         if($leadFromResNumber) {
             $this->updateStatusDates($leadFromResNumber, $row);
         } else if($leadFromBasicInfo) {
+            $this->notFound[] = $row.'-'.$this->getResNumber($row)."-".$this->getFirstName($row)."-".$this->getLastName($row);
             $this->updateStatusDates($leadFromBasicInfo, $row);            
         } else {
             $this->notFound[] = $row.'-'.$this->getResNumber($row)."-".$this->getFirstName($row)."-".$this->getLastName($row);
