@@ -73,6 +73,7 @@ class Lead
         'CRIS Database' => 'CRIS Database',
         'Door to door canvas' => 'Door to door canvas',
         'E-mail' => 'E-mail',
+        'Mailing' => 'Mailing',
         'Neighbor / Friends' => 'Neighbor / Friends',
         'Newspaper Article' => 'Newspaper Article',
         'Phone' => 'Phone',
