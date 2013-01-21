@@ -340,6 +340,12 @@ class Lead
      * @ORM\Column(name="SourceOfLead", type="string", length=255, nullable="true")
      */
     private $SourceOfLead;
+    /**
+     * @var string $sourceOfLeadDetails
+     *
+     * @ORM\Column(name="sourceOfLeadDetails", type="string", length=255, nullable="true")
+     */
+    private $sourceOfLeadDetails;
 
     /**
      * @var string $DateOfLead
@@ -956,6 +962,27 @@ class Lead
         return $this->SourceOfLead;
     }
 
+
+    /**
+     * Set sourceOfLeadDetails
+     *
+     * @param string $sourceOfLeadDetails
+     */
+    public function setSourceOfLeadDetails($sourceOfLeadDetails)
+    {
+        $this->sourceOfLeadDetails = $sourceOfLeadDetails;
+    }
+
+    /**
+     * Get sourceOfLeadDetails
+     *
+     * @return string 
+     */
+    public function getSourceOfLeadDetails()
+    {
+        return $this->sourceOfLeadDetails;
+    }    
+    
     /**
      * Set state
      *
