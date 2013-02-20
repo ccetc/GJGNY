@@ -12,7 +12,7 @@ Every day, the ``Lead:process`` Command is run.  This command updates all Leads 
 ### Counties using the tool
 There are about 10 places in the code where the set of counties using the data tool is hard coded.  This list of counties should only exist in one spot, and that should likely be a table in the database.
 
-### "Sets" of boolean fields
+### Sets of boolean fields
 The ``Lead`` Entity has many fields that are actually groups of boolean fields.  This is not easily supported by Doctrine or Sonata, and our implementation is shakey.
 
 The messiest piece of this is the display of form fields and show fields.  Each of these fields and groups of fields has a set of pre/post hooks that give the groups labels, and indent the fields.  This is particularly confusing for the first field of each group, since in needs two pre hooks.

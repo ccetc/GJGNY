@@ -19,8 +19,7 @@ use Symfony\Component\Form\FormError;
 
 class PortalController extends Controller
 {
-
-    public function portalAction($url, $signup = false)
+    public function portalAction($url, $signup = false, $testimonials = false)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $portalRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:Portal');
@@ -160,6 +159,7 @@ class PortalController extends Controller
             'portal' => $portal,
             'partnerLogos' => $partnerLogos,
             'signup' => $signup,
+            'testimonials' => $testimonials,
             'contractors' => $contractorRepository->findBy(array(), array('name' => 'ASC'))
         );
 

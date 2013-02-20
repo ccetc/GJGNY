@@ -10,6 +10,10 @@ portal:
   pattern: /portal/{url}
   defaults: { _controller: GJGNYDataToolBundle:Portal:portal }
 
+testimonials:
+  pattern: /portal/{url}/testimonials
+  defaults: { _controller: GJGNYDataToolBundle:Portal:portal, testimonials: true }
+
 home:
   pattern:  /admin/dashboard
   defaults: { _controller: SonataAdminBundle:Core:dashboard }
