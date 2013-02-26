@@ -85,11 +85,6 @@ class Lead
         'TV News' => 'TV News',
         'Website' => 'Website',
     );
-    protected static $howAssessmentFinancedChoices = array(
-        'out-of-pocket' => 'out-of-pocket',
-        'AHP' => 'AHP',
-        'GJGNY Loan' => 'GJGNY Loan'
-    );
     protected static $leadStatusChoices = array(
         'not interested' => 'not interested',
         'interested but is a renter' => 'interested but is a renter',
@@ -190,11 +185,6 @@ class Lead
     public static function getSourceOfLeadChoices()
     {
         return self::$SourceOfLeadChoices;
-    }
-
-    public static function getHowAssessmentFinancedChoices()
-    {
-        return self::$howAssessmentFinancedChoices;
     }
 
     public static function getCampaignChoices()
@@ -547,12 +537,48 @@ class Lead
     private $step3bWorkDone;
 
     /**
+     * @var smallint $financeAHP
+     *
+     * @ORM\Column(name="financeAHP", type="boolean", nullable="true")
+     */
+    private $financeAHP;
+    /**
+     * @var smallint $financeOnBill
+     *
+     * @ORM\Column(name="financeOnBill", type="boolean", nullable="true")
+     */
+    private $financeOnBill;
+    /**
+     * @var smallint $financeEnergySmart
+     *
+     * @ORM\Column(name="financeEnergySmart", type="boolean", nullable="true")
+     */
+    private $financeEnergySmart;
+    /**
+     * @var smallint $financeHomeEquity
+     *
+     * @ORM\Column(name="financeHomeEquity", type="boolean", nullable="true")
+     */
+    private $financeHomeEquity;
+    /**
+     * @var smallint $financePersonal
+     *
+     * @ORM\Column(name="financePersonal", type="boolean", nullable="true")
+     */
+    private $financePersonal;
+    /**
+     * @var smallint $financePocket
+     *
+     * @ORM\Column(name="financePocket", type="boolean", nullable="true")
+     */
+    private $financePocket;
+    
+     /**
      * @var string $step3cHowFinanced
      *
      * @ORM\Column(name="step3cHowFinanced", type="string", length=255, nullable="true")
      */
     private $step3cHowFinanced;
-
     /**
      * @var smallint $reportReceived
      *
@@ -2638,5 +2664,125 @@ class Lead
     public function getCrisResNumber()
     {
         return $this->crisResNumber;
+    }
+
+    /**
+     * Set financeOnBill
+     *
+     * @param boolean $financeOnBill
+     */
+    public function setFinanceOnBill($financeOnBill)
+    {
+        $this->financeOnBill = $financeOnBill;
+    }
+
+    /**
+     * Get financeOnBill
+     *
+     * @return boolean 
+     */
+    public function getFinanceOnBill()
+    {
+        return $this->financeOnBill;
+    }
+
+    /**
+     * Set financeEnergySmart
+     *
+     * @param boolean $financeEnergySmart
+     */
+    public function setFinanceEnergySmart($financeEnergySmart)
+    {
+        $this->financeEnergySmart = $financeEnergySmart;
+    }
+
+    /**
+     * Get financeEnergySmart
+     *
+     * @return boolean 
+     */
+    public function getFinanceEnergySmart()
+    {
+        return $this->financeEnergySmart;
+    }
+
+    /**
+     * Set financeHomeEquity
+     *
+     * @param boolean $financeHomeEquity
+     */
+    public function setFinanceHomeEquity($financeHomeEquity)
+    {
+        $this->financeHomeEquity = $financeHomeEquity;
+    }
+
+    /**
+     * Get financeHomeEquity
+     *
+     * @return boolean 
+     */
+    public function getFinanceHomeEquity()
+    {
+        return $this->financeHomeEquity;
+    }
+
+    /**
+     * Set financePersonal
+     *
+     * @param boolean $financePersonal
+     */
+    public function setFinancePersonal($financePersonal)
+    {
+        $this->financePersonal = $financePersonal;
+    }
+
+    /**
+     * Get financePersonal
+     *
+     * @return boolean 
+     */
+    public function getFinancePersonal()
+    {
+        return $this->financePersonal;
+    }
+
+    /**
+     * Set financePocket
+     *
+     * @param boolean $financePocket
+     */
+    public function setFinancePocket($financePocket)
+    {
+        $this->financePocket = $financePocket;
+    }
+
+    /**
+     * Get financePocket
+     *
+     * @return boolean 
+     */
+    public function getFinancePocket()
+    {
+        return $this->financePocket;
+    }
+
+    /**
+     * Set financeAHP
+     *
+     * @param boolean $financeAHP
+     */
+    public function setFinanceAHP($financeAHP)
+    {
+        $this->financeAHP = $financeAHP;
+    }
+
+    /**
+     * Get financeAHP
+     *
+     * @return boolean 
+     */
+    public function getFinanceAHP()
+    {
+        return $this->financeAHP;
     }
 }

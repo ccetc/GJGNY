@@ -85,7 +85,12 @@ class LeadAdmin extends Admin
                 ->add('dateWorkScopeApproved', null, array('label' => 'Date Work Scope Approved', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
                 ->add('dateOfUpgrade', null, array('label' => 'Date of Upgrade', 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))
                 ->add('step3bWorkDone', null, array('label' => 'Description of work completed', 'required' => false))
-                ->add('step3cHowFinanced', 'choice', array('required' => false, 'label' => 'How was it financed', 'choices' => Lead::getHowAssessmentFinancedChoices()))
+                ->add('financeOnBill', null, array('label' => 'On-bill recovery loan', 'required' => false))
+                ->add('financeAHP', null, array('label' => 'AHP', 'required' => false))
+                ->add('financeEnergySmart', null, array('label' => 'Energy Smart (unsecured) loan', 'required' => false))
+                ->add('financeHomeEquity', null, array('label' => 'home equity loan', 'required' => false))
+                ->add('financePersonal', null, array('label' => 'personal loan', 'required' => false))
+                ->add('financePocket', null, array('label' => 'out of pocket', 'required' => false))
                 ->add('upgradeStatusNotes', null, array('label' => 'Notes', 'required' => false))
             ->end()
             ->with('Outreach')
@@ -166,9 +171,15 @@ class LeadAdmin extends Admin
         'campaignChoiceSteward' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'campaignChoiceEvent' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'leadTypeOutreach' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-        'leadTypeWorkforce' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'leadTypeWorkforce' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',        
+        'financeEnergySmart' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'financeAHP' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'financeHomeEquity' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'financePersonal' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'financePocket' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
  
         // field group labels
+       'financeOnBill' => 'GJGNYDataToolBundle:Lead:_financeFormPreHook.html.twig',
        'campaignChoiceTalkingToNeighbors' => 'GJGNYDataToolBundle:Lead:_campaignChoiceFormPreHook.html.twig',
        'homeowner' => 'GJGNYDataToolBundle:Lead:_homeownerFormPreHook.html.twig',
        'leadTypeUpgrade' => 'GJGNYDataToolBundle:Lead:_leadTypeUpgradeFormPreHook.html.twig'        
@@ -196,6 +207,12 @@ class LeadAdmin extends Admin
         'leadTypeUpgrade' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'leadTypeOutreach' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'leadTypeWorkforce' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'financeOnBill' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'financeAHP' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'financeEnergySmart' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'financeHomeEquity' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'financePersonal' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'financePocket' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
     );
     
     public $formPostHook = array(
@@ -569,7 +586,6 @@ class LeadAdmin extends Admin
             ->add('upgradeStatus', array('label' => 'Upgrade Status'))
             ->add('step2eContractor', array('label' => 'Name of contractor'))
             ->add('step3bWorkDone', array('label' => 'What was done?'))
-            ->add('step3cHowFinanced', array('label' => 'How was it financed'))
             ->add('CRISStatus', array('label' => 'CRIS Status'))
             ->add('dateAppSubmitted', array('label' => 'Date Application Submitted', 'type' => 'date'))
             ->add('dateAppApproved', array('label' => 'Date Application Approved', 'type' => 'date'))
@@ -655,7 +671,12 @@ class LeadAdmin extends Admin
                 ->add('dateWorkScopeApproved', null, array('label' => 'Date Work Scope Approved'))
                 ->add('dateOfUpgrade', null, array('label' => 'Date of Upgrade'))
                 ->add('step3bWorkDone', null, array('label' => 'Description of work completed'))
-                ->add('step3cHowFinanced', null, array('label' => 'How was it financed?'))
+                ->add('financeOnBill', null, array('label' => 'Financed with On-bill recovery loan'))
+                ->add('financeAHP', null, array('label' => 'Financed with AHP'))
+                ->add('financeEnergySmart', null, array('label' => 'Financed with Energy Smart (unsecured) loan'))
+                ->add('financeHomeEquity', null, array('label' => 'Financed with home equity loan'))
+                ->add('financePersonal', null, array('label' => 'Financed with personal loan'))
+                ->add('financePocket', null, array('label' => 'Financed with out of pocket'))
                 ->add('upgradeStatusNotes', null, array('label' => 'Notes'))
             ->end()
             ->with('Outreach')
@@ -722,7 +743,7 @@ class LeadAdmin extends Admin
         'step2aInterested',
         'step2bSubmitted',
         'step2dCompleted',
-        'step3'
+        'step3',
     );
 
     public $showPreHook = array(
