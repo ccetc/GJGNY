@@ -573,12 +573,6 @@ class Lead
      */
     private $financePocket;
     
-     /**
-     * @var string $step3cHowFinanced
-     *
-     * @ORM\Column(name="step3cHowFinanced", type="string", length=255, nullable="true")
-     */
-    private $step3cHowFinanced;
     /**
      * @var smallint $reportReceived
      *
@@ -1314,26 +1308,6 @@ class Lead
     public function getStep2dCompleted()
     {
         return $this->step2dCompleted;
-    }
-
-    /**
-     * Set step3cHowFinanced
-     *
-     * @param string $step3cHowFinanced
-     */
-    public function setStep3cHowFinanced($step3cHowFinanced)
-    {
-        $this->step3cHowFinanced = $step3cHowFinanced;
-    }
-
-    /**
-     * Get step3cHowFinanced
-     *
-     * @return string 
-     */
-    public function getStep3cHowFinanced()
-    {
-        return $this->step3cHowFinanced;
     }
 
     /**
