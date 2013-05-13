@@ -81,6 +81,7 @@ class Lead
         'Meeting' => 'Meeting',
         'Program' => 'Program',
         'Presentation' => 'Presentation',
+        'Radion' => 'Radio',
         'Tabling' => 'Tabling',
         'TV News' => 'TV News',
         'Website' => 'Website',
