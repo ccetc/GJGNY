@@ -593,6 +593,7 @@ class LeadAdmin extends Admin
             ->add('dateOfAssessment', array('label' => 'Date of Assessment', 'type' => 'date'))
             ->add('dateWorkScopeApproved', array('label' => 'Date Work Scope Approved', 'type' => 'date'))
             ->add('dateOfUpgrade', array('label' => 'Date of Upgrade', 'type' => 'date'))
+            ->add('upgradeStatusNotes', array('label' => 'Notes'))
         ;
     }
     
