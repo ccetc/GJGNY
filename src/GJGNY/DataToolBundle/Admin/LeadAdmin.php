@@ -51,6 +51,7 @@ class LeadAdmin extends Admin
                 ->add('workEmail', null, array('label' => 'Work E-mail', 'required' => false))
             ->end()
             ->with('Lead History')
+                ->add('outreachOrganization', 'choice', array('required' => false, 'label' => 'Outreach Organization', 'choices' => Lead::getOutreachOrganizationChoices()))
                 ->add('Program', 'sonata_type_model', array('label' => 'Program Source', 'required' => false), array('edit' => 'standard'))
                 ->add('SourceOfLead', 'choice', array('required' => false, 'label' => 'Source of Lead', 'choices' => Lead::getSourceOfLeadChoices()))
                 ->add('sourceOfLeadDetails', null, array('required' => false))
@@ -341,6 +342,14 @@ class LeadAdmin extends Admin
                 'choices' => array('Broome' => 'Broome', 'Tompkins' => 'Tompkins'),
             ),
         ));
+        $datagrid->add('outreachOrganization', 'doctrine_orm_choice', array(
+            'label' => 'Outreach Organization',
+            'field_type' => 'choice',
+            'field_options' => array(
+                'required' => false,
+                'choices' => Lead::getOutreachOrganizationChoices()
+            )
+        ));
         $datagrid->add('personalEmail', 'doctrine_orm_callback', array(
             'label' => 'Email',
             'callback' => function ($queryBuilder, $alias, $field, $values) {
@@ -432,9 +441,27 @@ class LeadAdmin extends Admin
                 'choices' => Lead::getLeadCategoryChoices()
             )
         ));            
-        $datagrid->add('homeowner', null, array('label' => 'Homeowner'));
-        $datagrid->add('renter', null, array('label' => 'Renter'));
-        $datagrid->add('landlord', null, array('label' => 'Landlord'));
+        $datagrid->add('residentialStatus', 'doctrine_orm_callback', array(
+            'label' => 'Resendential Status',
+            'callback' => function($queryBuilder, $alias, $field, $values) {
+                if(!$values['value'])
+                {
+                    return;
+                }
+                if(!$values['value'] || $values['value'] == "")
+                {
+                    return;
+                }
+                $queryBuilder->andWhere($alias.'.'.$values['value'].' = 1');
+                
+                return true;
+            },
+            'field_type' => 'choice',
+            'field_options' => array(
+                'required' => false,
+                'choices' => array('homeowner' => 'Homeowner', 'renter' => 'Renter', 'landlord' => 'Landlord')
+            ),
+        ));
         $datagrid->add('appointmentMade', null, array('label' => 'Appointment Made?'));
         $datagrid->add('userAssignedTo', 'doctrine_orm_callback', array(
             'label' => 'Assigned To',
@@ -451,6 +478,7 @@ class LeadAdmin extends Admin
                 $queryBuilder->andWhere('u.id = :userId');
                 $queryBuilder->setParameter('userId',$values['value']);
                 
+                return true;
             },
             'field_type' => 'choice',
             'field_options' => array(
@@ -467,6 +495,7 @@ class LeadAdmin extends Admin
         $datagrid->add('dateOfAssessment', 'doctrine_orm_date_range', array('label' => 'Date of Assessment'));
         $datagrid->add('dateWorkScopeApproved', 'doctrine_orm_date_range', array('label' => 'Date Work Scope Approved'));
         $datagrid->add('dateOfUpgrade', 'doctrine_orm_date_range', array('label' => 'Date of Upgrade'));
+        $datagrid->add('DateOfLead', 'doctrine_orm_date_range', array('label' => 'Date of First Contact'));
         
         $datagrid->add('countyEntity', null, array('label' => 'County'), null, array('expanded' => true, 'multiple' => true));
 
@@ -498,13 +527,12 @@ class LeadAdmin extends Admin
         'PathStep' => true,
         'DateOfNextFollowup' => true,
         'leadCategory',
-        'homeowner' => true,
-        'renter' => true,
-        'landlord' => true,
+        'residentialStatus' => true,
         'commercial' => true,
         'multifamily' => true,
         'datetimeEntered' => true,
         'datetimeLastUpdated' => true,
+        'DateOfLead' => true,
         'step2aInterested' => true,
         'step2bSubmitted' => true,
         'step2dCompleted' => true,
@@ -524,7 +552,8 @@ class LeadAdmin extends Admin
         'countyEntity' => true,
         'leadStatus' => true,
         'upgradeStatus' => true,
-        'SourceOfLead' => true
+        'SourceOfLead' => true,
+        'outreachOrganization' => true
     );
     
     protected function configureSpreadsheetFields(SpreadsheetMapper $spreadsheetMapper)
@@ -593,7 +622,10 @@ class LeadAdmin extends Admin
             ->add('dateOfAssessment', array('label' => 'Date of Assessment', 'type' => 'date'))
             ->add('dateWorkScopeApproved', array('label' => 'Date Work Scope Approved', 'type' => 'date'))
             ->add('dateOfUpgrade', array('label' => 'Date of Upgrade', 'type' => 'date'))
+                
             ->add('upgradeStatusNotes', array('label' => 'Notes'))
+            ->add('outreachOrganization', array('label' => 'Outreach Organization'))
+            ->add('dataCounty', array('label' => 'Outreach County'))
         ;
     }
     
@@ -641,6 +673,7 @@ class LeadAdmin extends Admin
                 ->add('workEmail', null, array('label' => 'Work E-mail'))
             ->end()
             ->with('Lead History')
+                ->add('outreachOrganization', null, array('label' => 'Outreach Organization'))
                 ->add('SourceOfLead', null, array('label' => 'Source of Lead'))
                 ->add('sourceOfLeadDetails', null, array('label' => 'Source of Lead Details'))
                 ->add('Program', null, array('label' => 'Program Source'))

@@ -147,6 +147,16 @@ class Lead
         'HP work complete' => 'HP work complete'
     );
     
+    protected static $outreachOrganizationChoices = array(
+        'CCETC' => 'CCETC',
+        'ELP' => 'ELP',
+        'PPEF' => 'PPEF'
+    );
+    
+    public static function getOutreachOrganizationChoices()
+    {
+        return self::$outreachOrganizationChoices;
+    }
     
     public static function getUpgradeStatusChoices()
     {
@@ -331,6 +341,12 @@ class Lead
      * @ORM\Column(name="SourceOfLead", type="string", length=255, nullable="true")
      */
     private $SourceOfLead;
+     /**
+     * @var string $outreachOrganization
+     *
+     * @ORM\Column(name="outreachOrganization", type="string", length=255, nullable="true")
+     */
+    private $outreachOrganization;
     /**
      * @var string $sourceOfLeadDetails
      *
@@ -2759,5 +2775,25 @@ class Lead
     public function getFinanceAHP()
     {
         return $this->financeAHP;
+    }
+
+    /**
+     * Set outreachOrganization
+     *
+     * @param string $outreachOrganization
+     */
+    public function setOutreachOrganization($outreachOrganization)
+    {
+        $this->outreachOrganization = $outreachOrganization;
+    }
+
+    /**
+     * Get outreachOrganization
+     *
+     * @return string 
+     */
+    public function getOutreachOrganization()
+    {
+        return $this->outreachOrganization;
     }
 }

@@ -9,7 +9,9 @@ framework:
     form:            true
     csrf_protection: true
     validation:      { enable_annotations: true }
-    templating:      { engines: ['php','twig'] } #assets_version: SomeVersionScheme
+    templating:
+       engines: ['php','twig']
+       assets_version: 1.0.0
     session:
         default_locale: %locale%
         auto_start:     true
