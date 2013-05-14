@@ -1,3 +1,12 @@
 <div class="alert-message info block-message">A Lead represents an individual potentially interested in a home energy assessment and upgrade.  Each Lead has contact information, employer information, and specific information about their interest in getting an assessment and upgrade, and their progress along that path.</div>
   
-  
+<script type="text/javascript">
+    $('form.sonata-filter-form').live("submit", function(e){
+        $.each($('form.sonata-filter-form input, form.sonata-filter-form select'), function() {
+            // remove if empty or a checkbox and not checked
+            if($(this).val() == "" || $(this).val() == undefined || ($(this).attr('type') == 'checkbox') && !$(this).is(':checked') ) {
+                $(this).remove();
+            }
+        });
+    });
+</script>
