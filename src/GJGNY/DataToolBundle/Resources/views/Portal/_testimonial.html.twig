@@ -1,0 +1,14 @@
+<div class="row">
+	<div class="span4">
+	    <img src="{{ asset('images/Portals/' ~ testimonial.filename ) }}" style="max-width: 200px; max-height: 200px; float: left; margin-right: 5px;" />
+	</div>
+	<div class="span10">
+	    {% if testimonial.quote is defined and testimonial.quote != "" %}<h2 style=""><i>"{{ testimonial.quote }}"</i></h2>{% endif %}
+	    <h4 style="">{{ testimonial.name }}</h4>
+	    <h4 style="">{{ testimonial.location }}</h4>
+
+	    <a href="{{ path('testimonial', {'url' : portal.url, 'id' : testimonial.id }) }}" class="pull-right btn">View full testimoninal &rarr;</a>
+	</div>
+    <div style="line-height: 0px; clear: both;">&nbsp;</div>
+</div>
+<hr>

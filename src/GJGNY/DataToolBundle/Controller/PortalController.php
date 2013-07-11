@@ -19,15 +19,49 @@ use Symfony\Component\Form\FormError;
 
 class PortalController extends Controller
 {
-    public function portalAction($url, $signup = false, $testimonials = false)
+    public function homeAction($url)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-        $portalRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:Portal');
-        $portal = $portalRepository->findOneByUrl($url);
+        $templateParameters = $this->getBaseTemplateParameters($url);
+        $testimonialRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:Testimonial');
+        $templateParameters['testimonials'] = $testimonialRepository->findByFeatured(true);
 
-        $portalPartnerLogoRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:PortalPartnerLogo');
-        $partnerLogos = $portalPartnerLogoRepository->findBy(array('portal' => $portal->getId()), array('rank' => 'DESC'));
+        return $this->render('GJGNYDataToolBundle:Portal:home.html.twig', $templateParameters);
+    }
 
+    public function contractorsAction($url)
+    {
+        $contractorRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:Contractor');
+
+        $templateParameters = $this->getBaseTemplateParameters($url);
+
+        $templateParameters['contractors'] = $contractorRepository->findBy(array(), array('name' => 'ASC'));
+
+        return $this->render('GJGNYDataToolBundle:Portal:contractors.html.twig', $templateParameters);
+    }
+
+    public function testimonialsAction($url)
+    {
+        $templateParameters = $this->getBaseTemplateParameters($url);
+
+        return $this->render('GJGNYDataToolBundle:Portal:testimonials.html.twig', $templateParameters);
+    }
+
+    public function testimonialAction($url, $id)
+    {
+        $templateParameters = $this->getBaseTemplateParameters($url);
+        $testimonialRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:Testimonial');
+        $templateParameters['testimonial'] = $testimonialRepository->findOneById($id);
+
+        return $this->render('GJGNYDataToolBundle:Portal:testimonial.html.twig', $templateParameters);
+    }
+
+    public function signupAction($url)
+    {
+        $em = $this->getDoctrine()->getEntityManager();        
+        $templateParameters = $this->getBaseTemplateParameters($url);
+        extract($templateParameters);
+
+        $request = $this->getRequest();
         $portalSettingsRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:PortalSettings');
         $portalSettings = $portalSettingsRepository->findAll(array('portal' => $portal));
 
@@ -41,132 +75,135 @@ class PortalController extends Controller
 
         asort($counties);
 
-        $contractorRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:Contractor');
+        $form = $this->createFormBuilder()
+                ->add('firstName', 'text', array('label' => 'First Name'))
+                ->add('lastName', 'text', array('label' => 'Last Name'))
+                ->add('email', 'text', array('label' => 'E-mail'))
+                ->add('phone', 'text', array('label' => 'Phone', 'required' => true))
+                ->add('town', 'text', array('label' => 'Town'))
+                ->add('county', 'choice', array('label' => 'County', 'choices' => $counties));
 
-        if($signup) {
-            $request = $this->getRequest();
-
-            $form = $this->createFormBuilder()
-                    ->add('firstName', 'text', array('label' => 'First Name'))
-                    ->add('lastName', 'text', array('label' => 'Last Name'))
-                    ->add('email', 'text', array('label' => 'E-mail'))
-                    ->add('phone', 'text', array('label' => 'Phone', 'required' => true))
-                    ->add('town', 'text', array('label' => 'Town'))
-                    ->add('county', 'choice', array('label' => 'County', 'choices' => $counties));
-
-            $form->
-                addValidator(new CallbackValidator(function(FormInterface $form)
+        $form->
+            addValidator(new CallbackValidator(function(FormInterface $form)
+            {
+                if (!$form["firstName"]->getData() && trim($form["firstName"]->getData()) == "" )
                 {
-                    if (!$form["firstName"]->getData() && trim($form["firstName"]->getData()) == "" )
-                    {
-                        $form->addError(new FormError('Please enter your first name'));
-                    }
-                })
-            );
-            $form->
-                addValidator(new CallbackValidator(function(FormInterface $form)
+                    $form->addError(new FormError('Please enter your first name'));
+                }
+            })
+        );
+        $form->
+            addValidator(new CallbackValidator(function(FormInterface $form)
+            {
+                if (!$form["lastName"]->getData() && trim($form["lastName"]->getData()) == "" )
                 {
-                    if (!$form["lastName"]->getData() && trim($form["lastName"]->getData()) == "" )
-                    {
-                        $form->addError(new FormError('Please enter your last name'));
-                    }
-                })
-            );
-            $form->
-                addValidator(new CallbackValidator(function(FormInterface $form)
+                    $form->addError(new FormError('Please enter your last name'));
+                }
+            })
+        );
+        $form->
+            addValidator(new CallbackValidator(function(FormInterface $form)
+            {
+                if (!$form["phone"]->getData() && trim($form["phone"]->getData()) == "" )
                 {
-                    if (!$form["phone"]->getData() && trim($form["phone"]->getData()) == "" )
-                    {
-                        $form->addError(new FormError('Please enter your phone number'));
-                    }
-                })
-            );
+                    $form->addError(new FormError('Please enter your phone number'));
+                }
+            })
+        );
+        
+        $form = $form->getForm();
             
-            $form = $form->getForm();
-                
-                
-            if($request->getMethod() == 'POST') {
-                $form->bindRequest($request);
+            
+        if($request->getMethod() == 'POST') {
+            $form->bindRequest($request);
 
-                if($form->isValid()) {
-                    $session = $this->getRequest()->getSession();
-                    $data = $form->getData();
+            if($form->isValid()) {
+                $session = $this->getRequest()->getSession();
+                $data = $form->getData();
 
-                    $countyRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:County');
-                    $userCounty = $countyRepository->findOneBy(array('id' => $data['county']));
+                $countyRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:County');
+                $userCounty = $countyRepository->findOneBy(array('id' => $data['county']));
 
-                    foreach($portalSettings as $ps) {
-                        foreach($ps->getCountiesServed() as $cs) {
-                            if($cs->getId() == $data['county']) {
-                                $portalMatch = $ps;
-                                break 2;
-                            }
+                foreach($portalSettings as $ps) {
+                    foreach($ps->getCountiesServed() as $cs) {
+                        if($cs->getId() == $data['county']) {
+                            $portalMatch = $ps;
+                            break 2;
                         }
                     }
-
-                    $lead = new \GJGNY\DataToolBundle\Entity\Lead();
-                    $lead->setFirstName($data['firstName']);
-                    $lead->setLastName($data['lastName']);
-                    $lead->setPersonalEmail($data['email']);
-                    $lead->setTown($data['town']);
-                    $lead->setCountyEntity($userCounty);
-                    $lead->setDatetimeEntered(new \DateTime());
-                    $lead->setLeadStatus('active lead');
-                    $lead->setNeedToCall(true);
-                    $lead->setProgram($portalMatch->getNotificationProgram());
-                    $lead->setDataCounty($portalMatch->getCountyOwnedBy());
-		    $lead->setPhone($data['phone']);
-		    
-                    $newLeadLink = $this->getPageLink().'/admin/gjgny/datatool/lead/list'.
-                            '?filter[Program][type]=&filter[Program][value]='.$portalMatch->getNotificationProgram()->getId().
-                            '&filter[FirstName][type]=&filter[FirstName][value]='.$data['firstName'].
-                            '&filter[LastName][type]=&filter[LastName][value]='.$data['lastName']
-                            ;
-                    
-                    foreach($portalMatch->getNotificationUsers() as $notificationUser) {
-                        $this->sendSignupNotificationEmail($lead, $notificationUser->getEmail(), $newLeadLink);
-                    }
-
-                    
-                    // create the lead
-                    // NOTES:
-                    //  - we need to be able to insert the lead, and add object acl permissions even though there is no logged in user
-                    //  - this code is copied from SonataAdminBundle\Security\Handler\AclSecurityHandler->createObjectSecurity
-                    //
-	            $leadAdmin = $this->get('gjgny.datatool.admin.lead');        	    
-	         
-                    $leadAdmin->getModelManager()->create($lead);
-                    
-                    $securityHandler = $leadAdmin->getSecurityHandler();
-
-                    $objectIdentity = ObjectIdentity::fromDomainObject($lead);
-                    $acl = $securityHandler->getObjectAcl($objectIdentity);
-                    if (is_null($acl)) {
-                        $acl = $securityHandler->createAcl($objectIdentity);
-                    }
-
-                    $securityHandler->addObjectClassAces($acl, $securityHandler->buildSecurityInformation($leadAdmin));
-                    $securityHandler->updateAcl($acl);
-                    
-                    $session->setFlash('page-message', 'You have been signed up.  Thank you.');
-
-                    return $this->redirect($this->generateUrl('portal', array('url' => $portal->getUrl())));
                 }
+
+                $lead = new \GJGNY\DataToolBundle\Entity\Lead();
+                $lead->setFirstName($data['firstName']);
+                $lead->setLastName($data['lastName']);
+                $lead->setPersonalEmail($data['email']);
+                $lead->setTown($data['town']);
+                $lead->setCountyEntity($userCounty);
+                $lead->setDatetimeEntered(new \DateTime());
+                $lead->setLeadStatus('active lead');
+                $lead->setNeedToCall(true);
+                $lead->setProgram($portalMatch->getNotificationProgram());
+                $lead->setDataCounty($portalMatch->getCountyOwnedBy());
+                $lead->setPhone($data['phone']);
+        
+                $newLeadLink = $this->getPageLink().'/admin/gjgny/datatool/lead/list'.
+                        '?filter[Program][type]=&filter[Program][value]='.$portalMatch->getNotificationProgram()->getId().
+                        '&filter[FirstName][type]=&filter[FirstName][value]='.$data['firstName'].
+                        '&filter[LastName][type]=&filter[LastName][value]='.$data['lastName']
+                        ;
+                
+                foreach($portalMatch->getNotificationUsers() as $notificationUser) {
+                    $this->sendSignupNotificationEmail($lead, $notificationUser->getEmail(), $newLeadLink);
+                }
+
+                
+                // create the lead
+                // NOTES:
+                //  - we need to be able to insert the lead, and add object acl permissions even though there is no logged in user
+                //  - this code is copied from SonataAdminBundle\Security\Handler\AclSecurityHandler->createObjectSecurity
+                //
+                $leadAdmin = $this->get('gjgny.datatool.admin.lead');               
+         
+                $leadAdmin->getModelManager()->create($lead);
+                
+                $securityHandler = $leadAdmin->getSecurityHandler();
+
+                $objectIdentity = ObjectIdentity::fromDomainObject($lead);
+                $acl = $securityHandler->getObjectAcl($objectIdentity);
+                if (is_null($acl)) {
+                    $acl = $securityHandler->createAcl($objectIdentity);
+                }
+
+                $securityHandler->addObjectClassAces($acl, $securityHandler->buildSecurityInformation($leadAdmin));
+                $securityHandler->updateAcl($acl);
+                
+                $session->setFlash('page-message', 'You have been signed up.  Thank you.');
+
+                return $this->redirect($this->generateUrl('portal', array('url' => $portal->getUrl())));
             }
         }
+
+        $templateParameters['form'] = $form->createView();
+
+        return $this->render('GJGNYDataToolBundle:Portal:signup.html.twig', $templateParameters);
+    }
+
+    public function getBaseTemplateParameters($url)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $portalRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:Portal');
+        $portal = $portalRepository->findOneByUrl($url);
+
+        $portalPartnerLogoRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:PortalPartnerLogo');
+        $partnerLogos = $portalPartnerLogoRepository->findBy(array('portal' => $portal->getId()), array('rank' => 'DESC'));
 
         $templateParameters = array(
             'portal' => $portal,
             'partnerLogos' => $partnerLogos,
-            'signup' => $signup,
-            'testimonials' => $testimonials,
-            'contractors' => $contractorRepository->findBy(array(), array('name' => 'ASC'))
+            'route' => $this->getRequest()->get('_route')
         );
 
-        if($signup)
-            $templateParameters['form'] = $form->createView();
-
-        return $this->render('GJGNYDataToolBundle:Portal:portal.html.twig', $templateParameters);
+        return $templateParameters;
     }
 
     protected function sendSignupNotificationEmail($signup, $to, $newLeadLink)

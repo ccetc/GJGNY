@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('bundles/ccetcbootstrap/bootstrap/bootstrap.min.css') }}" type="text/css" media="all" >
+            <link rel="stylesheet" href="{{ asset('styles/portals.css') }}" type="text/css" media="all" >
+        {% endblock %}
+            
+        {% block javascripts %}
+            <script src="{{ asset('bundles/sonatajquery/jquery-1.7.1.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('bundles/sonatajquery/jquery-ui-1.8.17.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('bundles/sonatajquery/jquery-ui-i18n.js') }}" type="text/javascript"></script>
+
+            <script src="{{ asset('bundles/ccetcbootstrap/bootstrap/js/bootstrap-tabs.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('bundles/ccetcbootstrap/bootstrap/js/bootstrap-alerts.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('bundles/ccetcbootstrap/bootstrap/js/bootstrap-modal.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('bundles/ccetcbootstrap/bootstrap/js/bootstrap-buttons.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('bundles/ccetcbootstrap/bootstrap/js/bootstrap-twipsy.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('bundles/ccetcbootstrap/bootstrap/js/bootstrap-popover.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('bundles/ccetcbootstrap/bootstrap/js/bootstrap-scrollspy.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('bundles/ccetcbootstrap/bootstrap/js/bootstrap-dropdown.js') }}" type="text/javascript"></script>
+
+            <script src="{{ asset('bundles/sonataadmin/jquery/jquery.form.js') }}" type="text/javascript"></script>
+        {% endblock %}
+
+        <title>
+            {% block title %}
+                Green Jobs Green New York - {{ portal.title }}
+            {% endblock%}
+        </title>
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="content">
+
+                <div class="row">
+                    <div class="span7">
+                        <div class="gjgny-logo-container">
+                            <a href="{{ path('portal', {'url' : portal.url }) }}"><img src="{{ asset('images/Portals/gjgny.png') }}" /></a>
+                            <span id="portal-title">{{ portal.title }}</span>
+                        </div>
+                    </div>
+                    <div class="span7">
+                        {% if portal.mainLogoUrl %}<a href="{{ portal.mainLogoUrl }}" target="_blank">{% endif %}
+                            <img id="main-logo" src="{{ asset('images/Portals/' ~ portal.mainLogoFilename ) }}" />
+                        {% if portal.mainLogoUrl %}</a>{% endif %}<br/>
+                        <a href="http://www.ccebroomecounty.com/Programs/energy-2" target="_blank"><img src="{{ asset('images/Portals/ELP Logo.png') }}" style="width: 175px; float: left; margin: 5px 0 0 50px;" /></a>
+                        <a href="https://www.facebook.com/EnergyLeadershipProgram" target="_blank" style="float: right; margin: 38px 68px 0 0;"><img src="{{ asset('images/Portals/facebook.png') }}" style="" /></a>
+                    </div>
+                </div>
+
+                <div class="row" id="heading-container">
+                    <div class="span14">
+                        <h3>Let us help you stop wasting energy dollars & be more comfortable in your home.</h3>
+                        <h2><a href="{{ path('signup', {'url': portal.url}) }}">Sign up today!</a></h2>
+                    </div>
+                </div>
+
+                {% if app.session.hasFlash('page-message') %}
+                    <div class="alert-message success">
+                        {{ app.session.flash('page-message') }}
+                    </div>
+                {% endif %}
+               
+                <ul class="tabs">
+                    <li {{ route == "portal" ? 'class="active"' : '' }}><a href="{{ path('portal', {'url': portal.url}) }}">Home</a></li>
+                    <li {{ route == "signup" ? 'class="active"' : '' }}><a href="{{ path('signup', {'url': portal.url}) }}">Signup</a></li>
+                    <li {{ route == "testimonials" or route == "testimonial" ? 'class="active"' : '' }}><a href="{{ path('testimonials', {'url': portal.url}) }}">Testimonials</a></li>
+                    <li {{ route == "contractors" ? 'class="active"' : '' }}><a href="{{ path('contractors', {'url': portal.url}) }}">Contractors</a></li>
+                </ul>
+
+                {% block content %} 
+
+                {% endblock %}
+          
+            </div>
+          
+            {% if partnerLogos|length > 0 %}
+                <footer>
+                    <div class="row">
+                        <div class="span14" id="partner-logo-container">
+                            <h4>Project Partners</h4>
+                            {% for logo in partnerLogos %}
+                                {% if logo.url %}<a href="{{ logo.url }}" target="_blank">{% endif %}
+                                    <img src="{{ asset('images/Portals/' ~ logo.filename ) }}" />
+                                {% if logo.url %}</a>{% endif %}                        
+                            {% endfor %}
+                        </div>
+                    </div>
+                </footer>
+           {% endif %}
+
+             
+        </div>
+    </body>
+</html>
+

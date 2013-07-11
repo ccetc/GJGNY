@@ -1,0 +1,23 @@
+{% extends 'GJGNYDataToolBundle:Portal:portal_layout.html.twig' %}
+
+{% block content %}
+    
+    <div class="row">
+        <div class="span8" id="portal-signup">
+            <form id="portal-signup-form" novalidate="novalidate" class="form-stacked" action="{{ path('signup', {'url' : portal.url}) }}" method="post" {{ form_enctype(form) }}>
+                {{ form_widget(form) }}
+
+                <div class="actions">
+                    <input id="portal-signup-submit" class="btn large primary" value="Sign Up" type="submit" />
+                    <a href="{{ path('portal', {'url': portal.url}) }}" class="btn large">cancel</a> 
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        jQuery('form#portal-signup-form').submit(function(e) {
+            var btn = jQuery('input#portal-signup-submit');
+            btn.button('loading');
+        });
+    </script>
+{% endblock %}    

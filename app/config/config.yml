@@ -67,6 +67,11 @@ services:
       tags:
         - { name: sonata.admin, manager_type: orm, group: Settings, label: Counties }
       arguments: [null, GJGNY\DataToolBundle\Entity\County, GJGNYDataToolBundle:CountyAdmin] 
+    gjgny.datatool.admin.testimonial:
+      class: GJGNY\DataToolBundle\Admin\TestimonialAdmin
+      tags:
+        - { name: sonata.admin, manager_type: orm, group: Portals, label: Testimonials }
+      arguments: [null, GJGNY\DataToolBundle\Entity\Testimonial, GJGNYDataToolBundle:TestimonialAdmin] 
 
 
 parameters:

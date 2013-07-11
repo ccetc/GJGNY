@@ -71,6 +71,9 @@ class Portal
     /** @ORM\OneToMany(targetEntity="PortalPartnerLogo", mappedBy="portal", cascade={"persist", "remove"}) */
     protected $partnerLogos;
 
+     /** @ORM\OneToMany(targetEntity="Testimonial", mappedBy="portal", cascade={"persist", "remove"}) */
+    protected $testimonials;
+
     /** @ORM\OneToMany(targetEntity="PortalSettings", mappedBy="portal", cascade={"persist", "remove"}) */
     protected $portalSettings;
 
@@ -308,5 +311,25 @@ class Portal
     public function getPortalSettings()
     {
         return $this->portalSettings;
+    }
+
+    /**
+     * Add testimonial
+     *
+     * @param GJGNY\DataToolBundle\Entity\Testimonial $testimonial
+     */
+    public function addTestimonial(\GJGNY\DataToolBundle\Entity\Testimonial $testimonial)
+    {
+        $this->testimonials[] = $testimonial;
+    }
+
+    /**
+     * Get testimonial
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getTestimonials()
+    {
+        return $this->testimonials;
     }
 }

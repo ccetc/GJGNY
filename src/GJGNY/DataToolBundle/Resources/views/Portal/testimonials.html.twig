@@ -1,0 +1,8 @@
+{% extends 'GJGNYDataToolBundle:Portal:portal_layout.html.twig' %}
+
+{% block content %}
+	<h1>Testimonials</h1>
+	{% for testimonial in portal.testimonials %}
+        {% include 'GJGNYDataToolBundle:Portal:_testimonial.html.twig' %}		
+	{% endfor %}
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'GJGNYDataToolBundle:Portal:portal_layout.html.twig' %}
+
+{% block content %}
+    <div class="row">
+        <div class="span8" id="portal-steps">
+            <ol>
+                <h3>7 Easy Steps to Upgrade Your Home</h3>
+                <li><a href="http://www.upgradeupstate.org/assessments">Apply for a reduced or no-cost energy assessment</a></li>
+                <li><a href="{{ path('contractors', {'url': portal.url}) }}">Select a Participating Contractor</a></li>
+                <li>Get assessment</li>
+                <li>Choose Your Improvements</li>
+                <li><a href="http://www.upgradeupstate.org/finance">Apply for low-interest financing and rebates to pay for upgrades</a></li>
+                <li>Get the work done</li>
+                <li>Enjoy all the benefits of a more comfortable energy efficient home!</li>
+            </ol>                                
+        </div>
+
+        <div class="span6">
+            <a target="blank" href="http://www.upgradeupstate.org/learn/howTo/interactive-house">
+                <img style="width: 335px;" src="{{ asset('images/Portals/interactive-house-lg.jpg') }}" />
+            </a>
+            <div style="text-align: left; font-size: 13px; float: left;">
+                <a target="blank" class="btn" href="http://www.upgradeupstate.org/learn/howTo/interactive-house">Tour a house</a>
+            </div>                                
+            <div style="text-align: right; font-size: 11px; float: right;">
+                Source: U.S. EPA
+            </div>
+            <div style="clear: both;">&nbsp;</div>
+            <div>
+                <i>We've partnered with <a href="http://ccetompkins.org">Cornell Cooperative Extension of Tompkins County</a> who created this site</i>
+            </div>
+            <div id="btn-container">
+                <a href="{{ path('signup', {'url': portal.url}) }}" class="btn large">Sign Up</a> 
+                <a href="http://www.upgradeupstate.org/upgradeSteps" class="btn primary large">Learn More &rarr;</a> 
+            </div>
+        </div>                    
+    </div>
+
+    <div class="row">
+        <div class="span7">
+            <h2>Contact Us</h2>
+            {{ portal.contactUs|raw }}
+        </div>
+        <div class="span7">
+            <h2>Events</h2>
+            {{ portal.events|raw }}
+        </div>
+    </div>
+    <div class="row" style="margin-top: 25px;">
+        <div class="span14">
+            <h2>Testimonials</h2>
+            {% for testimonial in testimonials %}
+                {% include 'GJGNYDataToolBundle:Portal:_testimonial.html.twig' %}
+            {% endfor %}
+        </div>
+    </div>
+
+     <div class="about-container alert-message block-message info">
+        <p>Green Jobs Green New York Southern Tier is a community-based energy efficiency program funded through the New York State Energy Research and Development Authority (NYSERDA) and by a Department of Energy (DOE) grant obtained by the City of Binghamton.</p><br/>
+        <p>We help New York homeowners at every stage of the energy efficiency upgrade process. Our effort is part of a statewide effort to make your home more comfortable, reduce your energy usage and your bills, and create local jobs. We provide southern tier residents access to free or reduced-cost energy assessments, installation services, low-cost financing and, workforce opportunities. </p>
+    </div>
+{% endblock %}

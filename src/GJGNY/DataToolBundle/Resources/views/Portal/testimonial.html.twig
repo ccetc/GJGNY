@@ -1,0 +1,23 @@
+{% extends 'GJGNYDataToolBundle:Portal:portal_layout.html.twig' %}
+
+{% block content %}
+	<a href="{{ path('testimonials', {'url' : portal.url} ) }}">&larr; Back to Testimonials</a>
+
+	<div class="row">
+		<div class="span10">
+			{% if testimonial.quote is defined and testimonial.quote != "" %}<h2><i>"{{ testimonial.quote }}"</i></h2>{% endif %}
+			<h3>{{ testimonial.name }}</h3>
+			<h3>{{ testimonial.location }}</h3>
+			<p>
+				{{ testimonial.text|raw }}
+			</p>
+
+			{% if testimonial.YouTubeId is defined and testimonial.YouTubeId != "" %}
+		 		<iframe width="640" height="390" src="http://www.youtube.com/embed/{{ testimonial.YouTubeId }}?autoplay=0&rel=0" frameborder="0" allowfullscreen=></iframe>
+			{% endif %}
+		</div>
+		<div class="span4">
+			<img src="{{ asset('images/Portals/' ~ testimonial.filename ) }}" style="max-width: 100%; max-height: 300px;" />
+		</div>
+	</div>
+{% endblock %}

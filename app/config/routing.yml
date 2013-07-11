@@ -4,15 +4,23 @@ homeDefault:
 
 signup:
   pattern: /portal/{url}/sign-up
-  defaults: { _controller: GJGNYDataToolBundle:Portal:portal, signup: true }
+  defaults: { _controller: GJGNYDataToolBundle:Portal:signup }
 
 portal:
   pattern: /portal/{url}
-  defaults: { _controller: GJGNYDataToolBundle:Portal:portal }
+  defaults: { _controller: GJGNYDataToolBundle:Portal:home }
 
 testimonials:
   pattern: /portal/{url}/testimonials
-  defaults: { _controller: GJGNYDataToolBundle:Portal:portal, testimonials: true }
+  defaults: { _controller: GJGNYDataToolBundle:Portal:testimonials }
+
+testimonial:
+  pattern: /portal/{url}/testimonial/{id}
+  defaults: { _controller: GJGNYDataToolBundle:Portal:testimonial }
+
+contractors:
+  pattern: /portal/{url}/contractors
+  defaults: { _controller: GJGNYDataToolBundle:Portal:contractors }
 
 home:
   pattern:  /admin/dashboard

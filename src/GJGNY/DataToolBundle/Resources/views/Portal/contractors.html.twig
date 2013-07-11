@@ -1,0 +1,38 @@
+{% extends 'GJGNYDataToolBundle:Portal:portal_layout.html.twig' %}
+
+{% block content %}
+	<div class="row" style="margin-top:25px;" id="contractors">
+        <div class="span14">
+            <h2>Home Performance Contractors</h2>
+            <p style="float: left;">These contractors have supplied additional information not found on the New York State Energy Research & Development Authority’s (NYSERDA) website. View the full list <a href="http://www.nyserda.ny.gov/en/Contractors/Find-a-Contractor/Residential-Contractor.aspx" target="_blank">here</a>.</p>
+            <a href="http://www.upgradeupstate.org/contractors" class="btn pull-right" style="margin-bottom: 10px;">Learn More</a>
+            <table class="" style="">
+                <thead style="background: #666; color: white;">
+                    <tr>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Contact</th>
+                        <th>Specialties</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for contractor in contractors %}
+                        <tr>
+                            <td>
+                                {% if contractor.filename != "" %}<img style="width: 150px;" src="{{ asset('images/Portals/' ~ contractor.filename ) }}" />{% endif %}
+                                {{ contractor.name }}
+                            </td>
+                            <td>{{ contractor.address }}</td>
+                            <td>
+                                {% if contractor.email != "" %}<a href="mailto:{{ contractor.email }}">{{ contractor.email }}</a><br/>{% endif %}
+                                {% if contractor.website != "" %}<a href="{{ contractor.website }}">{{ contractor.website }}</a><br/>{% endif %}
+                                {% if contractor.phone != "" %}{{ contractor.phone }}<br/>{% endif %}
+                            </td>
+                            <td>{{ contractor.specialties }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
