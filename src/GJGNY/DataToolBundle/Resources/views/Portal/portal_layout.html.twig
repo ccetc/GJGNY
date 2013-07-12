@@ -72,6 +72,9 @@
                     <li {{ route == "contractors" ? 'class="active"' : '' }}><a href="{{ path('contractors', {'url': portal.url}) }}">Contractors</a></li>
                     <li><a href="{{ route != "portal" ? path('portal', {'url' : portal.url }) : '' }}#contact">Contact Us</a></li>
                     <li><a href="{{ route != "portal" ? path('portal', {'url' : portal.url }) : '' }}#events">Events</a></li>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li style="float: right"><a href="{{ path('sonata_admin_dashboard') }}">Admin</a></li>
+                    {% endif %}
                 </ul>
 
                 {% block content %} 
