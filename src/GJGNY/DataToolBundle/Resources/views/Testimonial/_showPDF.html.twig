@@ -1,0 +1,7 @@
+{% extends 'SonataAdminBundle:CRUD:base_show_field.html.twig' %}
+
+{% block field%}
+    {% if object.filenamePDF %}
+    	<a href="{{ asset('images/Portals/' ~ object.filenamePDF ) }}">{{ object.filenamePDF }}</a>
+    {% endif %}
+{% endblock %}

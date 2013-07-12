@@ -74,6 +74,20 @@ class Testimonial
     protected $file;    
 
     /**
+     * @var string $filenamePDF
+     *
+     * @ORM\Column(name="filenamePDF", type="string", length=255)
+     */
+    private $filenamePDF;
+
+    /**
+     * @var string $PDF
+     *
+     * @ORM\Column(name="filePDF", type="string", length=255, nullable=true)
+     */
+    protected $filePDF;    
+
+    /**
      * @var smallint $featured
      *
      * @ORM\Column(name="featured", type="boolean", nullable="true")
@@ -151,7 +165,7 @@ class Testimonial
         return $this->text;
     }
 
-     public function getAbsolutePath()
+    public function getAbsolutePath()
     {
         return null === $this->filename ? null : $this->getUploadRootDir() . '/' . $this->filename;
     }
@@ -184,6 +198,36 @@ class Testimonial
 
         // clean up the file property as you won't need it anymore
         $this->file = null;
+    }
+
+    public function getAbsolutePathPDF()
+    {
+        return null === $this->filenamePDF ? null : $this->getUploadRootDir() . '/' . $this->filenamePDF;
+    }
+
+    public function getWebPathPDF()
+    {
+        return null === $this->filenamePDF ? null : $this->getUploadDir() . '/' . $this->filenamePDF;
+    }
+
+    public function uploadPDF()
+    {
+        // the file property can be empty if the field is not required
+        if(null === $this->filePDF)
+        {
+            return;
+        }
+
+        // we use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+        // move takes the target directory and then the target filename to move to
+        $this->filePDF->move($this->getUploadDir(), $this->filePDF->getClientOriginalName());
+
+        // set the path property to the filename where you'ved saved the file
+        $this->setFilenamePDF($this->filePDF->getClientOriginalName());
+
+        // clean up the file property as you won't need it anymore
+        $this->filePDF = null;
     }
 
     public function __toString()
@@ -324,5 +368,45 @@ class Testimonial
     public function getFeatured()
     {
         return $this->featured;
+    }
+
+    /**
+     * Set filenamePDF
+     *
+     * @param string $filenamePDF
+     */
+    public function setFilenamePDF($filenamePDF)
+    {
+        $this->filenamePDF = $filenamePDF;
+    }
+
+    /**
+     * Get filenamePDF
+     *
+     * @return string 
+     */
+    public function getFilenamePDF()
+    {
+        return $this->filenamePDF;
+    }
+
+    /**
+     * Set filePDF
+     *
+     * @param string $filePDF
+     */
+    public function setFilePDF($filePDF)
+    {
+        $this->filePDF = $filePDF;
+    }
+
+    /**
+     * Get filePDF
+     *
+     * @return string 
+     */
+    public function getFilePDF()
+    {
+        return $this->filePDF;
     }
 }

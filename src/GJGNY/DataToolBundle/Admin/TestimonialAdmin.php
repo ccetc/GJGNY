@@ -30,6 +30,7 @@ class TestimonialAdmin extends Admin
             ->add('quote', null, array('label' => 'Quote'))
             ->add('text', null, array('label' => 'Text', 'attr' => array('class' => 'tinymce')))
             ->add('file', 'file', array('label' => 'Photo', 'required' => false))            
+            ->add('filePDF', 'file', array('label' => 'Document', 'required' => false))            
             ->add('youtubeUrl', null, array('label' => 'YouTube URL'))
             ->add('featured')
       ;
@@ -74,23 +75,25 @@ class TestimonialAdmin extends Admin
             ->add('quote', null, array('label' => 'Quote'))
             ->add('text', null, array('label' => 'Text'))
             ->add('filename', 'string', array('label' => 'Photo', 'template' => 'GJGNYDataToolBundle:PortalPartnerLogo:_showLogo.html.twig'))
+            ->add('filenamePDF', 'string', array('label' => 'Document', 'template' => 'GJGNYDataToolBundle:Testimonial:_showPDF.html.twig'))
             ->add('youtubeUrl', null, array('label' => 'YouTube URL'))
             ->add('featured')            
         ;
     }
      public function prePersist($object)
     {
-        $this->saveFile($object);
+        $this->saveFiles($object);
     }
 
     public function preUpdate($object)
     {
-        $this->saveFile($object);
+        $this->saveFiles($object);
     }
 
-    public function saveFile($object)
+    public function saveFiles($object)
     {
         $object->upload();
+        $object->uploadPDF();
     }
         
 }

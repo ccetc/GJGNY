@@ -6,7 +6,11 @@
 	<div class="row">
 		<div class="span10">
 			{% if testimonial.quote is defined and testimonial.quote != "" %}<h2><i>"{{ testimonial.quote }}"</i></h2>{% endif %}
-			<h3>{{ testimonial.name }}</h3>
+			<h3>
+				{% if testimonial.filenamePDF is defined and testimonial.filenamePDF != "" %}<a href="{{ asset('images/Portals/' ~ testimonial.filenamePDF ) }}">{% endif %}
+					{{ testimonial.name }}
+				{% if testimonial.filenamePDF is defined and testimonial.filenamePDF != "" %}</a>{% endif %}
+			</h3>
 			<h3>{{ testimonial.location }}</h3>
 			<p>
 				{{ testimonial.text|raw }}

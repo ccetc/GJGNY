@@ -45,7 +45,7 @@ class Testimonial
     /**
      * @var string $quote
      *
-     * @ORM\Column(name="quote", type="string", length=255, nullable=true)
+     * @ORM\Column(name="quote", type="string", length=600, nullable=true)
      */
     private $quote;
 
@@ -72,6 +72,20 @@ class Testimonial
      * @ORM\Column(name="file", type="string", length=255, nullable=true)
      */
     protected $file;    
+
+    /**
+     * @var string $filenamePDF
+     *
+     * @ORM\Column(name="filenamePDF", type="string", length=255)
+     */
+    private $filenamePDF;
+
+    /**
+     * @var string $PDF
+     *
+     * @ORM\Column(name="filePDF", type="string", length=255, nullable=true)
+     */
+    protected $filePDF;    
 
     /**
      * @var smallint $featured
@@ -151,7 +165,7 @@ class Testimonial
         return $this->text;
     }
 
-     public function getAbsolutePath()
+    public function getAbsolutePath()
     {
         return null === $this->filename ? null : $this->getUploadRootDir() . '/' . $this->filename;
     }
@@ -184,6 +198,36 @@ class Testimonial
 
         // clean up the file property as you won't need it anymore
         $this->file = null;
+    }
+
+    public function getAbsolutePathPDF()
+    {
+        return null === $this->filenamePDF ? null : $this->getUploadRootDir() . '/' . $this->filenamePDF;
+    }
+
+    public function getWebPathPDF()
+    {
+        return null === $this->filenamePDF ? null : $this->getUploadDir() . '/' . $this->filenamePDF;
+    }
+
+    public function uploadPDF()
+    {
+        // the file property can be empty if the field is not required
+        if(null === $this->filePDF)
+        {
+            return;
+        }
+
+        // we use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+        // move takes the target directory and then the target filename to move to
+        $this->filePDF->move($this->getUploadDir(), $this->file->getClientOriginalName());
+
+        // set the path property to the filename where you'ved saved the file
+        $this->setFilenamePDF($this->filePDF->getClientOriginalName());
+
+        // clean up the file property as you won't need it anymore
+        $this->filePDF = null;
     }
 
     public function __toString()
@@ -304,5 +348,25 @@ class Testimonial
     public function getLocation()
     {
         return $this->location;
+    }
+
+    /**
+     * Set featured
+     *
+     * @param boolean $featured
+     */
+    public function setFeatured($featured)
+    {
+        $this->featured = $featured;
+    }
+
+    /**
+     * Get featured
+     *
+     * @return boolean 
+     */
+    public function getFeatured()
+    {
+        return $this->featured;
     }
 }
