@@ -70,6 +70,8 @@
                     <li {{ route == "signup" ? 'class="active"' : '' }}><a href="{{ path('signup', {'url': portal.url}) }}">Signup</a></li>
                     <li {{ route == "testimonials" or route == "testimonial" ? 'class="active"' : '' }}><a href="{{ path('testimonials', {'url': portal.url}) }}">Testimonials</a></li>
                     <li {{ route == "contractors" ? 'class="active"' : '' }}><a href="{{ path('contractors', {'url': portal.url}) }}">Contractors</a></li>
+                    <li><a href="{{ route != "portal" ? path('portal', {'url' : portal.url }) : '' }}#contact">Contact Us</a></li>
+                    <li><a href="{{ route != "portal" ? path('portal', {'url' : portal.url }) : '' }}#events">Events</a></li>
                 </ul>
 
                 {% block content %} 
