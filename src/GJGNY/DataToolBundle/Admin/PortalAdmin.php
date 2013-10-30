@@ -28,8 +28,9 @@ class PortalAdmin extends Admin
                 ->add('events', null, array('label' => 'Events', 'attr' => array('class' => 'tinymce')))
                 ->add('mainLogoFile', 'file', array('label' => 'Main Logo', 'required' => false))
                 ->add('mainLogoUrl', null, array('label' => 'Main Logo URL', 'required' => false))
+                ->add('googleAnalyticsKey', null, array('label' => 'Google Analytics Key', 'required' => false))
                 ->setHelps(array(
-                    'url' => 'http://gjgny.ccext/portal/YourUrl'
+                    'url' => 'http://gjgny.ccext/portal/YourUrl',
                 ))
       ;
     }

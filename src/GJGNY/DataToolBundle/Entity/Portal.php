@@ -43,6 +43,13 @@ class Portal
     private $contactUs;
 
     /**
+     * @var text $googleAnalyticsKey
+     *
+     * @ORM\Column(name="googleAnalyticsKey", type="string", length=255, nullable="true")
+     */
+    private $googleAnalyticsKey;
+
+    /**
      * @var text $events
      *
      * @ORM\Column(name="events", type="text", nullable="true")
@@ -171,6 +178,26 @@ class Portal
     public function getEvents()
     {
         return $this->events;
+    }
+
+ /**
+     * Set events
+     *
+     * @param text $events
+     */
+    public function setGoogleAnalyticsKey($googleAnalyticsKey)
+    {
+        $this->googleAnalyticsKey = $googleAnalyticsKey;
+    }
+
+    /**
+     * Get googleAnalyticsKey
+     *
+     * @return text 
+     */
+    public function getGoogleAnalyticsKey()
+    {
+        return $this->googleAnalyticsKey;
     }
 
     /**
