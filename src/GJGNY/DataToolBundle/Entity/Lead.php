@@ -148,11 +148,7 @@ class Lead
         'Ph.D.' => 'Ph.D.'
     );
     
-    protected static $leadCategoryChoices = array (
-        'Residential (1-4 Unit)' => 'Residential (1-4 Unit)',
-        'Multifamily' => 'Multifamily',
-        "Commercial / Non-Profit / Gov't" => "Commercial / Non-Profit / Gov't",
-    );
+   
     protected static $categoryChoices = array(
         'homeowner' => 'homeowner',
         'renter' => 'renter',
@@ -206,10 +202,6 @@ class Lead
         return self::$CRISStatusChoices;
     }
             
-    public static function getLeadCategoryChoices()
-    {
-        return self::$leadCategoryChoices;
-    }
      public static function getCategoryChoices()
     {
         return self::$categoryChoices;
@@ -470,39 +462,13 @@ class Lead
      * @ORM\Column(name="leadTypeWorkforce", type="boolean", nullable="true")
      */
     private $leadTypeWorkforce;
-    /**
-     * @var smallint $leadCategory
-     *
-     * @ORM\Column(name="leadCategory", type="string", nullable="true")
-     */
-    private $leadCategory; 
+   
     /**
      * @var array $category
      *
      * @ORM\Column(name="category", type="array", nullable="true")
      */
     private $category;
-   
-    /**
-     * @var smallint $homeowner
-     *
-     * @ORM\Column(name="homeowner", type="boolean", nullable="true")
-     */
-    private $homeowner;
-
-    /**
-     * @var smallint $renter
-     *
-     * @ORM\Column(name="renter", type="boolean", nullable="true")
-     */
-    private $renter;
-
-    /**
-     * @var smallint $landlord
-     *
-     * @ORM\Column(name="landlord", type="boolean", nullable="true")
-     */
-    private $landlord;
 
 
     /**
@@ -2094,65 +2060,6 @@ class Lead
         return $this->interestedInVisit;
     }
 
-    /**
-     * Set homeowner
-     *
-     * @param boolean $homeowner
-     */
-    public function setHomeowner($homeowner)
-    {
-        $this->homeowner = $homeowner;
-    }
-
-    /**
-     * Get homeowner
-     *
-     * @return boolean 
-     */
-    public function getHomeowner()
-    {
-        return $this->homeowner;
-    }
-
-    /**
-     * Set renter
-     *
-     * @param boolean $renter
-     */
-    public function setRenter($renter)
-    {
-        $this->renter = $renter;
-    }
-
-    /**
-     * Get renter
-     *
-     * @return boolean 
-     */
-    public function getRenter()
-    {
-        return $this->renter;
-    }
-
-    /**
-     * Set landlord
-     *
-     * @param boolean $landlord
-     */
-    public function setLandlord($landlord)
-    {
-        $this->landlord = $landlord;
-    }
-
-    /**
-     * Get landlord
-     *
-     * @return boolean 
-     */
-    public function getLandlord()
-    {
-        return $this->landlord;
-    }
 
     /**
      * Add LeadEvents
@@ -2487,25 +2394,7 @@ class Lead
     }
 
 
-    /**
-     * Set leadCategory
-     *
-     * @param boolean $leadCategory
-     */
-    public function setLeadCategory($leadCategory)
-    {
-        $this->leadCategory = $leadCategory;
-    }
-
-    /**
-     * Get leadCategory
-     *
-     * @return boolean 
-     */
-    public function getLeadCategory()
-    {
-        return $this->leadCategory;
-    }
+   
 
     /**
      * Set campaignChoiceVolunteer

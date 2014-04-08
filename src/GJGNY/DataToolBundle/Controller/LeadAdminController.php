@@ -188,42 +188,6 @@ class LeadAdminController extends Controller
     public function assignLeadsSelectUserAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
-  //   
-
-        $leadRepository = $this->getDoctrine()->getRepository("GJGNYDataToolBundle:Lead");
-        $leads = $leadRepository->findForCats(1593);
-
-        foreach($leads as $lead)
-        {
-            $updated = false;
-
-            if($lead->getRenter()) {
-                $lead->addCategory('renter');
-                $updated = true;
-            }
-            if($lead->getLandlord()) {
-                $lead->addCategory('landlord');
-                $updated = true;
-            }
-            if($lead->getHomeowner()) {
-                $lead->addCategory('homeowner');
-                $updated = true;
-            }
-            if($lead->getLeadCategory() && $lead->getLeadCategory() == "Multifamily") {
-                $lead->addCategory('multifamily');
-                $updated = true;
-            }
-            if($lead->getLeadCategory() && $lead->getLeadCategory() == "Residential (1-4 Unit)") {
-                $lead->addCategory('residential (1-4 unit)');
-                $updated = true;
-            }
-            if($updated) {
-                echo 'updated #'.$lead->getId()."<br/>";
-                $this->admin->update($lead);
-            }
-        }
-   
-//
 
         // get users
         $userRepository = $this->getDoctrine()->getRepository("ApplicationSonataUserBundle:User");

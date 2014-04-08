@@ -12,13 +12,5 @@ use Doctrine\ORM\EntityRepository;
  */
 class LeadRepository extends EntityRepository
 {
-    public function findForCats($id)
-    {
-		$qb = $this->createQueryBuilder('l');
-		$qb->where('l.id > '.$id);
-		$qb->orderBy('l.id', 'ASC');
-
-	    return $qb->getQuery()
-	        ->getResult();
-    }
+    
 }
