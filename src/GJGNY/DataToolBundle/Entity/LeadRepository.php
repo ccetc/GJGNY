@@ -12,15 +12,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class LeadRepository extends EntityRepository
 {
-/*    public function findUniqueProgramSources()
+    public function findForCats($id)
     {
-        $qb = $this->createQueryBuilder('l');
-        $qb->groupBy('programSource');
-        
-        $programSources = $qb->getQuery()->getResult();
-        
-        echo count($programSources);
-        
-        return array('a','b');
-    } */
+		$qb = $this->createQueryBuilder('l');
+		$qb->where('l.id > '.$id);
+		$qb->orderBy('l.id', 'ASC');
+
+	    return $qb->getQuery()
+	        ->getResult();
+    }
 }

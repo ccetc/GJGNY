@@ -1,0 +1,9 @@
+{% extends 'SonataAdminBundle:CRUD:base_show_field.html.twig' %}
+
+{% block field%}
+	<ul>
+	{% for cat in object.category %}
+		<li>{{ cat }}</li>
+	{% endfor %}
+	</ul>
+{% endblock %}

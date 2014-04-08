@@ -70,10 +70,10 @@ class LeadAdmin extends Admin
                 ->add('leadTypeUpgrade', null, array('label' => 'Energy Upgrade', 'required' => false))
                 ->add('leadTypeOutreach', null, array('label' => 'Outreach', 'required' => false))
                 ->add('leadTypeWorkforce', null, array('label' => 'Workforce', 'required' => false))
-                ->add('leadCategory', 'choice', array('label' => "Category", 'required' => false, 'choices' => Lead::getLeadCategoryChoices()))
-                ->add('homeowner', null, array('label' => 'Homeowner', 'required' => false))
-                ->add('renter', null, array('label' => 'Renter', 'required' => false))
-                ->add('landlord', null, array('label' => 'Landlord', 'required' => false))
+                ->add('leadTypeSolar', null, array('label' => 'Solar', 'required' => false))
+                ->add('category', 'choice', array('label' => "Category", 'required' => false, 'choices' => Lead::getCategoryChoices(), 'expanded' => true, 'multiple' => true ))
+                ->add('solarTypePV', null, array('label' => 'PV', 'required' => false))
+                ->add('solarTypeHotWater', null, array('label' => 'Hot Water', 'required' => false))
             ->end()
             ->with('Energy Upgrade')    
                 ->add('upgradeStatus', 'choice', array('label' => 'Upgrade Status', 'required' => false, 'choices' => Lead::getUpgradeStatusChoices()))
@@ -93,6 +93,9 @@ class LeadAdmin extends Admin
                 ->add('financePersonal', null, array('label' => 'personal loan', 'required' => false))
                 ->add('financePocket', null, array('label' => 'out of pocket', 'required' => false))
                 ->add('upgradeStatusNotes', null, array('label' => 'Notes', 'required' => false))
+            ->end()
+            ->with('Solar Upgrade')    
+                ->add('solarUpgradeStatus', 'choice', array('label' => 'Solar Upgrade Status', 'required' => false, 'choices' => Lead::getSolarUpgradeStatusChoices()))
             ->end()
             ->with('Outreach')
                 ->add('CommunityGroupsConnectedTo', null, array('label' => 'Community groups connected to', 'required' => false))
@@ -126,6 +129,13 @@ class LeadAdmin extends Admin
                 ->add('certifications', null, array('label' => 'Certifications', 'required' => false))
                 ->add('trainingExperience', null, array('label' => 'Training Experience', 'required' => false))                
             ->end();
+
+        $i = 1;
+        foreach(Lead::getSolarUpgradeStatusChoices() as $choice)
+        {
+            $formMapper->with('Solar Upgrade')->add('solarDate'.$i, null, array('label' => 'date '.$choice, 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))->end();
+            $i++;
+        }            
         
         if($user->getCounty() == "Broome") {
             $formMapper
@@ -158,10 +168,6 @@ class LeadAdmin extends Admin
         'motivationChoiceOther' => 'SonataAdminBundle:Hook:_otherFormFieldPre.html.twig',
         'secondaryPhoneType' => 'SonataAdminBundle:Hook:_otherFormFieldPre.html.twig',
         'campaignChoiceOther' => 'SonataAdminBundle:Hook:_otherFormFieldPre.html.twig',
-
-        // indented fields
-        'renter' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
-        'landlord' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         
         // indent choice options
         // NOTE: the indent divs for the first choices are included in the field group label hooks below
@@ -173,17 +179,19 @@ class LeadAdmin extends Admin
         'campaignChoiceEvent' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'leadTypeOutreach' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'leadTypeWorkforce' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',        
+        'leadTypeSolar' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'financeEnergySmart' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'financeAHP' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'financeHomeEquity' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'financePersonal' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
         'financePocket' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',
+        'solarTypeHotWater' => 'SonataAdminBundle:Hook:_indentFormFieldPre.html.twig',        
  
         // field group labels
        'financeOnBill' => 'GJGNYDataToolBundle:Lead:_financeFormPreHook.html.twig',
        'campaignChoiceTalkingToNeighbors' => 'GJGNYDataToolBundle:Lead:_campaignChoiceFormPreHook.html.twig',
-       'homeowner' => 'GJGNYDataToolBundle:Lead:_homeownerFormPreHook.html.twig',
-       'leadTypeUpgrade' => 'GJGNYDataToolBundle:Lead:_leadTypeUpgradeFormPreHook.html.twig'        
+       'leadTypeUpgrade' => 'GJGNYDataToolBundle:Lead:_leadTypeUpgradeFormPreHook.html.twig',        
+       'solarTypePV' => 'GJGNYDataToolBundle:Lead:_solarTypePVFormPreHook.html.twig'        
     );
     
     public $formFieldPostHooks = array(
@@ -191,12 +199,7 @@ class LeadAdmin extends Admin
         'primaryPhoneType' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'secondaryPhoneType' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'campaignChoiceOther' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        
-        // indented fields
-        'homeowner' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'renter' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        'landlord' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
-        
+                
          // choice options
         'campaignChoiceTalkingToNeighbors' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'campaignChoiceFormEnergyTeam' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
@@ -208,12 +211,15 @@ class LeadAdmin extends Admin
         'leadTypeUpgrade' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'leadTypeOutreach' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'leadTypeWorkforce' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'leadTypeSolar' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'financeOnBill' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'financeAHP' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'financeEnergySmart' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'financeHomeEquity' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'financePersonal' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
         'financePocket' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'solarTypePV' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
+        'solarTypeHotWater' => 'SonataAdminBundle:Hook:_closingDiv.html.twig',
     );
     
     public $formPostHook = array(
@@ -333,6 +339,14 @@ class LeadAdmin extends Admin
                 'choices' => Lead::getUpgradeStatusChoices()
             )
         ));
+        $datagrid->add('solarUpgradeStatus', 'doctrine_orm_choice', array(
+            'label' => 'Solar Upgrade Status',
+            'field_type' => 'choice',
+            'field_options' => array(
+                'required' => false,
+                'choices' => Lead::getSolarUpgradeStatusChoices()
+            )
+        ));
         $datagrid->add('needToCall', null, array('label' => 'Need to Contact'));
         $datagrid->add('dataCounty', null, array(
             'label' => 'Outreach County',
@@ -433,34 +447,31 @@ class LeadAdmin extends Admin
                 'choices' => Lead::getLeadTypeChoices()
             )
         ));            
-        $datagrid->add('leadCategory', 'doctrine_orm_choice', array(
-            'label' => 'Lead Category',
+        $datagrid->add('solarType', 'doctrine_orm_callback', array(
+            'label' => 'Solar Type',
+            'callback' => array($this, 'handleCheckboxChoiceFilter'),
             'field_type' => 'choice',
             'field_options' => array(
                 'required' => false,
-                'choices' => Lead::getLeadCategoryChoices()
+                'choices' => Lead::getSolarTypeChoices()
             )
         ));            
-        $datagrid->add('residentialStatus', 'doctrine_orm_callback', array(
-            'label' => 'Resendential Status',
-            'callback' => function($queryBuilder, $alias, $field, $values) {
+        $datagrid->add('category', 'doctrine_orm_callback', array(
+            'label' => 'Category',
+            'callback' => function ($queryBuilder, $alias, $field, $values) {
                 if(!$values['value'])
                 {
                     return;
                 }
-                if(!$values['value'] || $values['value'] == "")
-                {
-                    return;
-                }
-                $queryBuilder->andWhere($alias.'.'.$values['value'].' = 1');
-                
-                return true;
+
+                $queryBuilder->andWhere($alias.'.category LIKE :category');
+                $queryBuilder->setParameter('category', '%' . $values['value'] . '%');
             },
             'field_type' => 'choice',
             'field_options' => array(
                 'required' => false,
-                'choices' => array('homeowner' => 'Homeowner', 'renter' => 'Renter', 'landlord' => 'Landlord')
-            ),
+                'choices' => Lead::getCategoryChoices()
+            )
         ));
         $datagrid->add('appointmentMade', null, array('label' => 'Appointment Made?'));
         $datagrid->add('userAssignedTo', 'doctrine_orm_callback', array(
@@ -526,10 +537,6 @@ class LeadAdmin extends Admin
         'Campaign' => true,
         'PathStep' => true,
         'DateOfNextFollowup' => true,
-        'leadCategory',
-        'residentialStatus' => true,
-        'commercial' => true,
-        'multifamily' => true,
         'datetimeEntered' => true,
         'datetimeLastUpdated' => true,
         'DateOfLead' => true,
@@ -542,18 +549,20 @@ class LeadAdmin extends Admin
         'dateWorkScopeApproved' => true,
         'dateOfUpgrade' => true,
         'dateOfAssessment' => true,
-        'leadCategory' => true,
+        'category' => true,
         'leadEventTitle' => true,
         'appointmentMade' => true,
-	'CRISStatus' => true,
-	'inCRIS' => true,
+    	'CRISStatus' => true,
+    	'inCRIS' => true,
         'Zip' => true,
         'City' => true,
         'countyEntity' => true,
         'leadStatus' => true,
         'upgradeStatus' => true,
+        'solarUpgradeStatus' => true,        
         'SourceOfLead' => true,
-        'outreachOrganization' => true
+        'outreachOrganization' => true,
+        'solarType' => true
     );
     
     protected function configureSpreadsheetFields(SpreadsheetMapper $spreadsheetMapper)
@@ -586,11 +595,11 @@ class LeadAdmin extends Admin
             ->add('leadTypeUpgrade', array('label' => 'Lead Type: Energy Upgrade', 'type' => 'boolean'))
             ->add('leadTypeOutreach', array('label' => 'Lead Type: Outreach', 'type' => 'boolean'))
             ->add('leadTypeWorkforce', array('label' => 'Lead Type: Workforce', 'type' => 'boolean'))
-            ->add('leadCategory', array('label' => 'Lead Category'))
-            ->add('homeowner', array('label' => 'Homeowner', 'type' => 'boolean'))
-            ->add('renter', array('label' => 'Renter', 'type' => 'boolean'))
-            ->add('landlord', array('label' => 'Landlord', 'type' => 'boolean'))
+            ->add('leadTypeSolar', array('label' => 'Lead Type: Solar', 'type' => 'boolean'))
+            ->add('category', array('label' => 'Category', 'type' => 'array'))
             ->add('otherNotes', array('label' => 'Other Notes'))                
+            ->add('solarTypePV', array('label' => 'Solar Type: PV'))
+            ->add('solarTypeHotWater', array('label' => 'Solar Type: Hot Water'))
                 
             ->add('organization', array('label' => 'Employer / Organization'))
             ->add('orgTitle', array('label' => 'Org Title'))
@@ -626,7 +635,17 @@ class LeadAdmin extends Admin
             ->add('upgradeStatusNotes', array('label' => 'Notes'))
             ->add('outreachOrganization', array('label' => 'Outreach Organization'))
             ->add('dataCounty', array('label' => 'Outreach County'))
+            ->add('solarUpgradeStatus', array('label' => 'Solar Upgrade Status'))
         ;
+
+
+        $i = 1;
+        foreach(Lead::getSolarUpgradeStatusChoices() as $choice)
+        {
+            $spreadsheetMapper->add('solarDate'.$i, array('label' => 'date '.$choice, 'type' => 'date'));
+            $i++;
+        }     
+
     }
     
     protected function configureSummaryFields(SummaryMapper $summaryMapper)
@@ -636,6 +655,7 @@ class LeadAdmin extends Admin
             ->addYField('Program', array('label' => 'Program Source','type' => 'relation', 'relation_field_name' => 'Program_id', 'relation_repository' => 'GJGNYDataToolBundle:Program'))
             ->addYField('DateOfLead', array('label' => 'Date of First Contact', 'type' => 'date'))
             ->addXField('upgradeStatus', array('label' => 'Upgrade Status'))
+            ->addXField('solarUpgradeStatus', array('label' => 'Solar Upgrade Status'))
             ->addXField('CRISStatus', array('label' => 'CRIS Status'))
             ->addXField('countyEntity', array('label' => 'County', 'type' => 'relation', 'relation_field_name' => 'countyEntity_id', 'relation_repository' => 'GJGNYDataToolBundle:County'))
             ->addXField('Town')
@@ -689,10 +709,10 @@ class LeadAdmin extends Admin
                 ->add('leadTypeUpgrade', null, array('label' => 'Energy Upgrade'))
                 ->add('leadTypeOutreach', null, array('label' => 'Outreach'))
                 ->add('leadTypeWorkforce', null, array('label' => 'Workforce'))
-                ->add('leadCategory', null, array('label' => 'Lead Category'))
-                ->add('homeowner', null, array('label' => 'Homeowner'))
-                ->add('renter', null, array('label' => 'Renter'))
-                ->add('landlord', null, array('label' => 'Landlord'))
+                ->add('leadTypeSolar', null, array('label' => 'Solar'))
+                ->add('category', null, array('label' => 'Category', 'template' => 'GJGNYDataToolBundle:Lead:_showCategory.html.twig'))
+                ->add('solarTypePV', null, array('label' => 'Solar: PV'))
+                ->add('solarTypeHotWater', null, array('label' => 'Solar: Hot Water'))
             ->end()
             ->with('Enery Upgrade')
                 ->add('upgradeStatus', null, array('label' => 'Upgrade Status'))
@@ -712,6 +732,9 @@ class LeadAdmin extends Admin
                 ->add('financePersonal', null, array('label' => 'Financed with personal loan'))
                 ->add('financePocket', null, array('label' => 'Financed with out of pocket'))
                 ->add('upgradeStatusNotes', null, array('label' => 'Notes'))
+            ->end()
+            ->with('Solar Upgrade')
+                ->add('solarUpgradeStatus', null, array('label' => 'Solar Upgrade Status'))
             ->end()
             ->with('Outreach')
                 ->add('CommunityGroupsConnectedTo', null, array('label' => 'Community groups connected to'))
@@ -741,6 +764,13 @@ class LeadAdmin extends Admin
                 ->add('trainingExperience', null, array('label' => 'Training Experience'))                
             ->end();
         
+        $i = 1;
+        foreach(Lead::getSolarUpgradeStatusChoices() as $choice)
+        {
+            $showMapper->with('Solar Upgrade')->add('solarDate'.$i, null, array('label' => 'date '.$choice))->end();
+            $i++;
+        }            
+
         if($user->getCounty() == "Broome") {
             $showMapper
                 ->with('Other Fields')

@@ -96,7 +96,20 @@ class Lead
 	'unresponsive' => 'unresponsive',
         'upgrade complete' => 'upgrade complete',
     );
-    
+    protected static $solarUpgradeStatusChoices = array(
+        'site assessment requested' => 'site assessment requested',
+        'site assessment scheduled' => 'site assessment scheduled',
+        'NYSERDA submitted' => 'NYSERDA submitted',
+        'NYSERDA approved' => 'NYSERDA approved',
+        'building permit submitted' => 'building permit submitted',
+        'building permit approved' => 'building permit approved',
+        'financing application submitted' => 'financing application submitted',
+        'financing application approved' => 'financing application approved',
+        'interconnection submitted' => 'interconnection submitted',
+        'interconnection tech approved' => 'interconnection tech approved',
+        'interconnection completed' => 'interconnection completed',
+        'installation completed' => 'installation completed',     
+    );
     protected static $upgradeStatusChoices = array(
         'Interested in assessment - No app submitted' => 'Interested in assessment - No app submitted',
         'Referred to WAP / Empower' => 'Referred to WAP / Empower',
@@ -118,8 +131,15 @@ class Lead
     protected static $leadTypeChoices = array(
         'leadTypeUpgrade' => 'Energy Upgrade',
         'leadTypeOutreach' => 'Outreach',
-        'leadTypeWorkforce' => 'Workforce'
+        'leadTypeWorkforce' => 'Workforce',
+        'leadTypeSolar' => 'Solar',
     );
+
+    protected static $solarTypeChoices = array(
+        'solarTypePV' => 'PV',
+        'solarTypeHotWater' => 'Hot Water'
+    );
+
     protected static $highestLevelOfEducationChoices = array(
         'High School' => 'High School',
         'Associates' => 'Associates',
@@ -132,6 +152,17 @@ class Lead
         'Residential (1-4 Unit)' => 'Residential (1-4 Unit)',
         'Multifamily' => 'Multifamily',
         "Commercial / Non-Profit / Gov't" => "Commercial / Non-Profit / Gov't",
+    );
+    protected static $categoryChoices = array(
+        'homeowner' => 'homeowner',
+        'renter' => 'renter',
+        'landlord' => 'landlord',
+        'commercial' => 'commercial',
+        'nonprofit' => 'nonprofit',
+        'municipal' => 'municipal',
+        'school' => 'school',
+        'residential (1-4 unit)' => 'residential (1-4 unit)',
+        'multifamily' => 'multifamily',
     );
     
     protected static $CRISStatusChoices = array(
@@ -150,7 +181,9 @@ class Lead
     protected static $outreachOrganizationChoices = array(
         'CCETC' => 'CCETC',
         'ELP' => 'ELP',
-        'PPEF' => 'PPEF'
+        'PPEF' => 'PPEF',
+        'ETM' => 'ETM',
+        'STSW' => 'STSW'
     );
     
     public static function getOutreachOrganizationChoices()
@@ -158,6 +191,11 @@ class Lead
         return self::$outreachOrganizationChoices;
     }
     
+    public static function getSolarUpgradeStatusChoices()
+    {
+        return self::$solarUpgradeStatusChoices;
+    }
+
     public static function getUpgradeStatusChoices()
     {
         return self::$upgradeStatusChoices;
@@ -172,6 +210,10 @@ class Lead
     {
         return self::$leadCategoryChoices;
     }
+     public static function getCategoryChoices()
+    {
+        return self::$categoryChoices;
+    }
     
     public static function getHighestLevelOfEducationChoices()
     {
@@ -181,6 +223,10 @@ class Lead
     public static function getLeadTypeChoices()
     {
         return self::$leadTypeChoices;
+    }
+    public static function getSolarTypeChoices()
+    {
+        return self::$solarTypeChoices;
     }
 
     public static function getLeadStatusChoices()
@@ -411,6 +457,14 @@ class Lead
     private $leadTypeUpgrade;
 
     /**
+     * @var smallint $leadTypeSolar
+     *
+     * @ORM\Column(name="leadTypeSolar", type="boolean", nullable="true")
+     */
+    private $leadTypeSolar;
+
+
+    /**
      * @var smallint $leadTypeWorkforce
      *
      * @ORM\Column(name="leadTypeWorkforce", type="boolean", nullable="true")
@@ -421,7 +475,14 @@ class Lead
      *
      * @ORM\Column(name="leadCategory", type="string", nullable="true")
      */
-    private $leadCategory;    
+    private $leadCategory; 
+    /**
+     * @var array $category
+     *
+     * @ORM\Column(name="category", type="array", nullable="true")
+     */
+    private $category;
+   
     /**
      * @var smallint $homeowner
      *
@@ -442,6 +503,20 @@ class Lead
      * @ORM\Column(name="landlord", type="boolean", nullable="true")
      */
     private $landlord;
+
+
+    /**
+     * @var smallint $solarTypePV
+     *
+     * @ORM\Column(name="solarTypePV", type="boolean", nullable="true")
+     */
+    private $solarTypePV;
+    /**
+     * @var smallint $solarTypeHotWater
+     *
+     * @ORM\Column(name="solarTypeHotWater", type="boolean", nullable="true")
+     */
+    private $solarTypeHotWater;
 
 
     // Organization Information  ===============================================
@@ -848,7 +923,99 @@ class Lead
      */
     private $dataCounty;    
 
-    
+    // solar ====================
+    // =============================
+    /**
+     * @var string $solarUpgradeStatus
+     *
+     * @ORM\Column(name="solarUpgradeStatus", type="string", length=255, nullable="true")
+     */
+    private $solarUpgradeStatus;
+
+    /**
+     * @var date $solarDate1
+     *
+     * @ORM\Column(name="solarDate1", type="date", nullable="true")
+     */
+    private $solarDate1;
+
+    /**
+     * @var date $solarDate2
+     *
+     * @ORM\Column(name="solarDate2", type="date", nullable="true")
+     */
+    private $solarDate2;
+
+    /**
+     * @var date $solarDate3
+     *
+     * @ORM\Column(name="solarDate3", type="date", nullable="true")
+     */
+    private $solarDate3;
+
+    /**
+     * @var date $solarDate4
+     *
+     * @ORM\Column(name="solarDate4", type="date", nullable="true")
+     */
+    private $solarDate4;
+
+    /**
+     * @var date $solarDate5
+     *
+     * @ORM\Column(name="solarDate5", type="date", nullable="true")
+     */
+    private $solarDate5;
+
+    /**
+     * @var date $solarDate6
+     *
+     * @ORM\Column(name="solarDate6", type="date", nullable="true")
+     */
+    private $solarDate6;
+
+    /**
+     * @var date $solarDate7
+     *
+     * @ORM\Column(name="solarDate7", type="date", nullable="true")
+     */
+    private $solarDate7;
+
+    /**
+     * @var date $solarDate8
+     *
+     * @ORM\Column(name="solarDate8", type="date", nullable="true")
+     */
+    private $solarDate8;
+
+    /**
+     * @var date $solarDate9
+     *
+     * @ORM\Column(name="solarDate9", type="date", nullable="true")
+     */
+    private $solarDate9;
+
+    /**
+     * @var date $solarDate10
+     *
+     * @ORM\Column(name="solarDate10", type="date", nullable="true")
+     */
+    private $solarDate10;
+
+    /**
+     * @var date $solarDate11
+     *
+     * @ORM\Column(name="solarDate11", type="date", nullable="true")
+     */
+    private $solarDate11;
+
+    /**
+     * @var date $solarDate12
+     *
+     * @ORM\Column(name="solarDate12", type="date", nullable="true")
+     */
+    private $solarDate12;
+
     /**
      * Get id
      *
@@ -2057,6 +2224,27 @@ class Lead
         return $this->leadTypeUpgrade;
     }
 
+  /**
+     * Set leadTypeSolar
+     *
+     * @param boolean $leadTypeSolar
+     */
+    public function setLeadTypeSolar($leadTypeSolar)
+    {
+        $this->leadTypeSolar = $leadTypeSolar;
+    }
+
+    /**
+     * Get leadTypeSolar
+     *
+     * @return boolean 
+     */
+    public function getLeadTypeSolar()
+    {
+        return $this->leadTypeSolar;
+    }
+
+
     /**
      * Set leadTypeWorkforce
      *
@@ -2076,6 +2264,47 @@ class Lead
     {
         return $this->leadTypeWorkforce;
     }
+
+/**
+     * Set solarTypePV
+     *
+     * @param boolean $solarTypePV
+     */
+    public function setSolarTypePV($solarTypePV)
+    {
+        $this->solarTypePV = $solarTypePV;
+    }
+
+    /**
+     * Get solarTypePV
+     *
+     * @return boolean 
+     */
+    public function getSolarTypePV()
+    {
+        return $this->solarTypePV;
+    }
+    /**
+     * Set solarTypeHotWater
+     *
+     * @param boolean $solarTypeHotWater
+     */
+    public function setSolarTypeHotWater($solarTypeHotWater)
+    {
+        $this->solarTypeHotWater = $solarTypeHotWater;
+    }
+
+    /**
+     * Get solarTypeHotWater
+     *
+     * @return boolean 
+     */
+    public function getSolarTypeHotWater()
+    {
+        return $this->solarTypeHotWater;
+    }
+
+
 
     /**
      * Set highestLevelOfEducation
@@ -2796,4 +3025,288 @@ class Lead
     {
         return $this->outreachOrganization;
     }
+ /**
+     * Set category
+     *
+     * @param array $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+    }
+
+    public function addCategory($category)
+    {
+        $this->category[] = $category;
+    }
+
+    /**
+     * Get category
+     *
+     * @return array 
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * Set solarUpgradeStatus
+     *
+     * @param string $solarUpgradeStatus
+     */
+    public function setSolarUpgradeStatus($solarUpgradeStatus)
+    {
+        $this->solarUpgradeStatus = $solarUpgradeStatus;
+    }
+
+    /**
+     * Get solarUpgradeStatus
+     *
+     * @return string 
+     */
+    public function getSolarUpgradeStatus()
+    {
+        return $this->solarUpgradeStatus;
+    }
+
+    /**
+     * Set solarDate1
+     *
+     * @param date $solarDate1
+     */
+    public function setSolarDate1($solarDate1)
+    {
+        $this->solarDate1 = $solarDate1;
+    }
+
+    /**
+     * Get solarDate1
+     *
+     * @return date 
+     */
+    public function getSolarDate1()
+    {
+        return $this->solarDate1;
+    }
+
+    /**
+     * Set solarDate2
+     *
+     * @param date $solarDate2
+     */
+    public function setSolarDate2($solarDate2)
+    {
+        $this->solarDate2 = $solarDate2;
+    }
+
+    /**
+     * Get solarDate2
+     *
+     * @return date 
+     */
+    public function getSolarDate2()
+    {
+        return $this->solarDate2;
+    }
+
+    /**
+     * Set solarDate3
+     *
+     * @param date $solarDate3
+     */
+    public function setSolarDate3($solarDate3)
+    {
+        $this->solarDate3 = $solarDate3;
+    }
+
+    /**
+     * Get solarDate3
+     *
+     * @return date 
+     */
+    public function getSolarDate3()
+    {
+        return $this->solarDate3;
+    }
+
+    /**
+     * Set solarDate4
+     *
+     * @param date $solarDate4
+     */
+    public function setSolarDate4($solarDate4)
+    {
+        $this->solarDate4 = $solarDate4;
+    }
+
+    /**
+     * Get solarDate4
+     *
+     * @return date 
+     */
+    public function getSolarDate4()
+    {
+        return $this->solarDate4;
+    }
+
+    /**
+     * Set solarDate5
+     *
+     * @param date $solarDate5
+     */
+    public function setSolarDate5($solarDate5)
+    {
+        $this->solarDate5 = $solarDate5;
+    }
+
+    /**
+     * Get solarDate5
+     *
+     * @return date 
+     */
+    public function getSolarDate5()
+    {
+        return $this->solarDate5;
+    }
+
+    /**
+     * Set solarDate6
+     *
+     * @param date $solarDate6
+     */
+    public function setSolarDate6($solarDate6)
+    {
+        $this->solarDate6 = $solarDate6;
+    }
+
+    /**
+     * Get solarDate6
+     *
+     * @return date 
+     */
+    public function getSolarDate6()
+    {
+        return $this->solarDate6;
+    }
+
+    /**
+     * Set solarDate7
+     *
+     * @param date $solarDate7
+     */
+    public function setSolarDate7($solarDate7)
+    {
+        $this->solarDate7 = $solarDate7;
+    }
+
+    /**
+     * Get solarDate7
+     *
+     * @return date 
+     */
+    public function getSolarDate7()
+    {
+        return $this->solarDate7;
+    }
+
+    /**
+     * Set solarDate8
+     *
+     * @param date $solarDate8
+     */
+    public function setSolarDate8($solarDate8)
+    {
+        $this->solarDate8 = $solarDate8;
+    }
+
+    /**
+     * Get solarDate8
+     *
+     * @return date 
+     */
+    public function getSolarDate8()
+    {
+        return $this->solarDate8;
+    }
+
+    /**
+     * Set solarDate9
+     *
+     * @param date $solarDate9
+     */
+    public function setSolarDate9($solarDate9)
+    {
+        $this->solarDate9 = $solarDate9;
+    }
+
+    /**
+     * Get solarDate9
+     *
+     * @return date 
+     */
+    public function getSolarDate9()
+    {
+        return $this->solarDate9;
+    }
+
+    /**
+     * Set solarDate10
+     *
+     * @param date $solarDate10
+     */
+    public function setSolarDate10($solarDate10)
+    {
+        $this->solarDate10 = $solarDate10;
+    }
+
+    /**
+     * Get solarDate10
+     *
+     * @return date 
+     */
+    public function getSolarDate10()
+    {
+        return $this->solarDate10;
+    }
+
+    /**
+     * Set solarDate11
+     *
+     * @param date $solarDate11
+     */
+    public function setSolarDate11($solarDate11)
+    {
+        $this->solarDate11 = $solarDate11;
+    }
+
+    /**
+     * Get solarDate11
+     *
+     * @return date 
+     */
+    public function getSolarDate11()
+    {
+        return $this->solarDate11;
+    }
+
+    /**
+     * Set solarDate12
+     *
+     * @param date $solarDate12
+     */
+    public function setSolarDate12($solarDate12)
+    {
+        $this->solarDate12 = $solarDate12;
+    }
+
+    /**
+     * Get solarDate12
+     *
+     * @return date 
+     */
+    public function getSolarDate12()
+    {
+        return $this->solarDate12;
+    }    
 }
