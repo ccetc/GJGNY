@@ -17,6 +17,8 @@ use Symfony\Component\Form\CallbackValidator;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormError;
 
+use GJGNY\DataToolBundle\Entity\Lead;
+
 class PortalController extends Controller
 {
     public function homeAction($url)
@@ -76,12 +78,41 @@ class PortalController extends Controller
         asort($counties);
 
         $form = $this->createFormBuilder()
-                ->add('firstName', 'text', array('label' => 'First Name'))
-                ->add('lastName', 'text', array('label' => 'Last Name'))
-                ->add('email', 'text', array('label' => 'E-mail'))
-                ->add('phone', 'text', array('label' => 'Phone', 'required' => true))
-                ->add('town', 'text', array('label' => 'Town'))
-                ->add('county', 'choice', array('label' => 'County', 'choices' => $counties));
+                ->add('firstName', 'text', array('label' => 'First Name *', 'required' => true))
+                ->add('lastName', 'text', array('label' => 'Last Name *', 'required' => true))
+                ->add('email', 'text', array('label' => 'E-mail *', 'required' => true))
+                ->add('phone', 'text', array('label' => 'Phone *', 'required' => true))
+                ->add('address', 'text', array('label' => 'Address *', 'required' => true))
+                ->add('town', 'text', array('label' => 'Town *', 'required' => true))
+                ->add('zip', 'text', array('label' => 'Zip *', 'required' => true))
+                ->add('county', 'choice', array('label' => 'County', 'choices' => $counties, 'required' => true))
+                ->add('state', 'choice', array(
+                    'label' => 'State',
+                    'required' => true,
+                    'choices' => Lead::getStateChoices(),
+                    'preferred_choices' => array('NY', 'PA')
+                ))
+                ->add('outreachOrganization', 'choice', array(
+                    'label' => 'Outreach Organization',
+                    'required' => true,
+                    'choices' => array('PPEF' => 'PPEF', 'STSW' => 'STSW'),
+                ))
+                ->add('solar', 'choice', array(
+                    'label' => 'Interested in Solar Site Assessment',
+                    'required' => true,
+                    'choices' => array('yes' => 'yes', 'no' => 'no'),
+                ))
+                ->add('energyUpgrade', 'choice', array(
+                    'label' => 'Interested in Home Energy Audit',
+                    'required' => true,
+                    'choices' => array('yes' => 'yes', 'no' => 'no'),
+                ))
+                ->add('SourceOfLead', 'choice', array(
+                    'required' => true,
+                    'label' => 'How did you hear about us?',
+                    'choices' => Lead::getSourceOfLeadChoices()
+                ))
+                ->add('message', 'textarea', array('label' => 'Message'));
 
         $form->
             addValidator(new CallbackValidator(function(FormInterface $form)
@@ -107,6 +138,42 @@ class PortalController extends Controller
                 if (!$form["phone"]->getData() && trim($form["phone"]->getData()) == "" )
                 {
                     $form->addError(new FormError('Please enter your phone number'));
+                }
+            })
+        );
+        $form->
+            addValidator(new CallbackValidator(function(FormInterface $form)
+            {
+                if (!$form["email"]->getData() && trim($form["email"]->getData()) == "" )
+                {
+                    $form->addError(new FormError('Please enter your email'));
+                }
+            })
+        );
+        $form->
+            addValidator(new CallbackValidator(function(FormInterface $form)
+            {
+                if (!$form["zip"]->getData() && trim($form["zip"]->getData()) == "" )
+                {
+                    $form->addError(new FormError('Please enter your zip'));
+                }
+            })
+        );
+        $form->
+            addValidator(new CallbackValidator(function(FormInterface $form)
+            {
+                if (!$form["address"]->getData() && trim($form["address"]->getData()) == "" )
+                {
+                    $form->addError(new FormError('Please enter your address'));
+                }
+            })
+        );
+        $form->
+            addValidator(new CallbackValidator(function(FormInterface $form)
+            {
+                if (!$form["state"]->getData() && trim($form["state"]->getData()) == "" )
+                {
+                    $form->addError(new FormError('Please enter your state'));
                 }
             })
         );
@@ -138,6 +205,9 @@ class PortalController extends Controller
                 $lead->setLastName($data['lastName']);
                 $lead->setPersonalEmail($data['email']);
                 $lead->setTown($data['town']);
+                $lead->setZip($data['zip']);
+                $lead->setAddress($data['address']);
+                $lead->setState($data['state']);
                 $lead->setCountyEntity($userCounty);
                 $lead->setDatetimeEntered(new \DateTime());
                 $lead->setLeadStatus('active lead');
@@ -145,6 +215,16 @@ class PortalController extends Controller
                 $lead->setProgram($portalMatch->getNotificationProgram());
                 $lead->setDataCounty($portalMatch->getCountyOwnedBy());
                 $lead->setPhone($data['phone']);
+                $lead->setOtherNotes($data['message']);
+                $lead->setOutreachOrganization($data['outreachOrganization']);
+                $lead->setSourceOfLead($data['SourceOfLead']);
+
+                if($data['solar'] && $data['solar'] == 'yes') {
+                    $lead->setLeadTypeSolar(true);
+                }
+                if($data['energyUpgrade'] && $data['energyUpgrade'] == 'yes') {
+                    $lead->setLeadTypeUpgrade(true);
+                }
         
                 $newLeadLink = $this->getPageLink().'/admin/gjgny/datatool/lead/list'.
                         '?filter[Program][type]=&filter[Program][value]='.$portalMatch->getNotificationProgram()->getId().

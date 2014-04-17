@@ -69,23 +69,33 @@ class Lead
         'campaignChoicePresent' => 'setup presentation at workplace or organization'
     );
     protected static $SourceOfLeadChoices = array(
+        'Advertising' => 'Advertising',
+        'Banner' => 'Banner',
         'Contractor' => 'Contractor',
         'CRIS Database' => 'CRIS Database',
         'Door to door canvas' => 'Door to door canvas',
         'E-mail' => 'E-mail',
+        'Event' => 'Event',
         'Mailing' => 'Mailing',
+        'Meeting' => 'Meeting',
         'Neighbor / Friends' => 'Neighbor / Friends',
         'Newspaper Article' => 'Newspaper Article',
+        'Organization I belong to' => 'Organization I belong to',
         'Phone' => 'Phone',
-        'Event' => 'Event',
-        'Meeting' => 'Meeting',
         'Program' => 'Program',
         'Presentation' => 'Presentation',
         'Radion' => 'Radio',
+        'Social media (Facebook, Twitter, etc.)' => 'Social media (Facebook, Twitter, etc.)',
+        'Solar Ambassador/Volunteer' => 'Solar Ambassador/Volunteer',
+        'Solar Installer' => 'Solar Installer',
         'Tabling' => 'Tabling',
+        'Town Leader' => 'Town Leader',
         'TV News' => 'TV News',
         'Website' => 'Website',
+        'Workshop' => 'Workshop',
+        'Yard sign' => 'Yard sign',
     );
+
     protected static $leadStatusChoices = array(
         'not interested' => 'not interested',
         'interested but is a renter' => 'interested but is a renter',
