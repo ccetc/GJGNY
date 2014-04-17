@@ -61,10 +61,10 @@
                     </div>
                     <div class="span7">
                         {% if portal.mainLogoUrl %}<a href="{{ portal.mainLogoUrl }}" target="_blank">{% endif %}
-                            <img id="main-logo" src="{{ asset('images/Portals/' ~ portal.mainLogoFilename ) }}" />
+                            {% if portal.mainLogoFilename %}<img id="main-logo" src="{{ asset('images/Portals/' ~ portal.mainLogoFilename ) }}" />{% endif %}
                         {% if portal.mainLogoUrl %}</a>{% endif %}<br/>
-                        <a href="http://www.ccebroomecounty.com/Programs/energy-2" target="_blank"><img src="{{ asset('images/Portals/ELP Logo.png') }}" style="width: 175px; float: left; margin: 5px 0 0 50px;" /></a>
-                        <a href="https://www.facebook.com/EnergyLeadershipProgram" target="_blank" style="float: right; margin: 38px 68px 0 0;"><img src="{{ asset('images/Portals/facebook.png') }}" style="" /></a>
+                        <a href="http://www.southerntiersolarworks.org/" target="_blank"><img src="{{ asset('images/Portals/STSWlogo.png') }}" style="width: 175px; float: left; margin: -10px 0 0 50px;" /></a>
+                        <a href="https://www.facebook.com/STSWNY" target="_blank" style="float: right; margin: 0px 0px 0 0;"><img src="{{ asset('images/Portals/facebook.png') }}" style="" /></a>
                     </div>
                 </div>
 
