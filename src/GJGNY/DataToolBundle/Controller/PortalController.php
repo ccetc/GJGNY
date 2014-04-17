@@ -219,6 +219,12 @@ class PortalController extends Controller
                 $lead->setOutreachOrganization($data['outreachOrganization']);
                 $lead->setSourceOfLead($data['SourceOfLead']);
 
+<<<<<<< HEAD
+=======
+                echo $data['solar'];
+                echo $data['outreachOrganization'];
+
+>>>>>>> ae1834c20851ebf6e90d1b5e84a7794dda109601
                 if($data['solar'] && $data['solar'] == 'yes') {
                     $lead->setLeadTypeSolar(true);
                 }
