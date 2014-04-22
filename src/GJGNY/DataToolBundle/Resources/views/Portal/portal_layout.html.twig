@@ -53,17 +53,15 @@
             <div class="content">
 
                 <div class="row">
-                    <div class="span7">
+                    <div class="span14">
                         <div class="gjgny-logo-container">
                             <a href="{{ path('portal', {'url' : portal.url }) }}"><img src="{{ asset('images/Portals/gjgny.png') }}" /></a>
                             <span id="portal-title">{{ portal.title }}</span>
                         </div>
-                    </div>
-                    <div class="span7">
                         {% if portal.mainLogoUrl %}<a href="{{ portal.mainLogoUrl }}" target="_blank">{% endif %}
-                            {% if portal.mainLogoFilename %}<img id="main-logo" src="{{ asset('images/Portals/' ~ portal.mainLogoFilename ) }}" />{% endif %}
+                            {% if portal.mainLogoFilename %}<img id="main-logo" style="margin: 50px 10px 0 20px; width: 275px; float: left;" src="{{ asset('images/Portals/' ~ portal.mainLogoFilename ) }}" />{% endif %}
                         {% if portal.mainLogoUrl %}</a>{% endif %}<br/>
-                        <a href="http://www.southerntiersolarworks.org/" target="_blank"><img src="{{ asset('images/Portals/STSWlogo.png') }}" style="width: 175px; float: left; margin: -10px 0 0 50px;" /></a>
+                        <a href="http://www.southerntiersolarworks.org/" target="_blank"><img src="{{ asset('images/Portals/STSWlogo.png') }}" style="width: 150px; float: left;" /></a>
                         <a href="https://www.facebook.com/STSWNY" target="_blank" style="float: right; margin: 0px 0px 0 0;"><img src="{{ asset('images/Portals/facebook.png') }}" style="" /></a>
                     </div>
                 </div>

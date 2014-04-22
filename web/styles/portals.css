@@ -23,6 +23,7 @@ html, body {
 div.gjgny-logo-container {
     width: 320px;
     text-align: center;
+    float: left;
 }
 
 img#main-logo {
