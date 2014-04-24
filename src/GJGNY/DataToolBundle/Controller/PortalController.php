@@ -67,7 +67,7 @@ class PortalController extends Controller
         $portalSettingsRepository = $this->getDoctrine()->getRepository('GJGNYDataToolBundle:PortalSettings');
         $portalSettings = $portalSettingsRepository->findAll(array('portal' => $portal));
 
-        $counties = array();
+        $counties = array('' => '');
 
         foreach($portalSettings as $ps) {
             foreach($ps->getCountiesServed() as $cs) {
@@ -85,32 +85,32 @@ class PortalController extends Controller
                 ->add('address', 'text', array('label' => 'Address *', 'required' => true))
                 ->add('town', 'text', array('label' => 'Town *', 'required' => true))
                 ->add('zip', 'text', array('label' => 'Zip *', 'required' => true))
-                ->add('county', 'choice', array('label' => 'County', 'choices' => $counties, 'required' => true))
+                ->add('county', 'choice', array('label' => 'County *', 'choices' => $counties, 'required' => true))
                 ->add('state', 'choice', array(
-                    'label' => 'State',
+                    'label' => 'State *',
                     'required' => true,
-                    'choices' => Lead::getStateChoices(),
+                    'choices' => array_merge(array('' => ''), Lead::getStateChoices()),
                     'preferred_choices' => array('NY', 'PA')
                 ))
                 ->add('outreachOrganization', 'choice', array(
-                    'label' => 'Outreach Organization',
+                    'label' => 'Outreach Organization *',
                     'required' => true,
-                    'choices' => array('PPEF' => 'PPEF', 'STSW' => 'STSW'),
+                    'choices' => array('' => '', 'PPEF' => 'PPEF', 'STSW' => 'STSW'),
                 ))
                 ->add('solar', 'choice', array(
-                    'label' => 'Interested in Solar Site Assessment',
+                    'label' => 'Interested in Solar Site Assessment *',
                     'required' => true,
-                    'choices' => array('yes' => 'yes', 'no' => 'no'),
+                    'choices' => array('' => '', 'yes' => 'yes', 'no' => 'no'),
                 ))
                 ->add('energyUpgrade', 'choice', array(
-                    'label' => 'Interested in Home Energy Audit',
+                    'label' => 'Interested in Home Energy Audit *',
                     'required' => true,
-                    'choices' => array('yes' => 'yes', 'no' => 'no'),
+                    'choices' => array('' => '', 'yes' => 'yes', 'no' => 'no'),
                 ))
                 ->add('SourceOfLead', 'choice', array(
                     'required' => true,
-                    'label' => 'How did you hear about us?',
-                    'choices' => Lead::getSourceOfLeadChoices()
+                    'label' => 'How did you hear about us? *',
+                    'choices' => array_merge(array('' => ''), Lead::getSourceOfLeadChoices())
                 ))
                 ->add('message', 'textarea', array('label' => 'Message'));
 
@@ -177,6 +177,51 @@ class PortalController extends Controller
                 }
             })
         );
+        $form->
+            addValidator(new CallbackValidator(function(FormInterface $form)
+            {
+                if (!$form["county"]->getData() && trim($form["county"]->getData()) == "" )
+                {
+                    $form->addError(new FormError('Please enter your county'));
+                }
+            })
+        );
+        $form->
+            addValidator(new CallbackValidator(function(FormInterface $form)
+            {
+                if (!$form["outreachOrganization"]->getData() && trim($form["outreachOrganization"]->getData()) == "" )
+                {
+                    $form->addError(new FormError('Please enter your Outreach Organization'));
+                }
+            })
+        );
+        $form->
+            addValidator(new CallbackValidator(function(FormInterface $form)
+            {
+                if (!$form["solar"]->getData() && trim($form["solar"]->getData()) == "" )
+                {
+                    $form->addError(new FormError('Please enter your interest in a solar assessment'));
+                }
+            })
+        );
+        $form->
+            addValidator(new CallbackValidator(function(FormInterface $form)
+            {
+                if (!$form["SourceOfLead"]->getData() && trim($form["SourceOfLead"]->getData()) == "" )
+                {
+                    $form->addError(new FormError('Please enter how you heard about us'));
+                }
+            })
+        );
+        $form->
+            addValidator(new CallbackValidator(function(FormInterface $form)
+            {
+                if (!$form["energyUpgrade"]->getData() && trim($form["energyUpgrade"]->getData()) == "" )
+                {
+                    $form->addError(new FormError('Please enter your interest in a home energy assessment'));
+                }
+            })
+        );            
         
         $form = $form->getForm();
             
