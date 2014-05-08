@@ -95,7 +95,7 @@ class LeadAdmin extends Admin
                 ->add('upgradeStatusNotes', null, array('label' => 'Notes', 'required' => false))
             ->end()
             ->with('Solar Upgrade')    
-                ->add('solarUpgradeStatus', 'choice', array('label' => 'Solar Upgrade Status', 'required' => false, 'choices' => Lead::getSolarUpgradeStatusChoices()))
+                ->add('solarUpgradeStatus', 'choice', array('label' => 'Solar Upgrade Status', 'expanded' => true, 'multiple' => true, 'required' => false, 'attr' => array('class' => 'stacked-options'), 'choices' => Lead::getSolarUpgradeStatusChoices()))
             ->end()
             ->with('Outreach')
                 ->add('CommunityGroupsConnectedTo', null, array('label' => 'Community groups connected to', 'required' => false))
@@ -130,11 +130,11 @@ class LeadAdmin extends Admin
                 ->add('trainingExperience', null, array('label' => 'Training Experience', 'required' => false))                
             ->end();
 
-        $i = 1;
-        foreach(Lead::getSolarUpgradeStatusChoices() as $choice)
+        $solarUpgradeStatusChoices = Lead::getSolarUpgradeStatusChoices();
+        foreach(Lead::$solarDateMappings as $statusArrayKey => $fieldNumber)
         {
-            $formMapper->with('Solar Upgrade')->add('solarDate'.$i, null, array('label' => 'date '.$choice, 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))->end();
-            $i++;
+            $choice = $solarUpgradeStatusChoices[$statusArrayKey];
+            $formMapper->with('Solar Upgrade')->add('solarDate'.$fieldNumber, null, array('label' => 'date '.$choice, 'required' => false, 'widget' => 'single_text', 'format' => 'MM/dd/yyyy', 'attr' => array('class' => 'datepicker')))->end();
         }            
         
         if($user->getCounty() == "Broome") {
@@ -339,13 +339,22 @@ class LeadAdmin extends Admin
                 'choices' => Lead::getUpgradeStatusChoices()
             )
         ));
-        $datagrid->add('solarUpgradeStatus', 'doctrine_orm_choice', array(
+        $datagrid->add('solarUpgradeStatus', 'doctrine_orm_callback', array(
             'label' => 'Solar Upgrade Status',
+            'callback' => function ($queryBuilder, $alias, $field, $values) {
+                if(!$values['value'])
+                {
+                    return;
+                }
+
+                $queryBuilder->andWhere($alias.'.solarUpgradeStatus LIKE :status');
+                $queryBuilder->setParameter('status', '%' . $values['value'] . '%');
+            },
             'field_type' => 'choice',
             'field_options' => array(
                 'required' => false,
-                'choices' => Lead::getSolarUpgradeStatusChoices()
-            )
+                'choices' => Lead::getSolarUpgradeStatusChoices()                
+            ),
         ));
         $datagrid->add('needToCall', null, array('label' => 'Need to Contact'));
         $datagrid->add('dataCounty', null, array(
@@ -635,16 +644,17 @@ class LeadAdmin extends Admin
             ->add('upgradeStatusNotes', array('label' => 'Notes'))
             ->add('outreachOrganization', array('label' => 'Outreach Organization'))
             ->add('dataCounty', array('label' => 'Outreach County'))
-            ->add('solarUpgradeStatus', array('label' => 'Solar Upgrade Status'))
+            ->add('solarUpgradeStatus', array('label' => 'Solar Upgrade Status', 'type' => 'array'))
         ;
 
 
-        $i = 1;
-        foreach(Lead::getSolarUpgradeStatusChoices() as $choice)
+        $solarUpgradeStatusChoices = Lead::getSolarUpgradeStatusChoices();
+        foreach(Lead::$solarDateMappings as $statusArrayKey => $fieldNumber)
         {
-            $spreadsheetMapper->add('solarDate'.$i, array('label' => 'date '.$choice, 'type' => 'date'));
-            $i++;
-        }     
+            $choice = $solarUpgradeStatusChoices[$statusArrayKey];
+            $spreadsheetMapper->add('solarDate'.$fieldNumber, array('label' => 'date '.$choice, 'type' => 'date'));
+        }            
+
 
     }
     
@@ -655,7 +665,6 @@ class LeadAdmin extends Admin
             ->addYField('Program', array('label' => 'Program Source','type' => 'relation', 'relation_field_name' => 'Program_id', 'relation_repository' => 'GJGNYDataToolBundle:Program'))
             ->addYField('DateOfLead', array('label' => 'Date of First Contact', 'type' => 'date'))
             ->addXField('upgradeStatus', array('label' => 'Upgrade Status'))
-            ->addXField('solarUpgradeStatus', array('label' => 'Solar Upgrade Status'))
             ->addXField('CRISStatus', array('label' => 'CRIS Status'))
             ->addXField('countyEntity', array('label' => 'County', 'type' => 'relation', 'relation_field_name' => 'countyEntity_id', 'relation_repository' => 'GJGNYDataToolBundle:County'))
             ->addXField('Town')
@@ -734,7 +743,7 @@ class LeadAdmin extends Admin
                 ->add('upgradeStatusNotes', null, array('label' => 'Notes'))
             ->end()
             ->with('Solar Upgrade')
-                ->add('solarUpgradeStatus', null, array('label' => 'Solar Upgrade Status'))
+                ->add('solarUpgradeStatus', null, array('label' => 'Solar Upgrade Status', 'template' => 'GJGNYDataToolBundle:Lead:_show_solar_upgrade_status.html.twig'))
             ->end()
             ->with('Outreach')
                 ->add('CommunityGroupsConnectedTo', null, array('label' => 'Community groups connected to'))
@@ -763,13 +772,14 @@ class LeadAdmin extends Admin
                 ->add('certifications', null, array('label' => 'Certifications'))
                 ->add('trainingExperience', null, array('label' => 'Training Experience'))                
             ->end();
-        
-        $i = 1;
-        foreach(Lead::getSolarUpgradeStatusChoices() as $choice)
+               
+        $solarUpgradeStatusChoices = Lead::getSolarUpgradeStatusChoices();
+        foreach(Lead::$solarDateMappings as $statusArrayKey => $fieldNumber)
         {
-            $showMapper->with('Solar Upgrade')->add('solarDate'.$i, null, array('label' => 'date '.$choice))->end();
-            $i++;
+            $choice = $solarUpgradeStatusChoices[$statusArrayKey];
+            $showMapper->with('Solar Upgrade')->add('solarDate'.$fieldNumber, null, array('label' => 'date '.$choice))->end();
         }            
+
 
         if($user->getCounty() == "Broome") {
             $showMapper

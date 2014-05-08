@@ -109,6 +109,8 @@ class Lead
     protected static $solarUpgradeStatusChoices = array(
         'site assessment requested' => 'site assessment requested',
         'site assessment scheduled' => 'site assessment scheduled',
+        'proposal sent' => 'proposal sent', // added late
+        'contract signed' => 'contract signed', // added late
         'NYSERDA submitted' => 'NYSERDA submitted',
         'NYSERDA approved' => 'NYSERDA approved',
         'building permit submitted' => 'building permit submitted',
@@ -120,6 +122,25 @@ class Lead
         'interconnection completed' => 'interconnection completed',
         'installation completed' => 'installation completed',     
     );
+    // we gave solarStatusDate fields numbers to save time, but we had to add states into the middle of the list, hence this mapping
+    // solarUpgradeStatusChoice key => field number
+    public static $solarDateMappings = array(
+        'site assessment requested' =>  1,
+        'site assessment scheduled' =>  2,
+        'proposal sent' =>  13, // added late
+        'contract signed' =>  14, // added late
+        'NYSERDA submitted' =>  3,
+        'NYSERDA approved' =>  4,
+        'building permit submitted' =>  5,
+        'building permit approved' =>  6,
+        'financing application submitted' =>  7,
+        'financing application approved' =>  8,
+        'interconnection submitted' =>  9,
+        'interconnection tech approved' =>  10,
+        'interconnection completed' =>  11,
+        'installation completed' =>  12,
+    );
+
     protected static $upgradeStatusChoices = array(
         'Interested in assessment - No app submitted' => 'Interested in assessment - No app submitted',
         'Referred to WAP / Empower' => 'Referred to WAP / Empower',
@@ -904,7 +925,7 @@ class Lead
     /**
      * @var string $solarUpgradeStatus
      *
-     * @ORM\Column(name="solarUpgradeStatus", type="string", length=255, nullable="true")
+     * @ORM\Column(name="solarUpgradeStatus", type="array", nullable="true")
      */
     private $solarUpgradeStatus;
 
@@ -991,6 +1012,20 @@ class Lead
      * @ORM\Column(name="solarDate12", type="date", nullable="true")
      */
     private $solarDate12;
+
+    /**
+     * @var date $solarDate13
+     *
+     * @ORM\Column(name="solarDate13", type="date", nullable="true")
+     */
+    private $solarDate13;
+
+    /**
+     * @var date $solarDate14
+     *
+     * @ORM\Column(name="solarDate14", type="date", nullable="true")
+     */
+    private $solarDate14;
 
     /**
      * Get id
@@ -2949,25 +2984,43 @@ class Lead
         return $this->category;
     }
 
-    /**
-     * Set solarUpgradeStatus
-     *
-     * @param string $solarUpgradeStatus
-     */
-    public function setSolarUpgradeStatus($solarUpgradeStatus)
+    public function addSolarUpgradeStatus($option)
     {
-        $this->solarUpgradeStatus = $solarUpgradeStatus;
+        if(!isset($this->solarUpgradeStatus)) $this->solarUpgradeStatus = array();
+        
+        if (is_array($this->solarUpgradeStatus) && !in_array($option, $this->solarUpgradeStatus, true)) {
+            $this->solarUpgradeStatus[] = $option;
+        }
+
+        return $this;
     }
 
-    /**
-     * Get solarUpgradeStatus
-     *
-     * @return string 
-     */
+    public function removeSolarUpgradeStatus($option)
+    {
+        if (false !== $key = array_search($option, $this->solarUpgradeStatus, true)) {
+            unset($this->solarUpgradeStatus[$key]);
+            $this->solarUpgradeStatus = array_values($this->solarUpgradeStatus);
+        }
+
+        return $this;
+    }
+
     public function getSolarUpgradeStatus()
     {
         return $this->solarUpgradeStatus;
     }
+
+    public function setSolarUpgradeStatus(array $options)
+    {
+        $this->solarUpgradeStatus = array();
+
+        foreach ($options as $option) {
+            $this->addSolarUpgradeStatus($option);
+        }
+
+        return $this;
+    }
+
 
     /**
      * Set solarDate1
@@ -3207,5 +3260,46 @@ class Lead
     public function getSolarDate12()
     {
         return $this->solarDate12;
-    }    
+    }   
+
+    /**
+     * Set solarDate1
+     *
+     * @param date $solarDate13
+     */
+    public function setSolarDate13($solarDate13)
+    {
+        $this->solarDate13 = $solarDate13;
+    }
+
+    /**
+     * Get solarDate13
+     *
+     * @return date 
+     */
+    public function getSolarDate13()
+    {
+        return $this->solarDate13;
+    }
+ 
+    /**
+     * Set solarDate14
+     *
+     * @param date $solarDate14
+     */
+    public function setSolarDate14($solarDate14)
+    {
+        $this->solarDate14 = $solarDate14;
+    }
+
+    /**
+     * Get solarDate14
+     *
+     * @return date 
+     */
+    public function getSolarDate14()
+    {
+        return $this->solarDate14;
+    }
+
 }
