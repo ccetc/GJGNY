@@ -21,6 +21,7 @@ $loader->registerNamespaces(array(
     'Knp\Menu'   => __DIR__.'/../vendor/KnpMenu/src',
     'FOS'          => __DIR__.'/../vendor/bundles',
     'Sonata'          => __DIR__.'/../vendor/bundles',
+    'EWZ'              => __DIR__.'/../vendor/bundles',
 ));
 $loader->registerPrefixes(array(
     'Twig_Extensions_' => __DIR__.'/../vendor/twig-extensions/lib',

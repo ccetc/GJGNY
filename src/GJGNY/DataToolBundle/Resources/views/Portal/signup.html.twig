@@ -1,10 +1,16 @@
 {% extends 'GJGNYDataToolBundle:Portal:portal_layout.html.twig' %}
+{% form_theme form 'EWZRecaptchaBundle:Form:ewz_recaptcha_widget.html.twig' %}
 
 {% block content %}
-    
     <div class="row">
         <div class="span8" id="portal-signup">
             <form id="portal-signup-form" novalidate="novalidate" class="form-stacked" action="{{ path('signup', {'url' : portal.url}) }}" method="post" {{ form_enctype(form) }}>
+                {{ form_widget(form.recaptcha, { 'attr': {
+                    'options' : {
+                        'theme' : 'clean',
+                    },
+                } }) }}
+
                 {{ form_widget(form) }}
 
                 <div class="actions">

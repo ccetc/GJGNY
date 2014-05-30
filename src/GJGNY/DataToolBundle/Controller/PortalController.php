@@ -16,6 +16,8 @@ use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Form\CallbackValidator;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormError;
+use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\True;
+use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\TrueValidator;
 
 use GJGNY\DataToolBundle\Entity\Lead;
 
@@ -113,6 +115,20 @@ class PortalController extends Controller
                     'choices' => array_merge(array('' => ''), Lead::getSourceOfLeadChoices())
                 ))
                 ->add('message', 'textarea', array('label' => 'Message'));
+        
+        $form->add('recaptcha', 'ewz_recaptcha', array(
+        ));
+
+        $form->
+            addValidator(new CallbackValidator(function(FormInterface $form)
+            {
+                $validator = new TrueValidator($this->container);
+
+                if(!$validator->isValid($form['recaptcha'], new True())) {
+                    $form->addError(new FormError('Incorrect Captcha, please re-enter'));
+                }
+            })
+        );
 
         $form->
             addValidator(new CallbackValidator(function(FormInterface $form)

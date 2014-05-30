@@ -156,3 +156,9 @@ swiftmailer:
 jms_security_extra:
     secure_controllers:  true
     secure_all_services: false 
+
+ewz_recaptcha:
+  public_key:   6LdWYvQSAAAAAAcvnGv5ITAa9P_A95Fg_eKgeym3
+  private_key:  6LdWYvQSAAAAAB_gf9ijoXG0yttDbdP1Dkm6gRjd
+  locale_key:   locale
+  secure:       false
