@@ -276,7 +276,7 @@ class PortalController extends Controller
                 $lead->setProgram($portalMatch->getNotificationProgram());
                 $lead->setDataCounty($portalMatch->getCountyOwnedBy());
                 $lead->setPhone($data['phone']);
-                $lead->setOtherNotes($data['message']);
+                $lead->setUpgradeStatusNotes($data['message']);
                 $lead->setOutreachOrganization($data['outreachOrganization']);
                 $lead->setSourceOfLead($data['SourceOfLead']);
 
